@@ -810,14 +810,14 @@ const TEMPLATES = {
   temp: {
     title: '体温单（ENR_TZJL）',
     html: `
-<table class="case-table">
+<table class="case-table" data-category="患者信息">
   <tr><th colspan="8">体 温 单</th></tr>
   <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
       <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
       <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
       <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table">
+<table class="case-table" data-category="体温单">
   <tr><th>日期</th><th>时间</th><th>T(℃)</th><th>P(次/分)</th><th>R(次/分)</th><th>BP(mmHg)</th><th>大便</th><th>备注(出入量等)</th></tr>
   <tr><td><span class="field-edit" data-field="t1_date" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="t1_time" contenteditable="false"></span></td>

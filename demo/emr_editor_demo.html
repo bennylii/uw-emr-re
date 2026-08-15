@@ -67,6 +67,14 @@
   .date-picker-panel .dp-foot button:first-child { background: #eef2f6; }
   .date-picker-panel .dp-foot button:nth-child(2) { background: #3498db; color: #fff; }
   .date-picker-panel .dp-foot button:last-child { background: #fdf0ef; color: #c0392b; }
+  /* 时间选择网格 */
+  .dp-time-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px;
+    margin: 6px 0; align-items: center; }
+  .dp-time-grid .dp-tlbl { grid-column: 1 / -1; font-size: 11px; color: #7f8c8d; }
+  .dp-time-grid .dp-tcell { text-align: center; padding: 4px 0; border-radius: 4px;
+    cursor: pointer; font-size: 12px; background: #f5f7f9; }
+  .dp-time-grid .dp-tcell:hover { background: #dbe9f7; }
+  .dp-time-grid .dp-tcell.sel { background: #3498db; color: #fff; font-weight: bold; }
   /* 医嘱单页签 */
   .tab-bar { display: flex; gap: 4px; margin: 8px 0; }
   .tab-btn { border: 1px solid #ccc; background: #fff; border-radius: 4px 4px 0 0;
@@ -1488,14 +1496,21 @@ function pickerOutside(e) {
 function parseDateText(text) {
   const m = text.match(/(\d{4})[年\/\-.](\d{1,2})[月\/\-.](\d{1,2})/);
   if (m) return { y: +m[1], mo: +m[2], d: +m[3] };
+  // 短格式：6/1、6月1日、2026/6/1（无年份默认当年）
+  const s = text.match(/(\d{1,2})[\/\-.](\d{1,2})/);
+  if (s) return { y: new Date().getFullYear(), mo: +s[1], d: +s[2] };
+  const c = text.match(/(\d{1,2})月(\d{1,2})日/);
+  if (c) return { y: new Date().getFullYear(), mo: +c[1], d: +c[2] };
   return null;
 }
 
 function openPicker(el) {
   closePicker();
   const f = el.dataset.field || '';
+  const hasDate = /date|birth|入院|出院|日期/.test(f);
   const hasTime = /time/.test(f);
-  const isDateTime = hasTime && /date|birth|入院|出院|日期/.test(f);
+  // 三种模式：date=日历 / datetime=日历+时间行 / time=时间选择面板
+  const mode = hasTime && !hasDate ? 'time' : (hasTime ? 'datetime' : 'date');
   const rect = el.getBoundingClientRect();
   const cur = parseDateText(el.textContent.trim());
   let year = cur ? cur.y : new Date().getFullYear();
@@ -1515,6 +1530,7 @@ function openPicker(el) {
 
   function render() {
     panel.innerHTML = '';
+    if (mode === 'time') { renderTimePanel(); return; }
     // 头部：翻页 + 年月
     const head = document.createElement('div');
     head.className = 'dp-head';
@@ -1543,8 +1559,8 @@ function openPicker(el) {
     for (let i = 0; i < first; i++) grid.appendChild(mkCell('', false));
     for (let d = 1; d <= days; d++) grid.appendChild(mkCell(d, true));
     panel.appendChild(grid);
-    // 时间行（datetime-local）
-    if (isDateTime) {
+    // 时间行（datetime 模式）
+    if (mode === 'datetime') {
       const tr = document.createElement('div');
       tr.className = 'dp-time';
       tr.innerHTML = '时间 ';
@@ -1562,7 +1578,7 @@ function openPicker(el) {
     ok.textContent = '确定';
     ok.onclick = () => {
       let val = year + '-' + pad2(month) + '-' + pad2(selDay);
-      if (isDateTime) {
+      if (mode === 'datetime') {
         const hh = panel.querySelector('.dp-time input:first-of-type');
         const mm = panel.querySelector('.dp-time input:last-of-type');
         val += ' ' + pad2(+hh.value || 0) + ':' + pad2(+mm.value || 0);
@@ -1596,6 +1612,66 @@ function openPicker(el) {
       c.textContent = d || '';
       if (enabled) c.onclick = () => { selDay = d; render(); };
       return c;
+    }
+  }
+
+  // 时间选择面板：小时 0-23 + 分钟 00/05/…/55 网格
+  function renderTimePanel() {
+    const head = document.createElement('div');
+    head.className = 'dp-head';
+    const label = document.createElement('span');
+    label.className = 'dp-title';
+    label.textContent = '选择时间';
+    head.appendChild(label);
+    panel.appendChild(head);
+    // 小时网格（0-23，8 列）
+    const hGrid = document.createElement('div');
+    hGrid.className = 'dp-time-grid';
+    hGrid.appendChild(mkLbl('小时'));
+    for (let h = 0; h < 24; h++) {
+      const c = document.createElement('span');
+      c.className = 'dp-tcell' + (h === selH ? ' sel' : '');
+      c.textContent = pad2(h);
+      c.onclick = () => { selH = h; renderTimePanel(); };
+      hGrid.appendChild(c);
+    }
+    panel.appendChild(hGrid);
+    // 分钟网格（00-55，5 分钟步进）
+    const mGrid = document.createElement('div');
+    mGrid.className = 'dp-time-grid';
+    mGrid.appendChild(mkLbl('分钟'));
+    for (let m = 0; m < 60; m += 5) {
+      const c = document.createElement('span');
+      c.className = 'dp-tcell' + (m === selM ? ' sel' : '');
+      c.textContent = pad2(m);
+      c.onclick = () => { selM = m; renderTimePanel(); };
+      mGrid.appendChild(c);
+    }
+    panel.appendChild(mGrid);
+    // 底部按钮
+    const foot = document.createElement('div');
+    foot.className = 'dp-foot';
+    const ok = document.createElement('button');
+    ok.textContent = '确定';
+    ok.onclick = () => { writeBack(el, pad2(selH) + ':' + pad2(selM)); closePicker(); };
+    const nowBtn = document.createElement('button');
+    nowBtn.textContent = '当前时间';
+    nowBtn.onclick = () => {
+      const t = new Date();
+      selH = t.getHours(); selM = Math.floor(t.getMinutes() / 5) * 5;
+      renderTimePanel();
+    };
+    const clearBtn = document.createElement('button');
+    clearBtn.textContent = '清空';
+    clearBtn.onclick = () => { writeBack(el, ''); closePicker(); };
+    foot.appendChild(nowBtn); foot.appendChild(ok); foot.appendChild(clearBtn);
+    panel.appendChild(foot);
+
+    function mkLbl(txt) {
+      const s = document.createElement('span');
+      s.className = 'dp-tlbl';
+      s.textContent = txt;
+      return s;
     }
   }
 

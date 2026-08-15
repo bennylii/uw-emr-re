@@ -67,6 +67,19 @@
   .date-picker-panel .dp-foot button:first-child { background: #eef2f6; }
   .date-picker-panel .dp-foot button:nth-child(2) { background: #3498db; color: #fff; }
   .date-picker-panel .dp-foot button:last-child { background: #fdf0ef; color: #c0392b; }
+  /* 医嘱单页签 */
+  .tab-bar { display: flex; gap: 4px; margin: 8px 0; }
+  .tab-btn { border: 1px solid #ccc; background: #fff; border-radius: 4px 4px 0 0;
+             padding: 5px 12px; cursor: pointer; font-size: 13px; }
+  .tab-btn.active { background: #2c3e50; color: #fff; border-color: #2c3e50; }
+  .row-del { margin-left: 5px; border: none; background: transparent; color: #999;
+             cursor: pointer; font-size: 14px; font-weight: bold; padding: 0 3px; }
+  .row-del:hover { color: #e74c3c; }
+  .cat-label { font-weight: bold; font-size: 11px; text-align: center; white-space: nowrap; }
+  .cat-label.ld { color: #16a085; }
+  .cat-label.ls { color: #2980b9; }
+  .cat-label.jz { color: #e67e22; }
+  .cat-label.cy { color: #8e44ad; }
   /* 打印样式 */
   @media print {
     #toolbar, #sidePane, .foot { display: none !important; }
@@ -143,6 +156,7 @@
   <button onclick="loadTemplate()">载入模板</button>
   <button onclick="newDoc()">新文档</button>
   <button onclick="fillSample()">示例填充</button>
+  <button onclick="addOrderRow()" style="background:#16a085">＋新增医嘱</button>
   <button onclick="printDoc()">打印</button>
   <select id="signRole" style="background:#f39c12">
     <option value="主治医师">主治医师</option>
@@ -563,16 +577,29 @@ const TEMPLATES = {
     ],
   },
   yzb: {
-    title: '医嘱单（EMR_YZB 长期/临时）',
+    title: '医嘱单（EMR_YZB 五类医嘱）',
     html: `
+<div class="tab-bar" id="yzbTabs">
+  <button class="tab-btn active" data-tab="all" onclick="switchYzbTab('all')">所有医嘱</button>
+  <button class="tab-btn" data-tab="ld" onclick="switchYzbTab('ld')">长期医嘱</button>
+  <button class="tab-btn" data-tab="ls" onclick="switchYzbTab('ls')">临时医嘱</button>
+  <button class="tab-btn" data-tab="jz" onclick="switchYzbTab('jz')">急诊医嘱</button>
+  <button class="tab-btn" data-tab="cy" onclick="switchYzbTab('cy')">出院带药</button>
+</div>
 <table class="case-table">
-  <tr><th colspan="8">长期医嘱单</th></tr>
+  <tr><th colspan="8">患者信息</th></tr>
   <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
       <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
       <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
       <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table">
+<div class="tab-pane" id="tab-all">
+<table class="case-table" data-category="所有医嘱">
+  <tr><th>类别</th><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>医师签名</th></tr>
+</table>
+</div>
+<div class="tab-pane" id="tab-ld">
+<table class="case-table" data-category="长期医嘱">
   <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
   <tr><td><span class="field-edit" data-field="y1_start" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_item" contenteditable="false"></span></td>
@@ -581,7 +608,7 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="y1_freq" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_stop" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_stopdoc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="y1_sign" contenteditable="false"></span></td></tr>
+      <td><span class="field-edit" data-field="y1_sign" contenteditable="false"></span><button class="row-del" onclick="delOrderRow(this)" title="删除本行">×</button></td></tr>
   <tr><td><span class="field-edit" data-field="y2_start" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_dose" contenteditable="false"></span></td>
@@ -589,8 +616,24 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="y2_freq" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_stop" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_stopdoc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="y2_sign" contenteditable="false"></span></td></tr>
+      <td><span class="field-edit" data-field="y2_sign" contenteditable="false"></span><button class="row-del" onclick="delOrderRow(this)" title="删除本行">×</button></td></tr>
 </table>
+</div>
+<div class="tab-pane" id="tab-ls" style="display:none">
+<table class="case-table" data-category="临时医嘱">
+  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+</table>
+</div>
+<div class="tab-pane" id="tab-jz" style="display:none">
+<table class="case-table" data-category="急诊医嘱">
+  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+</table>
+</div>
+<div class="tab-pane" id="tab-cy" style="display:none">
+<table class="case-table" data-category="出院带药">
+  <tr><th>药品名称</th><th>规格</th><th>剂量</th><th>用法</th><th>频次</th><th>数量</th><th>天数</th><th>医师签名</th></tr>
+</table>
+</div>
 `,
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
@@ -1177,6 +1220,12 @@ function renderTemplate(tpl) {
       paper.appendChild(div);
     });
   }
+  // 医嘱单：初始化页签状态
+  if (currentTpl === 'yzb') {
+    yzbActiveTab = 'ld';
+    yzbSeq = { ld: 2, ls: 0, jz: 0, cy: 0 };
+    switchYzbTab('ld');
+  }
   // 单选域渲染
   paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));
   bindDatePickers();
@@ -1188,6 +1237,128 @@ function renderTemplate(tpl) {
     paper.appendChild(sign);
   }
   syncAll();
+}
+
+/* ================= 医嘱单：5 页签 + 行内新增/删除 ================= */
+let yzbSeq = { ld: 2, ls: 0, jz: 0, cy: 0 };  // 静态行占用 ld 的 y1/y2
+let yzbActiveTab = 'ld';
+
+function switchYzbTab(name) {
+  if (currentTpl !== 'yzb') return;
+  yzbActiveTab = name;
+  document.querySelectorAll('#yzbTabs .tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === name));
+  ['all', 'ld', 'ls', 'jz', 'cy'].forEach(t => {
+    const pane = document.getElementById('tab-' + t);
+    if (pane) pane.style.display = (t === name) ? '' : 'none';
+  });
+  if (name === 'all') buildAllOrders();
+}
+
+function addOrderRow() {
+  if (currentTpl !== 'yzb') { alert('请先载入医嘱单模板'); return; }
+  if (yzbActiveTab === 'all') { alert('请先选择具体类别页签（长期/临时/急诊/出院带药）'); return; }
+  const cat = yzbActiveTab;
+  const table = document.querySelector('[data-category="' + catName(cat) + '"]');
+  if (!table) return;
+  const seq = ++yzbSeq[cat];
+  const row = mkOrderRow(cat, seq);
+  table.querySelector('tr:last-child').after(row);
+  bindDatePickers();
+  syncAll();
+}
+
+function delOrderRow(btn) {
+  const tr = btn.closest('tr');
+  const table = tr.closest('table');
+  // 每表至少保留 1 行
+  const rows = table.querySelectorAll('tr:not(:first-child)');
+  if (rows.length <= 1) { alert('至少保留一行医嘱'); return; }
+  tr.remove();
+  syncAll();
+}
+
+function catName(cat) {
+  return { ld: '长期医嘱', ls: '临时医嘱', jz: '急诊医嘱', cy: '出院带药' }[cat] || '';
+}
+
+function catLabel(cat) {
+  return { ld: '长期', ls: '临时', jz: '急诊', cy: '带药' }[cat] || '';
+}
+
+function nowStr() {
+  const t = new Date();
+  return t.getFullYear() + '-' + pad2(t.getMonth() + 1) + '-' + pad2(t.getDate()) +
+         ' ' + pad2(t.getHours()) + ':' + pad2(t.getMinutes());
+}
+
+function mkOrderRow(cat, seq) {
+  const p = cat + seq;
+  const tr = document.createElement('tr');
+  if (cat === 'cy') {
+    // 出院带药：名称/规格/剂量/用法/频次/数量/天数/签名
+    tr.innerHTML =
+      '<td><span class="field-edit" data-field="' + p + '_name" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_spec" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_dose" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_usage" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_freq" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_qty" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_days" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_sign" contenteditable="false"></span>' +
+      '<button class="row-del" onclick="delOrderRow(this)" title="删除本行">×</button></td>';
+  } else {
+    // 医嘱：起始时间/内容/剂量/用法/频次/停止时间/停止医师/签名
+    tr.innerHTML =
+      '<td><span class="field-edit" data-field="' + p + '_start" contenteditable="false">' + nowStr() + '</span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_item" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_dose" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_usage" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_freq" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_stop" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_stopdoc" contenteditable="false"></span></td>' +
+      '<td><span class="field-edit" data-field="' + p + '_sign" contenteditable="false"></span>' +
+      '<button class="row-del" onclick="delOrderRow(this)" title="删除本行">×</button></td>';
+  }
+  return tr;
+}
+
+// 所有医嘱汇总：从四类表收集行，行首标注类别
+function buildAllOrders() {
+  if (currentTpl !== 'yzb') return;
+  const table = document.querySelector('[data-category="所有医嘱"]');
+  if (!table) return;
+  // 保留表头，重建数据行
+  while (table.rows.length > 1) table.deleteRow(1);
+  ['ld', 'ls', 'jz', 'cy'].forEach(cat => {
+    const src = document.querySelector('[data-category="' + catName(cat) + '"]');
+    if (!src) return;
+    src.querySelectorAll('tr:not(:first-child)').forEach(tr => {
+      const cells = Array.from(tr.querySelectorAll('.field-edit')).map(c => c.textContent);
+      const nr = document.createElement('tr');
+      const label = document.createElement('td');
+      label.className = 'cat-label ' + cat;
+      label.textContent = catLabel(cat);
+      nr.appendChild(label);
+      if (cat === 'cy') {
+        // 带药：名称/规格/剂量/用法/频次/数量/天数/签名 → 摘要为 名称 规格 剂量…，合并进4列
+        const item = [cells[0], cells[1], cells[2]].filter(Boolean).join(' ');
+        ['', '', item, cells[3], cells[4], '', cells[6], cells[7]].forEach(v => {
+          const td = document.createElement('td');
+          td.textContent = v;
+          nr.appendChild(td);
+        });
+      } else {
+        // 医嘱：起始/内容/剂量/用法/频次/停止/停止医师/签名
+        cells.forEach(v => {
+          const td = document.createElement('td');
+          td.textContent = v;
+          nr.appendChild(td);
+        });
+      }
+      table.appendChild(nr);
+    });
+  });
 }
 
 /* ================= 日期选择（点击弹出日历面板） ================= */
@@ -1391,7 +1562,10 @@ function syncAll() {
   if (!sections.length) sections.push(paper); // 空文档
   sections.forEach(sec => {
     const isTable = sec.classList.contains('case-table');
-    xml.push(isTable ? '  <table>' : '  <para>');
+    const cat = sec.dataset ? sec.dataset.category : null;
+    xml.push(isTable
+      ? (cat ? '  <table category="' + esc(cat) + '">' : '  <table>')
+      : '  <para>');
     // 文本段（段落模板）
     if (!isTable) {
       sec.childNodes.forEach(node => {
@@ -1551,6 +1725,9 @@ function updateMissing(tpl) {
                     'diag_main', 'diag_main_code', 'total_fee'];
   const edits = paper.querySelectorAll('.field-edit, .field-hengxian');
   edits.forEach(el => {
+    const f = el.dataset.field || '';
+    // 动态医嘱字段（ld/ls/jz/cy 前缀）不参与必填检查
+    if (/^(ld|ls|jz|cy)\d/.test(f)) return;
     if (!el.textContent.trim()) m.push(el.dataset.field);
   });
   if (tpl.title.indexOf('病案首页') >= 0) {

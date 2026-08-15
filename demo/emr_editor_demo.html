@@ -80,6 +80,21 @@
   .cat-label.ls { color: #2980b9; }
   .cat-label.jz { color: #e67e22; }
   .cat-label.cy { color: #8e44ad; }
+  /* 病人列表遮罩层 */
+  .patient-overlay { position: fixed; inset: 0; background: rgba(44,62,80,.55);
+    z-index: 10000; display: flex; align-items: center; justify-content: center; }
+  .patient-panel { background: #fff; border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,.3);
+    width: 860px; max-width: 94vw; max-height: 84vh; overflow: auto; padding: 18px 22px; }
+  .patient-head { display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 12px; }
+  .patient-head h2 { font-size: 17px; color: #2c3e50; }
+  .patient-hint { font-size: 12px; color: #999; }
+  #patientTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+  #patientTable th { background: #2c3e50; color: #fff; padding: 7px 8px; text-align: left;
+    font-weight: normal; position: sticky; top: 0; }
+  #patientTable td { padding: 7px 8px; border-bottom: 1px solid #eef1f4; cursor: pointer; }
+  #patientTable tr:hover td { background: #eef6fd; }
+  #patientTable tr { transition: background .1s; }
   /* 打印样式 */
   @media print {
     #toolbar, #sidePane, .foot { display: none !important; }
@@ -157,6 +172,7 @@
   <button onclick="newDoc()">新文档</button>
   <button onclick="fillSample()">示例填充</button>
   <button onclick="addOrderRow()" style="background:#16a085">＋新增医嘱</button>
+  <button onclick="showPatientList()">病人列表</button>
   <button onclick="printDoc()">打印</button>
   <select id="signRole" style="background:#f39c12">
     <option value="主治医师">主治医师</option>
@@ -174,6 +190,18 @@
 </div>
 
 <div id="main">
+  <!-- 病人列表（双击进入） -->
+  <div id="patientList" class="patient-overlay">
+    <div class="patient-panel">
+      <div class="patient-head">
+        <h2>✚ 住院病人列表（双击病人进入病历）</h2>
+        <span class="patient-hint">演示数据 · 双击任意行进入该病人病历编辑</span>
+      </div>
+      <table id="patientTable">
+        <tr><th>病案号</th><th>姓名</th><th>性别</th><th>年龄</th><th>科室</th><th>病区/床号</th><th>入院日期</th><th>主要诊断</th></tr>
+      </table>
+    </div>
+  </div>
   <div id="docPane">
     <div id="paper" contenteditable="true"></div>
   </div>
@@ -1239,6 +1267,71 @@ function renderTemplate(tpl) {
   syncAll();
 }
 
+/* ================= 病人列表（双击进入病历） ================= */
+// 演示用病人数据（虚拟，无真实信息）
+const PATIENTS = [
+  { case_no: '00084301', name: '张明',   sex: '男', age: '56', dept: '心血管内科', ward: '5区', bed: '12',
+    in_time: '2026-06-01 09:30', diag: '冠状动脉粥样硬化性心脏病', idno: '350102197003150012' },
+  { case_no: '00084302', name: '李芳华', sex: '女', age: '43', dept: '消化内科',   ward: '3区', bed: '06',
+    in_time: '2026-06-03 14:20', diag: '胃溃疡', idno: '350103198301120024' },
+  { case_no: '00084303', name: '王建国', sex: '男', age: '68', dept: '神经内科',   ward: '2区', bed: '18',
+    in_time: '2026-06-05 08:15', diag: '脑梗死恢复期', idno: '350104195801090013' },
+  { case_no: '00084304', name: '陈晓燕', sex: '女', age: '35', dept: '产科',       ward: '6区', bed: '03',
+    in_time: '2026-06-08 10:40', diag: '妊娠38周 待产', idno: '350105199105220028' },
+  { case_no: '00084305', name: '刘志强', sex: '男', age: '29', dept: '骨科',       ward: '7区', bed: '09',
+    in_time: '2026-06-10 16:05', diag: '左胫腓骨骨折', idno: '350106199701180016' },
+];
+
+function showPatientList() {
+  const box = document.getElementById('patientList');
+  box.style.display = 'flex';
+  const tbody = document.querySelector('#patientTable');
+  // 保留表头，重建数据行
+  while (tbody.rows.length > 1) tbody.deleteRow(1);
+  PATIENTS.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.title = '双击进入 ' + p.name + ' 的病历';
+    [p.case_no, p.name, p.sex, p.age, p.dept, p.ward + '/' + p.bed, p.in_time, p.diag]
+      .forEach(v => {
+        const td = document.createElement('td');
+        td.textContent = v;
+        tr.appendChild(td);
+      });
+    tr.addEventListener('dblclick', () => enterPatient(p));
+    tbody.appendChild(tr);
+  });
+}
+
+function hidePatientList() {
+  document.getElementById('patientList').style.display = 'none';
+}
+
+// 双击病人 → 载入病案首页并预填该病人信息
+function enterPatient(p) {
+  hidePatientList();
+  currentTpl = 'case2012';
+  document.getElementById('tplSel').value = 'case2012';
+  renderTemplate(TEMPLATES[currentTpl]);
+  const paper = document.getElementById('paper');
+  const fill = {
+    case_no: p.case_no, name: p.name, sex: p.sex, age: p.age,
+    bed: p.bed, in_dept: p.dept, ward: p.ward,
+    in_time: p.in_time, idno: p.idno, diag_main: p.diag,
+    diag_main_code: '', birth: '', total_fee: '',
+  };
+  Object.keys(fill).forEach(f => {
+    const el = paper.querySelector('[data-field="' + f + '"]');
+    if (el && el.classList.contains('field-edit')) el.textContent = fill[f];
+  });
+  // 性别单选同步
+  const sexEl = paper.querySelector('[data-field="sex"]');
+  if (sexEl) {
+    const fd = TEMPLATES.case2012.fields.find(x => x.name === 'sex');
+    if (fd && fd.options.indexOf(p.sex) >= 0) { fd.value = p.sex; renderRadio(sexEl); }
+  }
+  syncAll();
+}
+
 /* ================= 医嘱单：5 页签 + 行内新增/删除 ================= */
 let yzbSeq = { ld: 2, ls: 0, jz: 0, cy: 0 };  // 静态行占用 ld 的 y1/y2
 let yzbActiveTab = 'ld';
@@ -1928,6 +2021,7 @@ function fillSample() {
 }
 
 /* 启动 */
+showPatientList();   // 启动先显示病人列表（双击进入病历）
 loadTemplate();
 </script>
 </body>

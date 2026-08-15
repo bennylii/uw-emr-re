@@ -38,6 +38,15 @@
   .case-table .mini { width: 30px; border: none; border-bottom: 1px solid #555;
                       text-align: center; outline: none; background: transparent; }
   .sign-line { margin-top: 24px; font-size: 13px; line-height: 2.2; }
+  /* 打印样式 */
+  @media print {
+    #toolbar, #sidePane, .foot { display: none !important; }
+    #main { display: block; height: auto; }
+    #docPane { padding: 0; overflow: visible; }
+    #paper { box-shadow: none; max-width: 100%; padding: 10mm; min-height: 0; }
+    .case-table { font-size: 10.5px; }
+    .field-edit, .field-hengxian { border-bottom: 1px solid #000; }
+  }
   .sign-area { margin-top: 36px; border-top: 1px solid #ccc; padding-top: 12px;
                font-size: 13px; color: #888; }
   .sign-box { display: inline-block; width: 160px; height: 64px; border: 1px dashed #bbb;
@@ -69,9 +78,12 @@
     <option value="admission">入院记录</option>
     <option value="progress">病程记录</option>
     <option value="surgery">手术记录</option>
+    <option value="consent">手术同意书</option>
+    <option value="discharge">出院记录</option>
   </select>
   <button onclick="loadTemplate()">载入模板</button>
   <button onclick="newDoc()">新文档</button>
+  <button onclick="printDoc()">打印</button>
   <button onclick="exportXML()">导出 XML</button>
   <button onclick="exportHTML()">导出 HTML</button>
   <span class="hint">仿真 uwWordDll 定制层：域控件 · XML 双向绑定 · 质控（clean-room 演示）</span>
@@ -187,6 +199,7 @@ const TEMPLATES = {
       门诊与出院 <span class="field-radio" data-field="match_op"></span>
       入院与出院 <span class="field-radio" data-field="match_ad"></span>
       术前与术后 <span class="field-radio" data-field="match_preop"></span>
+      放射与病理 <span class="field-radio" data-field="match_rp"></span>
       临床与病理 <span class="field-radio" data-field="match_cp"></span></td></tr>
   <tr><td>抢救次数</td><td><span class="field-edit" data-field="rescue_cnt" contenteditable="false"></span></td>
       <td>成功次数</td><td><span class="field-edit" data-field="rescue_ok" contenteditable="false"></span></td>
@@ -194,6 +207,15 @@ const TEMPLATES = {
   <tr><td>Rh</td><td><span class="field-radio" data-field="rh"></span></td>
       <td>输血反应</td><td><span class="field-radio" data-field="transfusion"></span></td>
       <td>是否院感</td><td><span class="field-radio" data-field="nosocomial"></span></td></tr>
+  <tr><td>妊娠梅毒筛查</td><td><span class="field-radio" data-field="syphilis_scr"></span></td>
+      <td>新生儿疾病筛查</td><td colspan="3">CH <span class="field-radio" data-field="scr_ch"></span>
+      PKU <span class="field-radio" data-field="scr_pku"></span>
+      CAH <span class="field-radio" data-field="scr_cah"></span>
+      G6PD <span class="field-radio" data-field="scr_g6pd"></span>
+      听力 <span class="field-radio" data-field="scr_hearing"></span></td></tr>
+  <tr><td>产后出血</td><td><span class="field-radio" data-field="postpartum"></span></td>
+      <td>新生儿性别</td><td><span class="field-radio" data-field="nb_sex"></span></td>
+      <td>新生儿体重</td><td><span class="field-edit" data-field="nb_weight" contenteditable="false"></span>g</td></tr>
   <tr><td>离院方式</td><td><span class="field-radio" data-field="discharge_mode"></span></td>
       <td colspan="6">拟接收医疗机构：<span class="field-edit" data-field="transfer_org" contenteditable="false"></span></td></tr>
   <tr><td>31天内再住院计划</td><td><span class="field-radio" data-field="readmit_plan"></span></td>
@@ -241,6 +263,12 @@ const TEMPLATES = {
   <tr><td>9.耗材类</td><td><span class="field-edit" data-field="fee9" contenteditable="false"></span></td>
       <td>10.其他类</td><td><span class="field-edit" data-field="fee10" contenteditable="false"></span></td>
       <td colspan="4"></td></tr>
+  <tr><td colspan="8" style="font-size:11px;color:#666">费用 24 项明细（可按 HIS 费用清单自动带出，此处仅列 10 大类）：
+      （1）一般医疗服务费（2）一般治疗操作费（3）护理费（4）其他费用（5）病理诊断费（6）实验室诊断费
+      （7）影像学诊断费（8）临床诊断项目费（9）非手术治疗项目费（10）手术治疗费（11）康复费
+      （12）中医治疗费（13）西药费（14）中成药费（15）中草药费（16）血费（17）白蛋白类制品费
+      （18）球蛋白类制品费（19）凝血因子类制品费（20）细胞因子类制品费（21）检查用一次性医用材料费
+      （22）治疗用一次性医用材料费（23）手术用一次性医用材料费（24）其他费</td></tr>
 </table>
 <div class="sign-line">科主任：<span class="field-edit" data-field="sign_dept_head" contenteditable="false"></span>
   主任（副主任）医师：<span class="field-edit" data-field="sign_chief" contenteditable="false"></span>
@@ -270,9 +298,18 @@ const TEMPLATES = {
       { type: 'radio', name: 'transfusion', caption: '输血反应', options: ['有', '无'], value: '无' },
       { type: 'radio', name: 'autopsy', caption: '尸检', options: ['是', '否'], value: '否' },
       { type: 'radio', name: 'nosocomial', caption: '院感', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'syphilis_scr', caption: '妊娠梅毒筛查', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'scr_ch', caption: 'CH', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'scr_pku', caption: 'PKU', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'scr_cah', caption: 'CAH', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'scr_g6pd', caption: 'G6PD', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'scr_hearing', caption: '听力', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'postpartum', caption: '产后出血', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'nb_sex', caption: '新生儿性别', options: ['男', '女'], value: '男' },
       { type: 'radio', name: 'match_op', caption: '门诊与出院符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
       { type: 'radio', name: 'match_ad', caption: '入院与出院符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
       { type: 'radio', name: 'match_preop', caption: '术前与术后符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
+      { type: 'radio', name: 'match_rp', caption: '放射与病理符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
       { type: 'radio', name: 'match_cp', caption: '临床与病理符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
       { type: 'radio', name: 'discharge_mode', caption: '离院方式', options: ['医嘱离院', '医嘱转院', '转社区卫生机构', '非医嘱离院', '死亡'], value: '医嘱离院' },
       { type: 'radio', name: 'readmit_plan', caption: '31天再住院', options: ['无', '有'], value: '无' },
@@ -314,14 +351,55 @@ const TEMPLATES = {
   },
   surgery: {
     title: '手术记录',
-    fields: [],
-    paras: [
+    fields: [],    paras: [
       { indent: false, html: '手术名称：<span class="field-edit" data-field="op_name" contenteditable="false"></span>' },
       { indent: false, html: '手术日期：<span class="field-edit" data-field="op_date" contenteditable="false"></span>　' +
                             '手术者：<span class="field-edit" data-field="op_doc" contenteditable="false"></span>' },
       { indent: true, html: '麻醉方式：<span class="field-edit" data-field="anesthesia" contenteditable="false"></span>' },
       { indent: true, html: '术前诊断：<span class="field-hengxian" data-field="pre_diag" contenteditable="false"></span>' },
       { indent: true, html: '术中情况：' },
+    ],
+  },
+  consent: {
+    title: '手术同意书',
+    paras: [
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁　入院日期：<span class="field-edit" data-field="in_date" contenteditable="false"></span>' },
+      { indent: false, html: '术前诊断：<span class="field-hengxian" data-field="pre_diag" contenteditable="false"></span>' },
+      { indent: false, html: '拟实施手术（操作）：<span class="field-hengxian" data-field="op_name" contenteditable="false"></span>' },
+      { indent: false, html: '拟行麻醉方式：<span class="field-hengxian" data-field="anesthesia" contenteditable="false"></span>' },
+      { indent: true, html: '手术风险告知：' },
+      { indent: false, html: '1. 麻醉意外、心脑血管意外、呼吸心跳骤停等危及生命的情况；' },
+      { indent: false, html: '2. 术中出血、损伤邻近脏器、神经血管等组织；' },
+      { indent: false, html: '3. 术后感染、出血、切口愈合不良、深静脉血栓等并发症；' },
+      { indent: false, html: '4. 病灶残留、复发或转移可能；' },
+      { indent: false, html: '5. 其他难以预料的意外情况。' },
+      { indent: true, html: '以上风险及可能发生的各种并发症和意外，医生已向我方详细说明，我方表示完全了解，同意手术（操作），并以本同意书签字为证。' },
+      { indent: false, html: '患者/家属（全权代表）签名：<span class="field-edit" data-field="sign_patient" contenteditable="false"></span>　与患者关系：<span class="field-edit" data-field="relation" contenteditable="false"></span>' },
+      { indent: false, html: '经治医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　日期：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  discharge: {
+    title: '出院记录',
+    paras: [
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '入院日期：<span class="field-edit" data-field="in_time" contenteditable="false"></span>　出院日期：<span class="field-edit" data-field="out_time" contenteditable="false"></span>　实际住院：<span class="field-edit" data-field="stay_days" contenteditable="false"></span>天' },
+      { indent: true, html: '入院情况：' },
+      { indent: true, html: '入院诊断：<span class="field-hengxian" data-field="diag_admit" contenteditable="false"></span>' },
+      { indent: true, html: '诊疗经过：' },
+      { indent: true, html: '出院诊断：<span class="field-hengxian" data-field="diag_main" contenteditable="false"></span>' },
+      { indent: true, html: '出院情况：<span class="field-edit" data-field="out_status" contenteditable="false"></span>　治疗结果：<span class="field-radio" data-field="result"></span>' },
+      { indent: true, html: '出院后用药及建议：' },
+      { indent: true, html: '随访计划：' },
+      { indent: false, html: '主治医师：<span class="field-edit" data-field="sign_attending" contenteditable="false"></span>　住院医师：<span class="field-edit" data-field="sign_resident" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'result', caption: '治疗结果', options: ['治愈', '好转', '未愈', '死亡', '其他'], value: '好转' },
     ],
   },
 };
@@ -506,6 +584,9 @@ function exportHTML() {
   a.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
   a.download = 'record.html';
   a.click();
+}
+function printDoc() {
+  window.print();
 }
 
 /* 编辑域输入 → 实时同步 XML */

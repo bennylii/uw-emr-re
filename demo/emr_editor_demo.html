@@ -67,6 +67,12 @@
   .date-picker-panel .dp-foot button:first-child { background: #eef2f6; }
   .date-picker-panel .dp-foot button:nth-child(2) { background: #3498db; color: #fff; }
   .date-picker-panel .dp-foot button:last-child { background: #fdf0ef; color: #c0392b; }
+  /* 自动补全面板 */
+  .ac-panel { position: fixed; z-index: 9998; background: #fff; border: 1px solid #b0b8c0;
+    border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,.25); font-size: 13px;
+    max-height: 260px; overflow-y: auto; min-width: 140px; padding: 4px 0; }
+  .ac-item { padding: 6px 12px; cursor: pointer; }
+  .ac-item:hover, .ac-item.sel { background: #3498db; color: #fff; }
   /* 时间选择网格 */
   .dp-time-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px;
     margin: 6px 0; align-items: center; }
@@ -1380,6 +1386,7 @@ function renderTemplate(tpl) {
   paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));
   applyFieldEditability();
   bindDatePickers();
+  bindAutocompletes();
   // 签名区（模拟 uwGetSignPhoto）— 仅段落模板
   if (!tpl.html) {
     const sign = document.createElement('div');
@@ -1482,6 +1489,7 @@ function addOrderRow() {
   table.querySelector('tr:last-child').after(row);
   applyFieldEditability();
   bindDatePickers();
+  bindAutocompletes();
   syncAll();
 }
 
@@ -1599,6 +1607,105 @@ function applyFieldEditability() {
       el.contentEditable = 'true';   // 普通字段：直接点击输入
     }
   });
+}
+
+/* ================= 自动补全（国籍/出生地/籍贯） ================= */
+const NATIONS = ['中国', '美国', '日本', '韩国', '英国', '法国', '德国', '俄罗斯', '加拿大',
+  '澳大利亚', '新加坡', '马来西亚', '泰国', '越南', '印度', '意大利', '西班牙', '荷兰',
+  '瑞士', '瑞典', '新西兰', '朝鲜', '蒙古', '印尼', '菲律宾', '缅甸', '老挝', '柬埔寨', '其他'];
+const REGIONS = ['北京', '天津', '上海', '重庆', '河北', '山西', '内蒙古', '辽宁', '吉林',
+  '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东',
+  '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆',
+  '香港', '澳门', '台湾', '石家庄', '太原', '呼和浩特', '沈阳', '大连', '长春', '哈尔滨',
+  '南京', '苏州', '无锡', '杭州', '宁波', '温州', '合肥', '福州', '厦门', '泉州', '漳州',
+  '莆田', '宁德', '龙岩', '三明', '南平', '南昌', '济南', '青岛', '郑州', '武汉', '长沙',
+  '广州', '深圳', '珠海', '佛山', '南宁', '海口', '成都', '重庆', '贵阳', '昆明', '拉萨',
+  '西安', '兰州', '西宁', '银川', '乌鲁木齐'];
+
+function bindAutocompletes() {
+  const paper = document.getElementById('paper');
+  paper.querySelectorAll('.field-edit').forEach(el => {
+    const f = el.dataset.field || '';
+    const opts = f === 'nation' ? NATIONS
+      : (f === 'birthplace' || f === 'native_place') ? REGIONS : null;
+    if (!opts || el.dataset.ac === '1') return;
+    el.dataset.ac = '1';
+    el.addEventListener('click', e => { e.stopPropagation(); showAcPanel(el, opts, el.textContent.trim()); });
+    el.addEventListener('input', () => {
+      showAcPanel(el, opts, el.textContent.trim());
+    });
+    el.addEventListener('keydown', e => acKeydown(e, el));
+  });
+}
+
+let activeAc = null;
+
+function showAcPanel(el, options, filter) {
+  closeAc();
+  const rect = el.getBoundingClientRect();
+  const panel = document.createElement('div');
+  panel.className = 'ac-panel';
+  const kw = (filter || '').toLowerCase();
+  const items = options.filter(o => !kw || o.toLowerCase().indexOf(kw) >= 0).slice(0, 30);
+  if (!items.length) items.push('（无匹配）');
+  let selIdx = 0;
+  function render() {
+    panel.innerHTML = '';
+    items.forEach((o, i) => {
+      const d = document.createElement('div');
+      d.className = 'ac-item' + (i === selIdx ? ' sel' : '');
+      d.textContent = o;
+      d.onclick = () => { setAcValue(el, o); closeAc(); };
+      d.onmouseenter = () => { selIdx = i; render(); };
+      panel.appendChild(d);
+    });
+  }
+  render();
+  document.body.appendChild(panel);
+  // 定位
+  const pw = panel.offsetWidth, ph = panel.offsetHeight;
+  let left = rect.left, top = rect.bottom + 4;
+  if (left + pw > window.innerWidth - 8) left = Math.max(8, window.innerWidth - pw - 8);
+  if (top + ph > window.innerHeight - 8) top = Math.max(8, rect.top - ph - 4);
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+  panel.dataset.items = items.length;
+  panel.dataset.sel = '0';
+  activeAc = { panel, items, el, selIdx };
+  document.addEventListener('mousedown', acOutside, true);
+}
+
+function acKeydown(e, el) {
+  if (!activeAc) return;
+  const { panel, items } = activeAc;
+  if (e.key === 'ArrowDown') { e.preventDefault(); activeAc.selIdx = (activeAc.selIdx + 1) % items.length; highlightAc(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); activeAc.selIdx = (activeAc.selIdx - 1 + items.length) % items.length; highlightAc(); }
+  else if (e.key === 'Enter') { e.preventDefault(); setAcValue(el, items[activeAc.selIdx]); closeAc(); }
+  else if (e.key === 'Escape') { closeAc(); }
+}
+
+function highlightAc() {
+  const items = activeAc.panel.querySelectorAll('.ac-item');
+  items.forEach((d, i) => d.classList.toggle('sel', i === activeAc.selIdx));
+  const s = items[activeAc.selIdx];
+  if (s) s.scrollIntoView({ block: 'nearest' });
+}
+
+function setAcValue(el, val) {
+  el.textContent = val;
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function closeAc() {
+  if (activeAc) {
+    activeAc.panel.remove();
+    activeAc = null;
+    document.removeEventListener('mousedown', acOutside, true);
+  }
+}
+
+function acOutside(e) {
+  if (activeAc && !activeAc.panel.contains(e.target)) closeAc();
 }
 
 /* ================= 日期选择（点击弹出日历面板） ================= */

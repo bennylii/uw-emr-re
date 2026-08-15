@@ -30,6 +30,14 @@
                 padding: 0 4px; cursor: text; outline: none; color: #16a085; }
   .field-hengxian { display: inline-block; min-width: 130px; border-bottom: 1.5px solid #555; }
   .section-title { font-weight: bold; margin: 16px 0 6px; font-size: 15px; }
+  /* 病案首页表格 */
+  .case-table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 12.5px; }
+  .case-table th, .case-table td { border: 1px solid #999; padding: 4px 6px; }
+  .case-table th { background: #f0f3f6; text-align: center; font-weight: bold; }
+  .case-table .field-edit { min-width: 60px; }
+  .case-table .mini { width: 30px; border: none; border-bottom: 1px solid #555;
+                      text-align: center; outline: none; background: transparent; }
+  .sign-line { margin-top: 24px; font-size: 13px; line-height: 2.2; }
   .sign-area { margin-top: 36px; border-top: 1px solid #ccc; padding-top: 12px;
                font-size: 13px; color: #888; }
   .sign-box { display: inline-block; width: 160px; height: 64px; border: 1px dashed #bbb;
@@ -57,6 +65,7 @@
 <div id="toolbar">
   <span class="title">✚ uwEMR 病历编辑器演示</span>
   <select id="tplSel">
+    <option value="case2012">病案首页(2012版 卫医政发84号)</option>
     <option value="admission">入院记录</option>
     <option value="progress">病程记录</option>
     <option value="surgery">手术记录</option>
@@ -99,6 +108,102 @@
 <script>
 /* ================= 模板 ================= */
 const TEMPLATES = {
+  case2012: {
+    title: '住院病案首页（2012版）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="6">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
+  <tr><td>健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
+      <td>第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td>
+      <td>病案号</td><td colspan="2"><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td></tr>
+  <tr><td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
+      <td>国籍</td><td><span class="field-edit" data-field="nation" contenteditable="false"></span></td>
+      <td>民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td></tr>
+  <tr><td>身份证号</td><td colspan="2"><span class="field-edit" data-field="idno" contenteditable="false"></span></td>
+      <td>职业</td><td colspan="2"><span class="field-edit" data-field="occupation" contenteditable="false"></span></td></tr>
+  <tr><td>婚姻</td><td><span class="field-radio" data-field="marriage"></span></td>
+      <td>出生地</td><td colspan="3"><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td></tr>
+  <tr><td>现住址</td><td colspan="3"><span class="field-edit" data-field="address" contenteditable="false"></span></td>
+      <td>电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td></tr>
+  <tr><td>联系人</td><td><span class="field-edit" data-field="contact" contenteditable="false"></span></td>
+      <td>关系</td><td><span class="field-edit" data-field="relation" contenteditable="false"></span></td>
+      <td>联系人电话</td><td><span class="field-edit" data-field="contact_phone" contenteditable="false"></span></td></tr>
+  <tr><td>入院途径</td><td><span class="field-radio" data-field="in_route"></span></td>
+      <td>入院时间</td><td colspan="3"><span class="field-edit" data-field="in_time" contenteditable="false"></span></td></tr>
+  <tr><td>入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
+      <td>病房</td><td><span class="field-edit" data-field="ward" contenteditable="false"></span></td>
+      <td>转科科别</td><td><span class="field-edit" data-field="transfer_dept" contenteditable="false"></span></td></tr>
+  <tr><td>出院时间</td><td colspan="2"><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
+      <td>实际住院</td><td colspan="2"><span class="field-edit" data-field="stay_days" contenteditable="false"></span> 天</td></tr>
+</table>
+<table class="case-table">
+  <tr><th colspan="6">出院诊断（疾病编码·入院病情·出院情况）</th></tr>
+  <tr><th style="width:34%">诊断名称</th><th>疾病编码</th><th>入院病情</th><th>出院情况</th></tr>
+  <tr><td>主要诊断：<span class="field-edit" data-field="diag_main" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_main_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_main"></span></td>
+      <td><span class="field-radio" data-field="out_status_main"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other"></span></td>
+      <td><span class="field-radio" data-field="out_status_other"></span></td></tr>
+  <tr><td>门（急）诊诊断</td><td colspan="3"><span class="field-edit" data-field="diag_outpatient" contenteditable="false"></span></td></tr>
+  <tr><td>损伤、中毒的外部原因</td><td colspan="3"><span class="field-edit" data-field="injury_cause" contenteditable="false"></span></td></tr>
+  <tr><td>病理诊断</td><td colspan="3"><span class="field-edit" data-field="pathology" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th colspan="6">手术及操作</th></tr>
+  <tr><th>手术及操作名称</th><th>编码</th><th>日期</th><th>切口愈合等级</th><th>麻醉方式</th><th>术者</th></tr>
+  <tr><td><span class="field-edit" data-field="op1_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_grade" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_anesthesia" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_surgeon" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op2_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_grade" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_anesthesia" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_surgeon" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><td>血型</td><td><span class="field-radio" data-field="blood_type"></span></td>
+      <td>Rh</td><td><span class="field-radio" data-field="rh"></span></td>
+      <td>输血反应</td><td><span class="field-radio" data-field="transfusion"></span></td></tr>
+  <tr><td>抢救次数</td><td><span class="field-edit" data-field="rescue_cnt" contenteditable="false"></span></td>
+      <td>成功次数</td><td><span class="field-edit" data-field="rescue_ok" contenteditable="false"></span></td>
+      <td>药物过敏</td><td><span class="field-edit" data-field="allergy" contenteditable="false"></span></td></tr>
+  <tr><td>离院方式</td><td><span class="field-radio" data-field="discharge_mode"></span></td>
+      <td>31天内再住院计划</td><td><span class="field-radio" data-field="readmit_plan"></span></td>
+      <td>病案质量</td><td><span class="field-radio" data-field="case_quality"></span></td></tr>
+  <tr><td>住院总费用（元）</td><td colspan="5"><span class="field-edit" data-field="total_fee" contenteditable="false"></span></td></tr>
+</table>
+<div class="sign-line">科主任：<span class="field-edit" data-field="sign_dept_head" contenteditable="false"></span>
+  主任（副主任）医师：<span class="field-edit" data-field="sign_chief" contenteditable="false"></span>
+  主治医师：<span class="field-edit" data-field="sign_attending" contenteditable="false"></span>
+  住院医师：<span class="field-edit" data-field="sign_resident" contenteditable="false"></span>
+  编码员：<span class="field-edit" data-field="sign_coder" contenteditable="false"></span></div>
+`,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'marriage', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '其他'], value: '已婚' },
+      { type: 'radio', name: 'in_route', caption: '入院途径', options: ['急诊', '门诊', '其他医疗机构转入', '其他'], value: '门诊' },
+      { type: 'radio', name: 'adm_status_main', caption: '入院病情(主要)', options: ['1.有', '2.临床未确定', '3.情况不明', '4.无'], value: '1.有' },
+      { type: 'radio', name: 'out_status_main', caption: '出院情况(主要)', options: ['1.治愈', '2.好转', '3.未愈', '4.死亡', '9.其他'], value: '1.治愈' },
+      { type: 'radio', name: 'adm_status_other', caption: '入院病情(其他)', options: ['1.有', '2.临床未确定', '3.情况不明', '4.无'], value: '1.有' },
+      { type: 'radio', name: 'out_status_other', caption: '出院情况(其他)', options: ['1.治愈', '2.好转', '3.未愈', '4.死亡', '9.其他'], value: '2.好转' },
+      { type: 'radio', name: 'blood_type', caption: '血型', options: ['A', 'B', 'O', 'AB', '不详', '未查'], value: 'O' },
+      { type: 'radio', name: 'rh', caption: 'Rh', options: ['阴性', '阳性', '不详', '未查'], value: '阳性' },
+      { type: 'radio', name: 'transfusion', caption: '输血反应', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'discharge_mode', caption: '离院方式', options: ['医嘱离院', '医嘱转院', '转社区卫生机构', '非医嘱离院', '死亡'], value: '医嘱离院' },
+      { type: 'radio', name: 'readmit_plan', caption: '31天再住院', options: ['无', '有'], value: '无' },
+      { type: 'radio', name: 'case_quality', caption: '病案质量', options: ['甲', '乙', '丙'], value: '甲' },
+    ],
+  },
   admission: {
     title: '入院记录',
     fields: [
@@ -152,23 +257,29 @@ let currentTpl = 'admission';
 function renderTemplate(tpl) {
   const paper = document.getElementById('paper');
   paper.innerHTML = '';
-  const t = document.createElement('div');
-  t.className = 'section-title';
-  t.textContent = tpl.title;
-  paper.appendChild(t);
-  tpl.paras.forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'para' + (p.indent ? ' indent' : '');
-    div.innerHTML = p.html;
-    paper.appendChild(div);
-  });
+  if (tpl.html) {
+    paper.innerHTML = tpl.html;
+  } else {
+    const t = document.createElement('div');
+    t.className = 'section-title';
+    t.textContent = tpl.title;
+    paper.appendChild(t);
+    tpl.paras.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'para' + (p.indent ? ' indent' : '');
+      div.innerHTML = p.html;
+      paper.appendChild(div);
+    });
+  }
   // 单选域渲染
   paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));
-  // 签名区（模拟 uwGetSignPhoto）
-  const sign = document.createElement('div');
-  sign.className = 'sign-area';
-  sign.innerHTML = '医师签名：<span class="sign-box"></span>　患者/家属签名：<span class="sign-box"></span>';
-  paper.appendChild(sign);
+  // 签名区（模拟 uwGetSignPhoto）— 仅段落模板
+  if (!tpl.html) {
+    const sign = document.createElement('div');
+    sign.className = 'sign-area';
+    sign.innerHTML = '医师签名：<span class="sign-box"></span>　患者/家属签名：<span class="sign-box"></span>';
+    paper.appendChild(sign);
+  }
   syncAll();
 }
 
@@ -198,29 +309,33 @@ function syncAll() {
   const xml = [];
   xml.push('<?xml version="1.0" encoding="UTF-8"?>');
   xml.push('<record tpl="' + esc(tpl.title) + '">');
-  paper.querySelectorAll('.para').forEach(para => {
-    xml.push('  <para>');
-    // 文本段
-    para.childNodes.forEach(node => {
-      if (node.nodeType === 3) {
-        const t = node.textContent.trim();
-        if (t) xml.push('    <text>' + esc(t) + '</text>');
-      } else if (node.nodeType === 1) {
-        const f = node.dataset.field;
-        if (node.classList.contains('field-radio')) {
-          const val = tpl.fields.find(x => x.name === f);
-          xml.push('    <field name="' + f + '" type="radio" value="' +
-                   esc(val ? val.value : '') + '"/>');
-        } else if (node.classList.contains('field-hengxian')) {
-          xml.push('    <field name="' + f + '" type="hengxian" value="' +
-                   esc(node.textContent) + '"/>');
-        } else if (node.classList.contains('field-edit')) {
-          xml.push('    <field name="' + f + '" type="edit" value="' +
-                   esc(node.textContent) + '"/>');
+  // 段落（模板文本）或表格（病案首页）
+  const sections = paper.querySelectorAll('.para, .case-table');
+  if (!sections.length) sections.push(paper); // 空文档
+  sections.forEach(sec => {
+    const isTable = sec.classList.contains('case-table');
+    xml.push(isTable ? '  <table>' : '  <para>');
+    // 文本段（段落模板）
+    if (!isTable) {
+      sec.childNodes.forEach(node => {
+        if (node.nodeType === 3) {
+          const t = node.textContent.trim();
+          if (t) xml.push('    <text>' + esc(t) + '</text>');
         }
-      }
+      });
+    }
+    // 字段元素（两种模板共用）
+    sec.querySelectorAll('.field-radio, .field-hengxian, .field-edit').forEach(node => {
+      const f = node.dataset.field;
+      let type = 'edit';
+      if (node.classList.contains('field-radio')) type = 'radio';
+      else if (node.classList.contains('field-hengxian')) type = 'hengxian';
+      const val = type === 'radio'
+        ? (tpl.fields.find(x => x.name === f) || {}).value || ''
+        : node.textContent;
+      xml.push('    <field name="' + f + '" type="' + type + '" value="' + esc(val) + '"/>');
     });
-    xml.push('  </para>');
+    xml.push(isTable ? '  </table>' : '  </para>');
   });
   xml.push('</record>');
   document.getElementById('xmlOut').textContent = xml.join('\n');
@@ -272,11 +387,20 @@ function runQC() {
 function updateMissing(tpl) {
   const paper = document.getElementById('paper');
   const m = [];
-  paper.querySelectorAll('.field-edit, .field-hengxian').forEach(el => {
-    if (!el.textContent.trim()) {
-      m.push(el.dataset.field);
-    }
+  // 病案首页必填项
+  const required = ['name', 'case_no', 'idno', 'in_time', 'out_time',
+                    'diag_main', 'diag_main_code', 'total_fee'];
+  const edits = paper.querySelectorAll('.field-edit, .field-hengxian');
+  edits.forEach(el => {
+    if (!el.textContent.trim()) m.push(el.dataset.field);
   });
+  if (tpl.title.indexOf('病案首页') >= 0) {
+    required.forEach(f => {
+      if (!paper.querySelector('[data-field="' + f + '"]')) return;
+      if (!paper.querySelector('[data-field="' + f + '"]').textContent.trim())
+        m.push('★' + f);
+    });
+  }
   const box = document.getElementById('missingList');
   box.innerHTML = '<b>缺项检查（模拟 uwGetNotCompleteList）：</b><br>' +
     (m.length ? m.map(x => '· ' + x).join('<br>') : '<span class="ok">无缺项</span>');

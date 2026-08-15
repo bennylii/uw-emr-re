@@ -81,10 +81,18 @@
     <option value="admission">入院记录</option>
     <option value="progress">病程记录</option>
     <option value="surgery">手术记录</option>
+    <option value="risk">手术风险评估表(NNIS)</option>
+    <option value="preop">术前小结</option>
     <option value="consent">手术同意书</option>
+    <option value="disclosure">住院告知书/授权委托书</option>
     <option value="discharge">出院记录</option>
+    <option value="death">死亡记录</option>
     <option value="nursing">护理记录单</option>
+    <option value="temp">体温单</option>
+    <option value="io">出入量记录单</option>
+    <option value="catheter">导管风险评估监控表</option>
     <option value="yzb">医嘱单</option>
+    <option value="opd">门诊病历</option>
   </select>
   <button onclick="loadTemplate()">载入模板</button>
   <button onclick="newDoc()">新文档</button>
@@ -495,6 +503,238 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="y2_sign" contenteditable="false"></span></td></tr>
 </table>
 `,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  risk: {
+    title: '手术风险评估表（NNIS，切口清洁度/ASA/时长）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="4">手术风险评估表</th></tr>
+  <tr><td>科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td>
+      <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>住院号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
+  <tr><td>拟实施手术名称</td><td colspan="3"><span class="field-edit" data-field="op_name" contenteditable="false"></span></td></tr>
+  <tr><th>1.手术切口清洁度</th><th>2.麻醉分级(ASA)</th><th>3.手术类别</th><th>4.手术持续时间</th></tr>
+  <tr><td>Ⅰ类(清洁) <span class="field-radio" data-field="incision1"></span><br>
+      Ⅱ类(相对清洁) <span class="field-radio" data-field="incision2"></span><br>
+      Ⅲ类(清洁-污染) <span class="field-radio" data-field="incision3"></span><br>
+      Ⅳ类(污染) <span class="field-radio" data-field="incision4"></span></td>
+      <td>P1 <span class="field-radio" data-field="asa1"></span><br>
+      P2 <span class="field-radio" data-field="asa2"></span><br>
+      P3 <span class="field-radio" data-field="asa3"></span><br>
+      P4 <span class="field-radio" data-field="asa4"></span><br>
+      P5 <span class="field-radio" data-field="asa5"></span></td>
+      <td>浅层组织 <span class="field-radio" data-field="cat1"></span><br>
+      深度组织 <span class="field-radio" data-field="cat2"></span><br>
+      器官 <span class="field-radio" data-field="cat3"></span><br>
+      腔隙 <span class="field-radio" data-field="cat4"></span></td>
+      <td>T1:&lt;3h <span class="field-radio" data-field="dur1"></span><br>
+      T2:&gt;3h <span class="field-radio" data-field="dur2"></span><br>
+      T3:急诊 <span class="field-radio" data-field="dur3"></span></td></tr>
+  <tr><td>手术医师签名</td><td colspan="3"><span class="field-edit" data-field="sign_surgeon" contenteditable="false"></span></td></tr>
+  <tr><td>麻醉医师签名</td><td colspan="3"><span class="field-edit" data-field="sign_anesthesia" contenteditable="false"></span></td></tr>
+  <tr><td>手术风险评估</td><td colspan="3">切口清洁度(<span class="field-edit" data-field="score_incision" contenteditable="false"></span>分)+ASA(<span class="field-edit" data-field="score_asa" contenteditable="false"></span>分)+时长(<span class="field-edit" data-field="score_dur" contenteditable="false"></span>分)=NNIS <span class="field-edit" data-field="score_nnis" contenteditable="false"></span>分</td></tr>
+</table>
+`,
+    fields: [
+      { type: 'radio', name: 'incision1', caption: '切口Ⅰ', options: ['□', '✓'], value: '✓' },
+      { type: 'radio', name: 'incision2', caption: '切口Ⅱ', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'incision3', caption: '切口Ⅲ', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'incision4', caption: '切口Ⅳ', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'asa1', caption: 'ASA P1', options: ['□', '✓'], value: '✓' },
+      { type: 'radio', name: 'asa2', caption: 'ASA P2', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'asa3', caption: 'ASA P3', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'asa4', caption: 'ASA P4', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'asa5', caption: 'ASA P5', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'cat1', caption: '浅层', options: ['□', '✓'], value: '✓' },
+      { type: 'radio', name: 'cat2', caption: '深度', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'cat3', caption: '器官', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'cat4', caption: '腔隙', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'dur1', caption: 'T1', options: ['□', '✓'], value: '✓' },
+      { type: 'radio', name: 'dur2', caption: 'T2', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'dur3', caption: 'T3急诊', options: ['□', '✓'], value: '□' },
+    ],
+  },
+  preop: {
+    title: '术前小结',
+    paras: [
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: true, html: '术前诊断：<span class="field-hengxian" data-field="pre_diag" contenteditable="false"></span>' },
+      { indent: true, html: '手术指征：<span class="field-hengxian" data-field="indication" contenteditable="false"></span>' },
+      { indent: true, html: '拟行手术名称：<span class="field-hengxian" data-field="op_name" contenteditable="false"></span>' },
+      { indent: true, html: '麻醉方式：<span class="field-hengxian" data-field="anesthesia" contenteditable="false"></span>' },
+      { indent: true, html: '术前准备情况（检查检验结果）：' },
+      { indent: true, html: '术前讨论意见/注意事项：' },
+      { indent: false, html: '手术者：<span class="field-edit" data-field="op_surgeon" contenteditable="false"></span>　助手：<span class="field-edit" data-field="op_assist" contenteditable="false"></span>' },
+      { indent: false, html: '小结医师：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　日期：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  disclosure: {
+    title: '住院告知书/授权委托书',
+    paras: [
+      { indent: false, html: '住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: true, html: '告知内容：为保障住院期间享有充分的知情同意权，医务人员将向您告知病情、医疗措施、医疗风险等情况；未经患者本人充分知情和签名同意，医务人员不得进行手术等重大医疗行为。请授权委托一位您充分信任的代理人，代为行使患者的知情同意权。' },
+      { indent: false, html: '授权方式选择（勾选）：' },
+      { indent: false, html: '<span class="field-radio" data-field="choose1"></span> 出具授权委托书指定代理人' },
+      { indent: false, html: '<span class="field-radio" data-field="choose2"></span> 不委托代理人，直接向本人告知；危急情况授权经治医师决定治疗方案' },
+      { indent: false, html: '<span class="field-radio" data-field="choose3"></span> 同意诊疗过程中使用自费医疗器材及自费药品' },
+      { indent: false, html: '患者签名：<span class="field-edit" data-field="sign_patient" contenteditable="false"></span>　日期：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+      { indent: false, html: '———————————————— 授权委托书 ————————————————' },
+      { indent: true, html: '兹委托 <span class="field-edit" data-field="agent_name" contenteditable="false"></span>（与患者关系：<span class="field-edit" data-field="relation" contenteditable="false"></span>）为本人的代理人，听取告知并在手术同意书等需患者签名的医疗文书上签名，代理本人行使知情同意权和选择权。' },
+      { indent: false, html: '受托人姓名：<span class="field-edit" data-field="agent_name2" contenteditable="false"></span>　委托人（患者）姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>' },
+      { indent: false, html: '受托人身份证号：<span class="field-edit" data-field="agent_idno" contenteditable="false"></span>　联系电话：<span class="field-edit" data-field="agent_phone" contenteditable="false"></span>' },
+      { indent: false, html: '日期：<span class="field-edit" data-field="sign_date2" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'choose1', caption: '授权方式1', options: ['□', '✓'], value: '✓' },
+      { type: 'radio', name: 'choose2', caption: '授权方式2', options: ['□', '✓'], value: '□' },
+      { type: 'radio', name: 'choose3', caption: '自费同意', options: ['□', '✓'], value: '□' },
+    ],
+  },
+  death: {
+    title: '死亡记录',
+    paras: [
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '入院日期：<span class="field-edit" data-field="in_time" contenteditable="false"></span>　死亡日期：<span class="field-edit" data-field="death_time" contenteditable="false"></span>' },
+      { indent: true, html: '入院情况：' },
+      { indent: true, html: '入院诊断：<span class="field-hengxian" data-field="diag_admit" contenteditable="false"></span>' },
+      { indent: true, html: '诊疗经过（抢救经过）：' },
+      { indent: true, html: '死亡原因：<span class="field-hengxian" data-field="death_cause" contenteditable="false"></span>' },
+      { indent: true, html: '死亡诊断：<span class="field-hengxian" data-field="diag_death" contenteditable="false"></span>' },
+      { indent: false, html: '是否尸检：<span class="field-radio" data-field="autopsy"></span>　是否死亡讨论：<span class="field-radio" data-field="discussion"></span>' },
+      { indent: false, html: '经治医师：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　记录日期：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'autopsy', caption: '尸检', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'discussion', caption: '死亡讨论', options: ['是', '否'], value: '是' },
+    ],
+  },
+  temp: {
+    title: '体温单（ENR_TZJL）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">体 温 单</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
+      <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>日期</th><th>时间</th><th>T(℃)</th><th>P(次/分)</th><th>R(次/分)</th><th>BP(mmHg)</th><th>大便</th><th>备注(出入量等)</th></tr>
+  <tr><td><span class="field-edit" data-field="t1_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_t" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_p" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_r" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_bp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_stool" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_note" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="t2_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_t" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_p" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_r" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_bp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_stool" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_note" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="t3_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t3_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t3_t" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t3_p" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t3_r" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t3_bp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t3_stool" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t3_note" contenteditable="false"></span></td></tr>
+</table>
+`,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  io: {
+    title: '出入量记录单（ENR_SRD）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">出入量记录单</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td>
+      <td>诊断</td><td colspan="3"><span class="field-edit" data-field="diag_main" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th rowspan="2">时间</th><th colspan="3">入量(ml)</th><th colspan="3">出量(ml)</th><th rowspan="2">护士签名</th></tr>
+  <tr><th>静脉输液</th><th>口服/饮食</th><th>小计</th><th>尿量</th><th>大便/引流</th><th>小计</th></tr>
+  <tr><td><span class="field-edit" data-field="io1_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io1_in_iv" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io1_in_oral" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io1_in_sum" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io1_out_urine" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io1_out_other" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io1_out_sum" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io1_sign" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="io2_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io2_in_iv" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io2_in_oral" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io2_in_sum" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io2_out_urine" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io2_out_other" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io2_out_sum" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="io2_sign" contenteditable="false"></span></td></tr>
+</table>
+`,
+    fields: [],
+  },
+  catheter: {
+    title: '导管风险评估监控表（ENR_SRD）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">导管风险评估监控表</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td>
+      <td>置管日期</td><td><span class="field-edit" data-field="tube_date" contenteditable="false"></span></td>
+      <td>置管部位</td><td><span class="field-edit" data-field="tube_site" contenteditable="false"></span></td></tr>
+  <tr><td>导管类型</td><td colspan="7"><span class="field-radio" data-field="tube_type"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>日期</th><th>导管固定情况</th><th>穿刺点外观(红/肿/渗液)</th><th>通畅情况</th><th>导管移位/滑脱</th><th>风险评估</th><th>护理措施</th><th>护士签名</th></tr>
+  <tr><td><span class="field-edit" data-field="c1_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="c1_fix" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="c1_site" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="c1_patency" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="c1_shift" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="c1_risk" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="c1_measure" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="c1_sign" contenteditable="false"></span></td></tr>
+</table>
+`,
+    fields: [
+      { type: 'radio', name: 'tube_type', caption: '导管类型', options: ['深静脉置管', 'PICC', 'CVC', '外周静脉', '导尿管', '胃管', '引流管'], value: '深静脉置管' },
+    ],
+  },
+  opd: {
+    title: '门诊病历',
+    paras: [
+      { indent: false, html: '就诊时间：<span class="field-edit" data-field="visit_time" contenteditable="false"></span>　科别：<span class="field-edit" data-field="dept" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '主诉：<span class="field-hengxian" data-field="chief" contenteditable="false"></span>' },
+      { indent: true, html: '现病史：' },
+      { indent: true, html: '既往史：<span class="field-hengxian" data-field="past" contenteditable="false"></span>' },
+      { indent: true, html: '体格检查：<span class="field-hengxian" data-field="exam" contenteditable="false"></span>' },
+      { indent: true, html: '辅助检查：' },
+      { indent: true, html: '初步诊断：<span class="field-hengxian" data-field="diag" contenteditable="false"></span>' },
+      { indent: true, html: '治疗意见/处理：' },
+      { indent: false, html: '医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>' },
+    ],
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
     ],

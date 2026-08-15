@@ -38,6 +38,9 @@
   .case-table .mini { width: 30px; border: none; border-bottom: 1px solid #555;
                       text-align: center; outline: none; background: transparent; }
   .sign-line { margin-top: 24px; font-size: 13px; line-height: 2.2; }
+  .ca-sig-line { margin-top: 10px; padding: 6px 8px; border: 1px solid #e74c3c;
+                 background: #fdf0ef; color: #c0392b; font-size: 12px;
+                 border-radius: 4px; }
   /* 打印样式 */
   @media print {
     #toolbar, #sidePane, .foot { display: none !important; }
@@ -80,10 +83,21 @@
     <option value="surgery">手术记录</option>
     <option value="consent">手术同意书</option>
     <option value="discharge">出院记录</option>
+    <option value="nursing">护理记录单</option>
+    <option value="yzb">医嘱单</option>
   </select>
   <button onclick="loadTemplate()">载入模板</button>
   <button onclick="newDoc()">新文档</button>
   <button onclick="printDoc()">打印</button>
+  <select id="signRole" style="background:#f39c12">
+    <option value="主治医师">主治医师</option>
+    <option value="住院医师">住院医师</option>
+    <option value="主任(副主任)医师">主任(副主任)医师</option>
+    <option value="责任护士">责任护士</option>
+    <option value="编码员">编码员</option>
+    <option value="质控医师">质控医师</option>
+  </select>
+  <button onclick="caSign()" style="background:#e74c3c">CA 签名</button>
   <button onclick="exportXML()">导出 XML</button>
   <button onclick="exportHTML()">导出 HTML</button>
   <span class="hint">仿真 uwWordDll 定制层：域控件 · XML 双向绑定 · 质控（clean-room 演示）</span>
@@ -97,6 +111,10 @@
     <div class="panel">
       <h3>病历 XML 序列化（模拟 RecordData_GetStandardXml，fd_Field 双向绑定）</h3>
       <div id="xmlOut"></div>
+    </div>
+    <div class="panel">
+      <h3>CA 电子签名记录（模拟 d_emr_cajk_sign_*，saf_rsasignwithstamp）</h3>
+      <div id="signList" style="font-size:12px"></div>
     </div>
     <div class="panel">
       <h3>书写质控（模拟 CompareSimilValue + uwGetNotCompleteList）</h3>
@@ -402,6 +420,85 @@ const TEMPLATES = {
       { type: 'radio', name: 'result', caption: '治疗结果', options: ['治愈', '好转', '未愈', '死亡', '其他'], value: '好转' },
     ],
   },
+  nursing: {
+    title: '护理记录单（ENR_SRD 直证）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">一般护理记录单</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
+      <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td></tr>
+  <tr><td>住院号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td>
+      <td>科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td>
+      <td>诊断</td><td colspan="3"><span class="field-edit" data-field="diag_main" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>日期时间</th><th>意识</th><th>T(℃)</th><th>P(次/分)</th><th>R(次/分)</th><th>BP(mmHg)</th><th>病情及护理措施</th><th>护士签名</th></tr>
+  <tr><td><span class="field-edit" data-field="n1_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n1_conscious" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n1_t" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n1_p" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n1_r" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n1_bp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n1_note" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n1_sign" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="n2_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n2_conscious" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n2_t" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n2_p" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n2_r" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n2_bp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n2_note" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n2_sign" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="n3_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n3_conscious" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n3_t" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n3_p" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n3_r" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n3_bp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n3_note" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="n3_sign" contenteditable="false"></span></td></tr>
+</table>
+`,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  yzb: {
+    title: '医嘱单（EMR_YZB 长期/临时）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">长期医嘱单</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
+      <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+  <tr><td><span class="field-edit" data-field="y1_start" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_dose" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_usage" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_freq" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_stop" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_stopdoc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_sign" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="y2_start" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_dose" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_usage" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_freq" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_stop" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_stopdoc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_sign" contenteditable="false"></span></td></tr>
+</table>
+`,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
 };
 
 /* ================= 渲染 ================= */
@@ -587,6 +684,65 @@ function exportHTML() {
 }
 function printDoc() {
   window.print();
+}
+
+/* ================= CA 电子签名（模拟 u_bs_cajk_ca / d_emr_cajk_sign_*） ================= */
+const caSignatures = [];   // {role, time, digest, sign, doc}
+
+function caSign() {
+  const role = document.getElementById('signRole').value;
+  const doc = document.getElementById('xmlOut').textContent;
+  if (!doc || doc.indexOf('<record') < 0) { alert('请先载入病历文档'); return; }
+  const t = new Date();
+  const ts = t.getFullYear() + '-' + pad2(t.getMonth() + 1) + '-' + pad2(t.getDate()) +
+             ' ' + pad2(t.getHours()) + ':' + pad2(t.getMinutes()) + ':' + pad2(t.getSeconds());
+  // 模拟摘要（RSA 签名前先做哈希，对应 saf_hash + saf_rsasignwithstamp）
+  const digest = sha256hex(doc).slice(0, 32).toUpperCase();
+  const sign = makeSign(digest, role);
+  caSignatures.push({ role, time: ts, digest, sign, doc: currentTpl });
+  renderSignList();
+  // 追加签名标记到文档（对应签名后写回 EMR_BL_* 表）
+  const paper = document.getElementById('paper');
+  const sig = document.createElement('div');
+  sig.className = 'ca-sig-line';
+  sig.textContent = '【CA 签名】' + role + '　时间：' + ts + '　摘要：' + digest +
+                    '　签名值：' + sign.slice(0, 16) + '…';
+  paper.appendChild(sig);
+  syncAll();
+}
+
+function renderSignList() {
+  const box = document.getElementById('signList');
+  if (!caSignatures.length) { box.innerHTML = '<span style="color:#999">尚无签名记录</span>'; return; }
+  box.innerHTML = caSignatures.map((s, i) =>
+    '<div style="border-bottom:1px dashed #ccc;padding:3px 0">' +
+    '<b>#' + (i + 1) + ' ' + s.role + '</b> ' + s.time + '<br>' +
+    '摘要 ' + s.digest.slice(0, 12) + '…　签名 ' + s.sign.slice(0, 12) + '…</div>'
+  ).join('');
+}
+
+// 模拟 RSA-SHA1 签名值（确定性：摘要+角色 → 大写十六进制）
+function makeSign(digest, role) {
+  let s = digest + role + 'EMRCA';
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = (h * 0x01000193) >>> 0;
+  }
+  return ('00000000' + h.toString(16).toUpperCase()).slice(-8) +
+         digest.slice(8, 16);
+}
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function sha256hex(str) {
+  // 简化摘要：FNV-1a 双轮（演示用途，非真实 SHA-256）
+  let h1 = 0x811c9dc5, h2 = 0x01000193;
+  for (let i = 0; i < str.length; i++) {
+    h1 = ((h1 ^ str.charCodeAt(i)) * 16777619) >>> 0;
+    h2 = ((h2 + str.charCodeAt(i)) * 2654435761) >>> 0;
+  }
+  return ('00000000' + h1.toString(16)).slice(-8) +
+         ('00000000' + h2.toString(16)).slice(-8) +
+         ('00000000' + (h1 ^ h2).toString(16)).slice(-8);
 }
 
 /* 编辑域输入 → 实时同步 XML */

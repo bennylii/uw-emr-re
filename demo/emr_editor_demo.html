@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>uwEMR 病历编辑器演示 (AbiWord 2.8 定制层仿真)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Microsoft YaHei", sans-serif; background: #e8eaed; color: #333; }
+  /* 顶部工具栏 */
+  #toolbar { background: #2c3e50; color: #fff; display: flex; align-items: center;
+             gap: 8px; padding: 8px 14px; flex-wrap: wrap; }
+  #toolbar .title { font-weight: bold; margin-right: 12px; font-size: 15px; }
+  #toolbar select, #toolbar button { padding: 5px 10px; border: none; border-radius: 4px;
+             cursor: pointer; font-size: 13px; }
+  #toolbar button { background: #3498db; color: #fff; }
+  #toolbar button:hover { background: #2980b9; }
+  #toolbar .hint { color: #9db6c9; font-size: 12px; margin-left: auto; }
+  /* 主区 */
+  #main { display: flex; height: calc(100vh - 48px); }
+  #docPane { flex: 1; overflow: auto; padding: 24px; }
+  #paper { background: #fff; max-width: 760px; margin: 0 auto; min-height: 900px;
+           padding: 48px 56px; box-shadow: 0 2px 12px rgba(0,0,0,.18); }
+  /* 文档元素 */
+  .para { margin: 8px 0; line-height: 1.75; position: relative; }
+  .para.indent { text-indent: 2em; }
+  .field-radio { display: inline-block; padding: 0 2px; cursor: pointer; color: #2980b9;
+                 user-select: none; }
+  .field-radio.on { color: #16a085; font-weight: bold; }
+  .field-edit { display: inline-block; min-width: 90px; border-bottom: 1.5px solid #555;
+                padding: 0 4px; cursor: text; outline: none; color: #16a085; }
+  .field-hengxian { display: inline-block; min-width: 130px; border-bottom: 1.5px solid #555; }
+  .section-title { font-weight: bold; margin: 16px 0 6px; font-size: 15px; }
+  .sign-area { margin-top: 36px; border-top: 1px solid #ccc; padding-top: 12px;
+               font-size: 13px; color: #888; }
+  .sign-box { display: inline-block; width: 160px; height: 64px; border: 1px dashed #bbb;
+              margin-top: 6px; vertical-align: middle; }
+  /* 右侧面板 */
+  #sidePane { width: 380px; background: #f4f6f8; border-left: 1px solid #d0d4da;
+              display: flex; flex-direction: column; overflow: hidden; }
+  .panel { padding: 10px 12px; border-bottom: 1px solid #dde1e6; overflow: auto; }
+  .panel h3 { font-size: 13px; margin-bottom: 6px; color: #2c3e50; }
+  #xmlOut { font-family: Consolas, monospace; font-size: 11px; white-space: pre-wrap;
+            background: #fff; border: 1px solid #dde1e6; padding: 8px; height: 46%;
+            overflow: auto; }
+  #qcOut { font-size: 12px; }
+  #qcOut .warn { color: #c0392b; }
+  #qcOut .ok { color: #27ae60; }
+  .qc-row { display: flex; gap: 6px; margin: 6px 0; }
+  .qc-row textarea { flex: 1; font-size: 12px; padding: 4px; height: 44px; }
+  #qcBtn { background: #e67e22; color: #fff; border: none; padding: 5px 12px;
+           border-radius: 4px; cursor: pointer; }
+  .foot { font-size: 11px; color: #999; padding: 8px 12px; border-top: 1px solid #dde1e6; }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <span class="title">✚ uwEMR 病历编辑器演示</span>
+  <select id="tplSel">
+    <option value="admission">入院记录</option>
+    <option value="progress">病程记录</option>
+    <option value="surgery">手术记录</option>
+  </select>
+  <button onclick="loadTemplate()">载入模板</button>
+  <button onclick="newDoc()">新文档</button>
+  <button onclick="exportXML()">导出 XML</button>
+  <button onclick="exportHTML()">导出 HTML</button>
+  <span class="hint">仿真 uwWordDll 定制层：域控件 · XML 双向绑定 · 质控（clean-room 演示）</span>
+</div>
+
+<div id="main">
+  <div id="docPane">
+    <div id="paper" contenteditable="true"></div>
+  </div>
+  <div id="sidePane">
+    <div class="panel">
+      <h3>病历 XML 序列化（模拟 RecordData_GetStandardXml，fd_Field 双向绑定）</h3>
+      <div id="xmlOut"></div>
+    </div>
+    <div class="panel">
+      <h3>书写质控（模拟 CompareSimilValue + uwGetNotCompleteList）</h3>
+      <div id="qcOut">
+        <div class="qc-row">
+          <textarea id="qcA" placeholder="文本 A（如：当前病历段落）"></textarea>
+          <textarea id="qcB" placeholder="文本 B（如：既往病历/范文）"></textarea>
+        </div>
+        <button id="qcBtn" onclick="runQC()">相似度比对</button>
+        <div id="qcResult" style="margin-top:6px"></div>
+        <div id="missingList" style="margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="foot">
+      研究演示：界面与交互为自拟实现，仅复现接口行为（域控件值↔XML 同步、
+      gzip 交换、相似度质控），不含厂商代码。基于 AbiWord 2.8.x GPL 分析。
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= 模板 ================= */
+const TEMPLATES = {
+  admission: {
+    title: '入院记录',
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'edit',  name: 'bed',  caption: '床号' },
+      { type: 'edit',  name: 'diag', caption: '初步诊断' },
+    ],
+    paras: [
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　' +
+                            '性别：<span class="field-radio" data-field="sex"></span>　' +
+                            '年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　' +
+                            '入院日期：<span class="field-edit" data-field="admit_date" contenteditable="false"></span>' },
+      { indent: true,  html: '主诉：<span class="field-hengxian" data-field="chief" contenteditable="false"></span>' },
+      { indent: true,  html: '现病史：<span class="field-hengxian" data-field="hpi" contenteditable="false"></span>' },
+      { indent: true,  html: '既往史：' },
+      { indent: false, html: '初步诊断：<span class="field-edit" data-field="diag" contenteditable="false"></span>' },
+    ],
+  },
+  progress: {
+    title: '病程记录',
+    fields: [],
+    paras: [
+      { indent: false, html: '日期：<span class="field-edit" data-field="date" contenteditable="false"></span>　' +
+                            '时间：<span class="field-edit" data-field="time" contenteditable="false"></span>' },
+      { indent: true, html: '今日患者神志清，精神可，饮食睡眠可，大小便正常。' },
+      { indent: true, html: '查体：T <span class="field-edit" data-field="temp" contenteditable="false"></span>℃，' +
+                            'P <span class="field-edit" data-field="pulse" contenteditable="false"></span>次/分，' +
+                            'R <span class="field-edit" data-field="resp" contenteditable="false"></span>次/分，' +
+                            'BP <span class="field-edit" data-field="bp" contenteditable="false"></span>mmHg。' },
+      { indent: true, html: '双肺呼吸音清，未及明显干湿性啰音。' },
+    ],
+  },
+  surgery: {
+    title: '手术记录',
+    fields: [],
+    paras: [
+      { indent: false, html: '手术名称：<span class="field-edit" data-field="op_name" contenteditable="false"></span>' },
+      { indent: false, html: '手术日期：<span class="field-edit" data-field="op_date" contenteditable="false"></span>　' +
+                            '手术者：<span class="field-edit" data-field="op_doc" contenteditable="false"></span>' },
+      { indent: true, html: '麻醉方式：<span class="field-edit" data-field="anesthesia" contenteditable="false"></span>' },
+      { indent: true, html: '术前诊断：<span class="field-hengxian" data-field="pre_diag" contenteditable="false"></span>' },
+      { indent: true, html: '术中情况：' },
+    ],
+  },
+};
+
+/* ================= 渲染 ================= */
+let currentTpl = 'admission';
+
+function renderTemplate(tpl) {
+  const paper = document.getElementById('paper');
+  paper.innerHTML = '';
+  const t = document.createElement('div');
+  t.className = 'section-title';
+  t.textContent = tpl.title;
+  paper.appendChild(t);
+  tpl.paras.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'para' + (p.indent ? ' indent' : '');
+    div.innerHTML = p.html;
+    paper.appendChild(div);
+  });
+  // 单选域渲染
+  paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));
+  // 签名区（模拟 uwGetSignPhoto）
+  const sign = document.createElement('div');
+  sign.className = 'sign-area';
+  sign.innerHTML = '医师签名：<span class="sign-box"></span>　患者/家属签名：<span class="sign-box"></span>';
+  paper.appendChild(sign);
+  syncAll();
+}
+
+function renderRadio(el) {
+  const tpl = TEMPLATES[currentTpl];
+  const f = tpl.fields.find(x => x.name === el.dataset.field);
+  if (!f) return;
+  el.textContent = f.options.map(o => (o === f.value ? '◉ ' : '○ ') + o).join('　');
+  el.classList.toggle('on', true);
+  el.addEventListener('click', () => {
+    const opts = f.options;
+    const idx = opts.indexOf(f.value);
+    f.value = opts[(idx + 1) % opts.length];
+    renderRadio(el);
+    syncAll();
+  });
+}
+
+/* ================= XML 双向绑定（模拟 fd_Field::setValue + updateFragobject） ================= */
+function esc(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function syncAll() {
+  const paper = document.getElementById('paper');
+  const tpl = TEMPLATES[currentTpl];
+  const xml = [];
+  xml.push('<?xml version="1.0" encoding="UTF-8"?>');
+  xml.push('<record tpl="' + esc(tpl.title) + '">');
+  paper.querySelectorAll('.para').forEach(para => {
+    xml.push('  <para>');
+    // 文本段
+    para.childNodes.forEach(node => {
+      if (node.nodeType === 3) {
+        const t = node.textContent.trim();
+        if (t) xml.push('    <text>' + esc(t) + '</text>');
+      } else if (node.nodeType === 1) {
+        const f = node.dataset.field;
+        if (node.classList.contains('field-radio')) {
+          const val = tpl.fields.find(x => x.name === f);
+          xml.push('    <field name="' + f + '" type="radio" value="' +
+                   esc(val ? val.value : '') + '"/>');
+        } else if (node.classList.contains('field-hengxian')) {
+          xml.push('    <field name="' + f + '" type="hengxian" value="' +
+                   esc(node.textContent) + '"/>');
+        } else if (node.classList.contains('field-edit')) {
+          xml.push('    <field name="' + f + '" type="edit" value="' +
+                   esc(node.textContent) + '"/>');
+        }
+      }
+    });
+    xml.push('  </para>');
+  });
+  xml.push('</record>');
+  document.getElementById('xmlOut').textContent = xml.join('\n');
+  updateMissing(tpl);
+}
+
+/* ================= 质控 ================= */
+// n-gram Jaccard（与 src/uwemr/qc/Similarity.cpp 同算法）
+function toChunks(s, n) {
+  const out = []; let buf = '', cnt = 0;
+  for (let i = 0; i < s.length;) {
+    const c = s.codePointAt(i);
+    let len = c > 0xFFFF ? 2 : 1;
+    buf += s.slice(i, i + len);
+    i += len;
+    if (++cnt === n) { out.push(buf); buf = ''; cnt = 0; }
+  }
+  if (buf) out.push(buf);
+  return out;
+}
+function simil(a, b) {
+  const N = 3;
+  const ca = toChunks(a, N), cb = toChunks(b, N);
+  if (!ca.length && !cb.length) return 1;
+  if (!ca.length || !cb.length) return 0;
+  const sa = {}, sb = {};
+  ca.forEach(x => sa[x] = (sa[x] || 0) + 1);
+  cb.forEach(x => sb[x] = (sb[x] || 0) + 1);
+  let inter = 0;
+  for (const k in sa) if (sb[k]) inter += Math.min(sa[k], sb[k]);
+  const uni = ca.length + cb.length - inter;
+  if (!uni) return 1;
+  const jac = inter / uni;
+  const lr = Math.min(ca.length, cb.length) / Math.max(ca.length, cb.length);
+  return jac * (0.7 + 0.3 * lr);
+}
+
+function runQC() {
+  const a = document.getElementById('qcA').value;
+  const b = document.getElementById('qcB').value;
+  const s = simil(a, b);
+  const r = document.getElementById('qcResult');
+  r.innerHTML = s > 0.6
+    ? '<span class="warn">⚠ 相似度 ' + s.toFixed(3) + ' —— 疑似复制粘贴，建议修改</span>'
+    : '<span class="ok">✓ 相似度 ' + s.toFixed(3) + '</span>';
+}
+
+// uwGetNotCompleteList：必填元素检查
+function updateMissing(tpl) {
+  const paper = document.getElementById('paper');
+  const m = [];
+  paper.querySelectorAll('.field-edit, .field-hengxian').forEach(el => {
+    if (!el.textContent.trim()) {
+      m.push(el.dataset.field);
+    }
+  });
+  const box = document.getElementById('missingList');
+  box.innerHTML = '<b>缺项检查（模拟 uwGetNotCompleteList）：</b><br>' +
+    (m.length ? m.map(x => '· ' + x).join('<br>') : '<span class="ok">无缺项</span>');
+}
+
+/* ================= 工具栏动作 ================= */
+function loadTemplate() {
+  currentTpl = document.getElementById('tplSel').value;
+  renderTemplate(TEMPLATES[currentTpl]);
+}
+function newDoc() {
+  document.getElementById('paper').innerHTML = '<div class="para" contenteditable="true">（空白病历文档）</div>';
+  syncAll();
+}
+function exportXML() {
+  const d = document.getElementById('xmlOut').textContent;
+  const a = document.createElement('a');
+  a.href = 'data:text/xml;charset=utf-8,' + encodeURIComponent(d);
+  a.download = 'record.xml';
+  a.click();
+}
+function exportHTML() {
+  const paper = document.getElementById('paper');
+  const html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>病历导出</title>' +
+    '<style>body{font-family:serif;max-width:760px;margin:40px auto;line-height:1.8}</style>' +
+    '</head><body>' + paper.innerHTML + '</body></html>';
+  const a = document.createElement('a');
+  a.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+  a.download = 'record.html';
+  a.click();
+}
+
+/* 编辑域输入 → 实时同步 XML */
+document.getElementById('paper').addEventListener('input', syncAll);
+
+/* 启动 */
+loadTemplate();
+</script>
+</body>
+</html>

@@ -294,9 +294,13 @@ const TEMPLATES = {
     html: `
 <table class="case-table">
   <tr><th colspan="8">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
-  <tr><td>医疗付费方式</td><td colspan="3"><span class="field-edit" data-field="pay_mode" contenteditable="false"></span></td>
-      <td>健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
-      <td>第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td></tr>
+  <tr><td>医疗机构名称</td><td colspan="3"><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
+      <td>组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td>
+      <td>医疗付费方式</td><td><span class="field-edit" data-field="pay_mode" contenteditable="false"></span></td></tr>
+  <tr><td>健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
+      <td>第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td>
+      <td>住院号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
+      <td>病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
   <tr><td>病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td>
       <td>住院流水号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
       <td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
@@ -310,8 +314,8 @@ const TEMPLATES = {
       <td>出生地</td><td><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td>
       <td>籍贯</td><td><span class="field-edit" data-field="native_place" contenteditable="false"></span></td></tr>
   <tr><td>民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
-      <td>身份证号</td><td colspan="3"><span class="field-edit" data-field="idno" contenteditable="false"></span></td>
-      <td>职业</td><td><span class="field-edit" data-field="occupation" contenteditable="false"></span></td></tr>
+      <td>身份证件类别</td><td><span class="field-radio" data-field="id_type"></span></td>
+      <td>身份证号</td><td colspan="3"><span class="field-edit" data-field="idno" contenteditable="false"></span></td></tr>
   <tr><td>现住址</td><td colspan="3"><span class="field-edit" data-field="address" contenteditable="false"></span></td>
       <td>电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
       <td>邮编</td><td><span class="field-edit" data-field="zip" contenteditable="false"></span></td></tr>
@@ -334,6 +338,7 @@ const TEMPLATES = {
       <td>转科科别</td><td><span class="field-edit" data-field="transfer_dept" contenteditable="false"></span></td></tr>
   <tr><td>出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
       <td>出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
+      <td>出院病房</td><td><span class="field-edit" data-field="out_ward" contenteditable="false"></span></td>
       <td>实际住院</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span> 天</td></tr>
 </table>
 <table class="case-table">
@@ -428,27 +433,44 @@ const TEMPLATES = {
       <td colspan="2">主要手术/操作与主要诊断匹配：<span class="field-radio" data-field="drg_match"></span></td></tr>
 </table>
 <table class="case-table">
-  <tr><td colspan="8"><b>住院费用（元）</b> 总费用：<span class="field-edit" data-field="total_fee" contenteditable="false"></span>
+  <tr><td colspan="8"><b>住院费用（元）（WS 445.10 24 项明细）</b>　总费用：<span class="field-edit" data-field="total_fee" contenteditable="false"></span>
       自付金额：<span class="field-edit" data-field="self_pay" contenteditable="false"></span>
       自费金额：<span class="field-edit" data-field="self_fee" contenteditable="false"></span>
       其他支付：<span class="field-edit" data-field="other_pay" contenteditable="false"></span></td></tr>
-  <tr><td>1.综合医疗服务类</td><td><span class="field-edit" data-field="fee1" contenteditable="false"></span></td>
-      <td>2.诊断类</td><td><span class="field-edit" data-field="fee2" contenteditable="false"></span></td>
-      <td>3.治疗类</td><td><span class="field-edit" data-field="fee3" contenteditable="false"></span></td>
-      <td>4.康复类</td><td><span class="field-edit" data-field="fee4" contenteditable="false"></span></td></tr>
-  <tr><td>5.中医类</td><td><span class="field-edit" data-field="fee5" contenteditable="false"></span></td>
-      <td>6.西药类</td><td><span class="field-edit" data-field="fee6" contenteditable="false"></span></td>
-      <td>7.中药类</td><td><span class="field-edit" data-field="fee7" contenteditable="false"></span></td>
-      <td>8.血液制品类</td><td><span class="field-edit" data-field="fee8" contenteditable="false"></span></td></tr>
-  <tr><td>9.耗材类</td><td><span class="field-edit" data-field="fee9" contenteditable="false"></span></td>
-      <td>10.其他类</td><td><span class="field-edit" data-field="fee10" contenteditable="false"></span></td>
-      <td colspan="4"></td></tr>
-  <tr><td colspan="8" style="font-size:11px;color:#666">费用 24 项明细（可按 HIS 费用清单自动带出，此处仅列 10 大类）：
-      （1）一般医疗服务费（2）一般治疗操作费（3）护理费（4）其他费用（5）病理诊断费（6）实验室诊断费
-      （7）影像学诊断费（8）临床诊断项目费（9）非手术治疗项目费（10）手术治疗费（11）康复费
-      （12）中医治疗费（13）西药费（14）中成药费（15）中草药费（16）血费（17）白蛋白类制品费
-      （18）球蛋白类制品费（19）凝血因子类制品费（20）细胞因子类制品费（21）检查用一次性医用材料费
-      （22）治疗用一次性医用材料费（23）手术用一次性医用材料费（24）其他费</td></tr>
+  <tr><td colspan="2">1.综合医疗服务类</td><td colspan="2">2.诊断类</td><td colspan="2">3.治疗类</td><td colspan="2">4.康复类</td></tr>
+  <tr><td>（1）一般医疗服务费</td><td><span class="field-edit" data-field="fee01" contenteditable="false"></span></td>
+      <td>（5）病理诊断费</td><td><span class="field-edit" data-field="fee05" contenteditable="false"></span></td>
+      <td>（9）非手术治疗项目费</td><td><span class="field-edit" data-field="fee09" contenteditable="false"></span></td>
+      <td>（11）康复费</td><td><span class="field-edit" data-field="fee11" contenteditable="false"></span></td></tr>
+  <tr><td>（2）一般治疗操作费</td><td><span class="field-edit" data-field="fee02" contenteditable="false"></span></td>
+      <td>（6）实验室诊断费</td><td><span class="field-edit" data-field="fee06" contenteditable="false"></span></td>
+      <td>（10）手术治疗费</td><td><span class="field-edit" data-field="fee10" contenteditable="false"></span></td>
+      <td>（12）中医治疗费</td><td><span class="field-edit" data-field="fee12" contenteditable="false"></span></td></tr>
+  <tr><td>（3）护理费</td><td><span class="field-edit" data-field="fee03" contenteditable="false"></span></td>
+      <td>（7）影像学诊断费</td><td><span class="field-edit" data-field="fee07" contenteditable="false"></span></td>
+      <td>9a.临床物理治疗费</td><td><span class="field-edit" data-field="fee09a" contenteditable="false"></span></td>
+      <td>5.中医类（12）已含</td><td></td></tr>
+  <tr><td>（4）其他费用</td><td><span class="field-edit" data-field="fee04" contenteditable="false"></span></td>
+      <td>（8）临床诊断项目费</td><td><span class="field-edit" data-field="fee08" contenteditable="false"></span></td>
+      <td>10a.麻醉费</td><td><span class="field-edit" data-field="fee10a" contenteditable="false"></span></td>
+      <td>10b.手术费</td><td><span class="field-edit" data-field="fee10b" contenteditable="false"></span></td></tr>
+  <tr><td colspan="2">5.中医类</td><td colspan="2">6.西药类</td><td colspan="2">7.中药类</td><td colspan="2">8.血液和血液制品类</td></tr>
+  <tr><td>（14）中成药费</td><td><span class="field-edit" data-field="fee14" contenteditable="false"></span></td>
+      <td>（13）西药费</td><td><span class="field-edit" data-field="fee13" contenteditable="false"></span></td>
+      <td>（15）中草药费</td><td><span class="field-edit" data-field="fee15" contenteditable="false"></span></td>
+      <td>（16）血费</td><td><span class="field-edit" data-field="fee16" contenteditable="false"></span></td></tr>
+  <tr><td>（12）中医治疗费</td><td><span class="field-edit" data-field="fee12b" contenteditable="false"></span></td>
+      <td>13a.抗菌药物费用</td><td><span class="field-edit" data-field="fee13a" contenteditable="false"></span></td>
+      <td>（17）白蛋白类制品费</td><td><span class="field-edit" data-field="fee17" contenteditable="false"></span></td>
+      <td>（18）球蛋白类制品费</td><td><span class="field-edit" data-field="fee18" contenteditable="false"></span></td></tr>
+  <tr><td colspan="2"></td><td colspan="2"></td>
+      <td>（19）凝血因子类制品费</td><td><span class="field-edit" data-field="fee19" contenteditable="false"></span></td>
+      <td>（20）细胞因子类制品费</td><td><span class="field-edit" data-field="fee20" contenteditable="false"></span></td></tr>
+  <tr><td colspan="2">9.耗材类</td><td colspan="2">10.其他类</td><td colspan="4"></td></tr>
+  <tr><td>（21）检查用一次性医用材料费</td><td><span class="field-edit" data-field="fee21" contenteditable="false"></span></td>
+      <td>（22）治疗用一次性医用材料费</td><td><span class="field-edit" data-field="fee22" contenteditable="false"></span></td>
+      <td>（23）手术用一次性医用材料费</td><td><span class="field-edit" data-field="fee23" contenteditable="false"></span></td>
+      <td>（24）其他费</td><td><span class="field-edit" data-field="fee24" contenteditable="false"></span></td></tr>
 </table>
 <div class="sign-line">科主任：<span class="field-edit" data-field="sign_dept_head" contenteditable="false"></span>
   主任（副主任）医师：<span class="field-edit" data-field="sign_chief" contenteditable="false"></span>
@@ -465,6 +487,7 @@ const TEMPLATES = {
 `,
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'id_type', caption: '身份证件类别', options: ['居民身份证', '军官证', '护照', '港澳通行证', '台胞证', '其他'], value: '居民身份证' },
       { type: 'radio', name: 'marriage', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '其他'], value: '已婚' },
       { type: 'radio', name: 'in_route', caption: '入院途径', options: ['急诊', '门诊', '其他医疗机构转入', '其他'], value: '门诊' },
       { type: 'radio', name: 'adm_status_main', caption: '入院病情(主要)', options: ['1.有', '2.临床未确定', '3.情况不明', '4.无'], value: '1.有' },
@@ -2178,7 +2201,10 @@ function checkCase() {
       if (q(n) && (!q(c) || !q(s))) problems.push(label + '信息不完整（需名称/编码/术者齐全）');
     });
   // 费用一致性（10 大类合计 ≈ 总费用，允许 ±10%）
-  const fees = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => parseFloat(q('fee' + i)) || 0);
+  // 24 项费用明细（fee01..fee24 + 子项 9a/10a/10b/12b/13a）；大类合并不参与校验，直接合计明细
+  const feeNames = ['01','02','03','04','05','06','07','08','09','09a','10','10a','10b',
+                   '11','12','12b','13','13a','14','15','16','17','18','19','20','21','22','23','24'];
+  const fees = feeNames.map(i => parseFloat(q('fee' + i)) || 0);
   const feeSum = fees.reduce((a, b) => a + b, 0);
   const total = parseFloat(q('total_fee')) || 0;
   if (total > 0 && feeSum > 0 && Math.abs(feeSum - total) / total > 0.1) {

@@ -41,6 +41,8 @@
   .ca-sig-line { margin-top: 10px; padding: 6px 8px; border: 1px solid #e74c3c;
                  background: #fdf0ef; color: #c0392b; font-size: 12px;
                  border-radius: 4px; }
+  .date-picker { font-size: 12.5px; padding: 1px 4px; border: 1px solid #3498db;
+                 border-radius: 3px; outline: none; }
   /* 打印样式 */
   @media print {
     #toolbar, #sidePane, .foot { display: none !important; }
@@ -1153,6 +1155,7 @@ function renderTemplate(tpl) {
   }
   // 单选域渲染
   paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));
+  bindDatePickers();
   // 签名区（模拟 uwGetSignPhoto）— 仅段落模板
   if (!tpl.html) {
     const sign = document.createElement('div');
@@ -1161,6 +1164,85 @@ function renderTemplate(tpl) {
     paper.appendChild(sign);
   }
   syncAll();
+}
+
+/* ================= 日期选择（点击日期字段弹出选择器） ================= */
+function bindDatePickers() {
+  const paper = document.getElementById('paper');
+  paper.querySelectorAll('.field-edit').forEach(el => {
+    const f = el.dataset.field || '';
+    if (!/date|time|birth|visit|入院|出院|日期|时间/.test(f)) return;
+    if (el.dataset.picker === '1') return;
+    el.dataset.picker = '1';
+    el.style.cursor = 'pointer';
+    el.title = '点击选择日期';
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      openPicker(el);
+    });
+  });
+}
+
+function openPicker(el) {
+  const f = el.dataset.field || '';
+  // 判定控件类型：含 time 的日期时间字段 → datetime-local；仅 time → time；其余 → date
+  let type = 'date';
+  if (/time/.test(f)) {
+    type = /date|birth|入院|出院|日期/.test(f) ? 'datetime-local' : 'time';
+  }
+  const inp = document.createElement('input');
+  inp.type = type;
+  inp.className = 'date-picker';
+  inp.value = toPickerValue(el.textContent.trim(), type);
+  el.replaceWith(inp);
+  inp.focus();
+  let done = false;
+  const commit = () => {
+    if (done) return;
+    done = true;
+    const span = document.createElement('span');
+    span.className = 'field-edit';
+    span.dataset.field = f;
+    span.contentEditable = 'false';
+    span.textContent = inp.value ? formatPickerValue(inp.value, type) : '';
+    inp.replaceWith(span);
+    bindDatePickers();
+    syncAll();
+  };
+  inp.addEventListener('change', commit);
+  inp.addEventListener('blur', () => setTimeout(() => { if (document.contains(inp)) commit(); }, 150));
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); commit(); }
+    if (e.key === 'Escape') { inp.value = ''; commit(); }
+  });
+}
+
+function toPickerValue(text, type) {
+  if (!text) return '';
+  if (type === 'date') {
+    // 兼容 2026-06-01 / 2026/6/1 / 2026年6月1日
+    let m = text.match(/(\d{4})[年\/\-.](\d{1,2})[月\/\-.](\d{1,2})/);
+    if (m) return m[1] + '-' + pad2(+m[2]) + '-' + pad2(+m[3]);
+    m = text.match(/(\d{4})-(\d{2})-(\d{2})/);
+    return m ? text : '';
+  }
+  if (type === 'time') {
+    const m = text.match(/(\d{1,2}):(\d{2})/);
+    return m ? pad2(+m[1]) + ':' + m[2] : '';
+  }
+  if (type === 'datetime-local') {
+    const m = text.match(/(\d{4})[年\/\-.](\d{1,2})[月\/\-.](\d{1,2})[日\sT ]*(\d{1,2})?:?(\d{2})?/);
+    if (m) return m[1] + '-' + pad2(+m[2]) + '-' + pad2(+m[3]) +
+           'T' + pad2(+(m[4] || 0)) + ':' + (m[5] || '00');
+    return '';
+  }
+  return text;
+}
+
+function formatPickerValue(val, type) {
+  if (type === 'datetime-local') return val.replace('T', ' ');
+  if (type === 'date') return val;
+  return val;
 }
 
 function renderRadio(el) {

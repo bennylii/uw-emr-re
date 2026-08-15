@@ -1289,6 +1289,7 @@ function renderTemplate(tpl) {
   }
   // 单选域渲染
   paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));
+  applyFieldEditability();
   bindDatePickers();
   // 签名区（模拟 uwGetSignPhoto）— 仅段落模板
   if (!tpl.html) {
@@ -1390,6 +1391,7 @@ function addOrderRow() {
   const seq = ++yzbSeq[cat];
   const row = mkOrderRow(cat, seq);
   table.querySelector('tr:last-child').after(row);
+  applyFieldEditability();
   bindDatePickers();
   syncAll();
 }
@@ -1484,6 +1486,20 @@ function buildAllOrders() {
       }
       table.appendChild(nr);
     });
+  });
+}
+
+/* ================= 字段可编辑性：普通字段可输入，日期字段弹日历 ================= */
+function applyFieldEditability() {
+  const paper = document.getElementById('paper');
+  paper.querySelectorAll('.field-edit, .field-hengxian').forEach(el => {
+    const f = el.dataset.field || '';
+    // 日期/时间类字段：保持不可编辑，点击弹出日历/时间面板
+    if (/date|time|birth|visit|入院|出院|日期|时间/.test(f)) {
+      el.contentEditable = 'false';
+    } else {
+      el.contentEditable = 'true';   // 普通字段：直接点击输入
+    }
   });
 }
 

@@ -43,6 +43,30 @@
                  border-radius: 4px; }
   .date-picker { font-size: 12.5px; padding: 1px 4px; border: 1px solid #3498db;
                  border-radius: 3px; outline: none; }
+  /* 弹出日历面板 */
+  .date-picker-panel { position: fixed; z-index: 9999; background: #fff;
+    border: 1px solid #b0b8c0; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    font-size: 13px; width: 250px; padding: 8px; user-select: none; }
+  .date-picker-panel .dp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .date-picker-panel .dp-head button { border: none; background: #eef2f6; border-radius: 4px;
+    cursor: pointer; padding: 2px 10px; font-size: 14px; }
+  .date-picker-panel .dp-title { font-weight: bold; color: #2c3e50; }
+  .date-picker-panel .dp-week, .date-picker-panel .dp-grid { display: grid;
+    grid-template-columns: repeat(7, 1fr); text-align: center; }
+  .date-picker-panel .dp-week span { font-size: 11px; color: #7f8c8d; padding: 2px 0; }
+  .date-picker-panel .dp-cell { padding: 4px 0; border-radius: 4px; cursor: pointer; }
+  .date-picker-panel .dp-cell:hover { background: #dbe9f7; }
+  .date-picker-panel .dp-cell.sel { background: #3498db; color: #fff; font-weight: bold; }
+  .date-picker-panel .dp-cell.today { outline: 1px solid #e67e22; }
+  .date-picker-panel .dp-time { margin: 6px 0; text-align: center; }
+  .date-picker-panel .dp-time input { width: 42px; text-align: center; font-size: 13px;
+    border: 1px solid #ccc; border-radius: 4px; padding: 2px; }
+  .date-picker-panel .dp-foot { display: flex; justify-content: space-between; margin-top: 6px; }
+  .date-picker-panel .dp-foot button { border: none; border-radius: 4px; padding: 4px 10px;
+    cursor: pointer; font-size: 12px; }
+  .date-picker-panel .dp-foot button:first-child { background: #eef2f6; }
+  .date-picker-panel .dp-foot button:nth-child(2) { background: #3498db; color: #fff; }
+  .date-picker-panel .dp-foot button:last-child { background: #fdf0ef; color: #c0392b; }
   /* 打印样式 */
   @media print {
     #toolbar, #sidePane, .foot { display: none !important; }
@@ -1166,7 +1190,9 @@ function renderTemplate(tpl) {
   syncAll();
 }
 
-/* ================= 日期选择（点击日期字段弹出选择器） ================= */
+/* ================= 日期选择（点击弹出日历面板） ================= */
+let activePicker = null;
+
 function bindDatePickers() {
   const paper = document.getElementById('paper');
   paper.querySelectorAll('.field-edit').forEach(el => {
@@ -1183,66 +1209,155 @@ function bindDatePickers() {
   });
 }
 
-function openPicker(el) {
-  const f = el.dataset.field || '';
-  // 判定控件类型：含 time 的日期时间字段 → datetime-local；仅 time → time；其余 → date
-  let type = 'date';
-  if (/time/.test(f)) {
-    type = /date|birth|入院|出院|日期/.test(f) ? 'datetime-local' : 'time';
+function closePicker() {
+  if (activePicker) {
+    activePicker.remove();
+    activePicker = null;
+    document.removeEventListener('mousedown', pickerOutside, true);
   }
-  const inp = document.createElement('input');
-  inp.type = type;
-  inp.className = 'date-picker';
-  inp.value = toPickerValue(el.textContent.trim(), type);
-  el.replaceWith(inp);
-  inp.focus();
-  let done = false;
-  const commit = () => {
-    if (done) return;
-    done = true;
+}
+
+function pickerOutside(e) {
+  if (activePicker && !activePicker.contains(e.target)) closePicker();
+}
+
+function parseDateText(text) {
+  const m = text.match(/(\d{4})[年\/\-.](\d{1,2})[月\/\-.](\d{1,2})/);
+  if (m) return { y: +m[1], mo: +m[2], d: +m[3] };
+  return null;
+}
+
+function openPicker(el) {
+  closePicker();
+  const f = el.dataset.field || '';
+  const hasTime = /time/.test(f);
+  const isDateTime = hasTime && /date|birth|入院|出院|日期/.test(f);
+  const rect = el.getBoundingClientRect();
+  const cur = parseDateText(el.textContent.trim());
+  let year = cur ? cur.y : new Date().getFullYear();
+  let month = cur ? cur.mo : new Date().getMonth() + 1;
+  let selDay = cur ? cur.d : new Date().getDate();
+  let selH = 0, selM = 0;
+  if (el.textContent.trim()) {
+    const tm = el.textContent.trim().match(/(\d{1,2}):(\d{2})/);
+    if (tm) { selH = +tm[1]; selM = +tm[2]; }
+  }
+
+  const panel = document.createElement('div');
+  panel.className = 'date-picker-panel';
+  panel.addEventListener('mousedown', e => e.stopPropagation());
+
+  const WEEKS = ['日', '一', '二', '三', '四', '五', '六'];
+
+  function render() {
+    panel.innerHTML = '';
+    // 头部：翻页 + 年月
+    const head = document.createElement('div');
+    head.className = 'dp-head';
+    const prev = mkBtn('‹', () => { month--; if (month < 1) { month = 12; year--; } render(); });
+    const next = mkBtn('›', () => { month++; if (month > 12) { month = 1; year++; } render(); });
+    const label = document.createElement('span');
+    label.className = 'dp-title';
+    label.textContent = year + '年' + month + '月';
+    head.appendChild(prev); head.appendChild(label); head.appendChild(next);
+    panel.appendChild(head);
+    // 星期行
+    const wk = document.createElement('div');
+    wk.className = 'dp-week';
+    WEEKS.forEach(w => {
+      const c = document.createElement('span');
+      c.textContent = w;
+      wk.appendChild(c);
+    });
+    panel.appendChild(wk);
+    // 日期网格
+    const grid = document.createElement('div');
+    grid.className = 'dp-grid';
+    const first = new Date(year, month - 1, 1).getDay();
+    const days = new Date(year, month, 0).getDate();
+    const today = new Date();
+    for (let i = 0; i < first; i++) grid.appendChild(mkCell('', false));
+    for (let d = 1; d <= days; d++) grid.appendChild(mkCell(d, true));
+    panel.appendChild(grid);
+    // 时间行（datetime-local）
+    if (isDateTime) {
+      const tr = document.createElement('div');
+      tr.className = 'dp-time';
+      tr.innerHTML = '时间 ';
+      const hh = document.createElement('input');
+      hh.type = 'number'; hh.min = '0'; hh.max = '23'; hh.value = pad2(selH);
+      const mm = document.createElement('input');
+      mm.type = 'number'; mm.min = '0'; mm.max = '59'; mm.value = pad2(selM);
+      tr.appendChild(hh); tr.appendChild(document.createTextNode(' : ')); tr.appendChild(mm);
+      panel.appendChild(tr);
+    }
+    // 底部按钮
+    const foot = document.createElement('div');
+    foot.className = 'dp-foot';
+    const ok = document.createElement('button');
+    ok.textContent = '确定';
+    ok.onclick = () => {
+      let val = year + '-' + pad2(month) + '-' + pad2(selDay);
+      if (isDateTime) {
+        const hh = panel.querySelector('.dp-time input:first-of-type');
+        const mm = panel.querySelector('.dp-time input:last-of-type');
+        val += ' ' + pad2(+hh.value || 0) + ':' + pad2(+mm.value || 0);
+      }
+      writeBack(el, val);
+      closePicker();
+    };
+    const todayBtn = document.createElement('button');
+    todayBtn.textContent = '今天';
+    todayBtn.onclick = () => {
+      year = today.getFullYear(); month = today.getMonth() + 1; selDay = today.getDate();
+      render();
+    };
+    const clearBtn = document.createElement('button');
+    clearBtn.textContent = '清空';
+    clearBtn.onclick = () => { writeBack(el, ''); closePicker(); };
+    foot.appendChild(todayBtn); foot.appendChild(ok); foot.appendChild(clearBtn);
+    panel.appendChild(foot);
+
+    function mkBtn(txt, fn) {
+      const b = document.createElement('button');
+      b.textContent = txt;
+      b.onclick = fn;
+      return b;
+    }
+    function mkCell(d, enabled) {
+      const c = document.createElement('span');
+      c.className = 'dp-cell' + (d === selDay ? ' sel' : '') +
+                    (enabled && d === today.getDate() && month === today.getMonth() + 1 &&
+                     year === today.getFullYear() ? ' today' : '');
+      c.textContent = d || '';
+      if (enabled) c.onclick = () => { selDay = d; render(); };
+      return c;
+    }
+  }
+
+  function writeBack(el, val) {
     const span = document.createElement('span');
     span.className = 'field-edit';
     span.dataset.field = f;
     span.contentEditable = 'false';
-    span.textContent = inp.value ? formatPickerValue(inp.value, type) : '';
-    inp.replaceWith(span);
+    span.textContent = val;
+    el.replaceWith(span);
     bindDatePickers();
     syncAll();
-  };
-  inp.addEventListener('change', commit);
-  inp.addEventListener('blur', () => setTimeout(() => { if (document.contains(inp)) commit(); }, 150));
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { e.preventDefault(); commit(); }
-    if (e.key === 'Escape') { inp.value = ''; commit(); }
-  });
-}
+  }
 
-function toPickerValue(text, type) {
-  if (!text) return '';
-  if (type === 'date') {
-    // 兼容 2026-06-01 / 2026/6/1 / 2026年6月1日
-    let m = text.match(/(\d{4})[年\/\-.](\d{1,2})[月\/\-.](\d{1,2})/);
-    if (m) return m[1] + '-' + pad2(+m[2]) + '-' + pad2(+m[3]);
-    m = text.match(/(\d{4})-(\d{2})-(\d{2})/);
-    return m ? text : '';
-  }
-  if (type === 'time') {
-    const m = text.match(/(\d{1,2}):(\d{2})/);
-    return m ? pad2(+m[1]) + ':' + m[2] : '';
-  }
-  if (type === 'datetime-local') {
-    const m = text.match(/(\d{4})[年\/\-.](\d{1,2})[月\/\-.](\d{1,2})[日\sT ]*(\d{1,2})?:?(\d{2})?/);
-    if (m) return m[1] + '-' + pad2(+m[2]) + '-' + pad2(+m[3]) +
-           'T' + pad2(+(m[4] || 0)) + ':' + (m[5] || '00');
-    return '';
-  }
-  return text;
-}
-
-function formatPickerValue(val, type) {
-  if (type === 'datetime-local') return val.replace('T', ' ');
-  if (type === 'date') return val;
-  return val;
+  render();
+  document.body.appendChild(panel);
+  // 定位：窗口内适配
+  const pw = panel.offsetWidth, ph = panel.offsetHeight;
+  let left = rect.left;
+  let top = rect.bottom + 4;
+  if (left + pw > window.innerWidth - 8) left = Math.max(8, window.innerWidth - pw - 8);
+  if (top + ph > window.innerHeight - 8) top = Math.max(8, rect.top - ph - 4);
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+  activePicker = panel;
+  document.addEventListener('mousedown', pickerOutside, true);
 }
 
 function renderRadio(el) {

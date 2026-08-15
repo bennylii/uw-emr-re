@@ -78,6 +78,7 @@
   <span class="title">✚ uwEMR 病历编辑器演示</span>
   <select id="tplSel">
     <optgroup label="住院文书">
+      <option value="summary">病历概要(WS 445.1)</option>
       <option value="case2012">病案首页(2012版 卫医政发84号)</option>
       <option value="case2012tcm">中医病案首页(WS 445.11)</option>
       <option value="admission">入院记录</option>
@@ -114,6 +115,7 @@
   </select>
   <button onclick="loadTemplate()">载入模板</button>
   <button onclick="newDoc()">新文档</button>
+  <button onclick="fillSample()">示例填充</button>
   <button onclick="printDoc()">打印</button>
   <select id="signRole" style="background:#f39c12">
     <option value="主治医师">主治医师</option>
@@ -167,6 +169,44 @@
 <script>
 /* ================= 模板 ================= */
 const TEMPLATES = {
+  summary: {
+    title: '病历概要（WS 445.1）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">病历概要（患者基本医疗信息摘要）</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td>
+      <td>病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
+  <tr><td>药物过敏史</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td>
+      <td>输血史</td><td><span class="field-edit" data-field="transfusion_hx" contenteditable="false"></span></td>
+      <td>血型</td><td><span class="field-radio" data-field="blood_type"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>就诊类型</th><th>就诊日期</th><th>就诊机构</th><th>主要诊断</th><th>疾病编码</th><th>住院天数</th><th>治疗结果</th><th>住院流水号</th></tr>
+  <tr><td><span class="field-edit" data-field="v1_type" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v1_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v1_org" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v1_diag" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v1_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v1_days" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v1_result" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v1_id" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="v2_type" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v2_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v2_org" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v2_diag" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v2_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v2_days" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v2_result" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="v2_id" contenteditable="false"></span></td></tr>
+</table>
+`,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'blood_type', caption: '血型', options: ['A', 'B', 'O', 'AB', '不详', '未查'], value: 'O' },
+    ],
+  },
   case2012: {
     title: '住院病案首页（2012版·完整）',
     html: `
@@ -678,6 +718,8 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="t3_stool" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="t3_note" contenteditable="false"></span></td></tr>
 </table>
+<svg id="tempChart" width="700" height="330" style="border:1px solid #999;margin-top:10px"></svg>
+<div style="font-size:11px;color:#666;margin-top:4px">体温单图形（模拟 ENR_TZJL 体温单绘制：纵轴 35~42℃，红=体温 绿=脉搏）</div>
 `,
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
@@ -1160,6 +1202,88 @@ function syncAll() {
   xml.push('</record>');
   document.getElementById('xmlOut').textContent = xml.join('\n');
   updateMissing(tpl);
+  drawTempChart();   // 体温单图形（ENR_TZJL 体温单绘制）
+}
+
+/* ================= 体温单图形（模拟 ENR_TZJL 体温单绘制） ================= */
+function drawTempChart() {
+  const svg = document.getElementById('tempChart');
+  if (!svg || currentTpl !== 'temp') return;
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  const W = 700, H = 300, L = 60, R = 20, T = 20, B = 40;
+  const plotW = W - L - R, plotH = H - T - B;
+  // 纵轴 35~42℃（1℃ 大格，0.5℃ 小格）
+  for (let c = 35; c <= 42; c++) {
+    const y = T + (42 - c) / 7 * plotH;
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', L); line.setAttribute('x2', W - R);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', c === 37 ? '#000' : '#aaa');
+    line.setAttribute('stroke-width', c === 37 ? 1.5 : 0.5);
+    svg.appendChild(line);
+    const txt = document.createElementNS(ns, 'text');
+    txt.setAttribute('x', L - 6); txt.setAttribute('y', y + 4);
+    txt.setAttribute('text-anchor', 'end'); txt.setAttribute('font-size', '10');
+    txt.textContent = c + '℃';
+    svg.appendChild(txt);
+    // 0.5℃ 小格
+    const y2 = T + (42 - (c + 0.5)) / 7 * plotH;
+    const l2 = document.createElementNS(ns, 'line');
+    l2.setAttribute('x1', L); l2.setAttribute('x2', W - R);
+    l2.setAttribute('y1', y2); l2.setAttribute('y2', y2);
+    l2.setAttribute('stroke', '#ddd'); l2.setAttribute('stroke-width', 0.5);
+    svg.appendChild(l2);
+  }
+  // 数据点（t1_t/t2_t/t3_t 与 t1_p/...）
+  const rows = [];
+  for (let i = 1; i <= 3; i++) {
+    const t = q('t' + i + '_t'), p = q('t' + i + '_p'), dt = q('t' + i + '_date');
+    rows.push({ t: parseFloat(t), p: parseFloat(p), label: dt || '' });
+  }
+  const plot = (v, min, max) => T + (max - v) / (max - min) * plotH;
+  const xOf = i => L + (rows.length === 1 ? plotW / 2 : i * plotW / (rows.length - 1));
+  // 折线：体温红，脉搏绿
+  drawPoly(rows, 't', 'red', xOf, v => plot(v, 42, 35));
+  drawPoly(rows, 'p', 'green', xOf, v => plot(v, 160, 40));
+  // 数据点符号：体温×红点，脉搏绿点
+  rows.forEach((r, i) => {
+    const x = xOf(i);
+    if (!isNaN(r.t)) {
+      circle(x, plot(r.t, 42, 35), 3, 'red');
+    }
+    if (!isNaN(r.p)) {
+      circle(x, plot(r.p, 160, 40), 3, 'green');
+    }
+    if (r.label) {
+      const txt = document.createElementNS(ns, 'text');
+      txt.setAttribute('x', x); txt.setAttribute('y', H - 8);
+      txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('font-size', '10');
+      txt.textContent = r.label;
+      svg.appendChild(txt);
+    }
+  });
+  function q(name) {
+    const el = document.querySelector('[data-field="' + name + '"]');
+    return el ? el.textContent.trim() : '';
+  }
+  function drawPoly(rows, key, color, xOf, yOf) {
+    const pts = rows.map((r, i) => ({ x: xOf(i), y: yOf(r[key]) }))
+                   .filter(p => !isNaN(p.y));
+    for (let i = 1; i < pts.length; i++) {
+      const line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', pts[i - 1].x); line.setAttribute('y1', pts[i - 1].y);
+      line.setAttribute('x2', pts[i].x); line.setAttribute('y2', pts[i].y);
+      line.setAttribute('stroke', color); line.setAttribute('stroke-width', 1.5);
+      svg.appendChild(line);
+    }
+  }
+  function circle(x, y, r, color) {
+    const c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', r);
+    c.setAttribute('fill', color);
+    svg.appendChild(c);
+  }
 }
 
 /* ================= 质控 ================= */
@@ -1317,6 +1441,47 @@ function sha256hex(str) {
 
 /* 编辑域输入 → 实时同步 XML */
 document.getElementById('paper').addEventListener('input', syncAll);
+
+/* ================= 示例填充 ================= */
+const SAMPLE = {
+  name: '张明', sex: '男', age: '56', birth: '1970-03-15', idno: '350102197003150012',
+  case_no: '00084301', in_time: '2026-06-01 09:30', out_time: '2026-06-15 10:00',
+  stay_days: '14', in_dept: '心血管内科', ward: '5区', bed: '12',
+  diag_main: '冠状动脉粥样硬化性心脏病', diag_main_code: 'I25.101',
+  diag_other: '2型糖尿病', diag_other_code: 'E11.900',
+  diag_outpatient: '冠心病', diag_admit: '冠心病 待查',
+  injury_cause: '无', pathology: '无',
+  total_fee: '12865.50', self_pay: '3280.00',
+  chief: '反复胸闷心悸3年，加重1周',
+  t1_t: '36.8', t1_p: '78', t1_r: '18', t1_bp: '128/82',
+  t2_t: '37.2', t2_p: '86', t2_r: '20', t2_bp: '132/85',
+  t3_t: '36.5', t3_p: '72', t3_r: '17', t3_bp: '125/80',
+  op1_name: '冠状动脉造影术', op1_code: '88.5501', op1_date: '2026-06-05',
+  op1_level: 'IV级', op1_grade: 'Ⅰ/甲', op1_anesthesia: '局麻', op1_surgeon: '李主任',
+  sign_attending: '王主治', sign_resident: '陈医师', sign_dept_head: '李主任',
+  sign_coder: '刘编码员',
+};
+function fillSample() {
+  const paper = document.getElementById('paper');
+  let n = 0;
+  Object.keys(SAMPLE).forEach(f => {
+    const el = paper.querySelector('[data-field="' + f + '"]');
+    if (el && el.classList.contains('field-edit')) {
+      el.textContent = SAMPLE[f];
+      n++;
+    }
+  });
+  // 体温单默认值：若空则填示例曲线
+  if (currentTpl === 'temp') {
+    [['t1_t', '36.8'], ['t2_t', '37.2'], ['t3_t', '36.5'],
+     ['t1_p', '78'], ['t2_p', '86'], ['t3_p', '72'],
+     ['t1_date', '6/1'], ['t2_date', '6/2'], ['t3_date', '6/3']].forEach(([f, v]) => {
+      const el = paper.querySelector('[data-field="' + f + '"]');
+      if (el && !el.textContent.trim()) { el.textContent = v; n++; }
+    });
+  }
+  syncAll();
+}
 
 /* 启动 */
 loadTemplate();

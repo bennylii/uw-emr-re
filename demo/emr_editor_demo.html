@@ -203,7 +203,10 @@
     <div class="patient-panel">
       <div class="patient-head">
         <h2>✚ 住院病人列表（双击病人进入病历）</h2>
-        <span class="patient-hint">演示数据 · 双击任意行进入该病人病历编辑</span>
+        <span class="patient-hint">
+          双击任意行进入该病人病历
+          <button onclick="hidePatientList()" style="margin-left:10px;padding:3px 10px;border:none;background:#3498db;color:#fff;border-radius:4px;cursor:pointer">跳过，直接演示 →</button>
+        </span>
       </div>
       <table id="patientTable">
         <tr><th>病案号</th><th>姓名</th><th>性别</th><th>年龄</th><th>科室</th><th>病区/床号</th><th>入院日期</th><th>主要诊断</th></tr>
@@ -1261,6 +1264,28 @@ function renderTemplate(tpl) {
     yzbActiveTab = 'ld';
     yzbSeq = { ld: 2, ls: 0, jz: 0, cy: 0 };
     switchYzbTab('ld');
+  }
+  // 体温单：自动填充示例数据（日期/时间/体征，保证打开即有数据）
+  if (currentTpl === 'temp') {
+    const t = new Date();
+    const base = t.getFullYear() + '-' + pad2(t.getMonth() + 1) + '-' + pad2(t.getDate());
+    const rows = [
+      ['t1', base, '08:00', '36.8', '78', '18', '128/82', '1', ''],
+      ['t2', base, '16:00', '37.2', '86', '20', '132/85', '', ''],
+      ['t3', nextDay(base), '08:00', '36.5', '72', '17', '125/80', '1', ''],
+    ];
+    rows.forEach(([p, dt, tm, T, P, R, BP, stool, note]) => {
+      const map = { date: dt, time: tm, t: T, p: P, r: R, bp: BP, stool: stool, note: note };
+      Object.keys(map).forEach(k => {
+        const el = paper.querySelector('[data-field="' + p + '_' + k + '"]');
+        if (el) el.textContent = map[k];
+      });
+    });
+    function nextDay(d) {
+      const x = new Date(d);
+      x.setDate(x.getDate() + 1);
+      return x.getFullYear() + '-' + pad2(x.getMonth() + 1) + '-' + pad2(x.getDate());
+    }
   }
   // 单选域渲染
   paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));

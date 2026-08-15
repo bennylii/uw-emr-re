@@ -85,6 +85,7 @@
       <option value="progress">病程记录</option>
       <option value="discharge">出院记录</option>
       <option value="death">死亡记录</option>
+      <option value="rescue">抢救记录</option>
       <option value="preop">术前小结</option>
       <option value="transfer">转诊(院)记录</option>
     </optgroup>
@@ -126,6 +127,7 @@
     <option value="质控医师">质控医师</option>
   </select>
   <button onclick="caSign()" style="background:#e74c3c">CA 签名</button>
+  <button onclick="importXML()">导入 XML</button>
   <button onclick="exportXML()">导出 XML</button>
   <button onclick="exportHTML()">导出 HTML</button>
   <span class="hint">仿真 uwWordDll 定制层：域控件 · XML 双向绑定 · 质控（clean-room 演示）</span>
@@ -661,9 +663,25 @@ const TEMPLATES = {
       { type: 'radio', name: 'choose3', caption: '自费同意', options: ['□', '✓'], value: '□' },
     ],
   },
-  death: {
-    title: '死亡记录',
+  rescue: {
+    title: '抢救记录',
     paras: [
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '抢救时间：<span class="field-edit" data-field="rescue_begin" contenteditable="false"></span> 至 <span class="field-edit" data-field="rescue_end" contenteditable="false"></span>' },
+      { indent: true, html: '病情变化及抢救经过：' },
+      { indent: true, html: '抢救措施：' },
+      { indent: true, html: '抢救结果：<span class="field-radio" data-field="rescue_result"></span>　转归：<span class="field-edit" data-field="outcome" contenteditable="false"></span>' },
+      { indent: false, html: '参加抢救人员：' },
+      { indent: false, html: '记录医师：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　记录时间：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'rescue_result', caption: '抢救结果', options: ['抢救成功', '抢救无效死亡', '自动出院'], value: '抢救成功' },
+    ],
+  },
+  death: {
+    title: '死亡记录',    paras: [
       { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
       { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
       { indent: false, html: '入院日期：<span class="field-edit" data-field="in_time" contenteditable="false"></span>　死亡日期：<span class="field-edit" data-field="death_time" contenteditable="false"></span>' },
@@ -1366,6 +1384,47 @@ function exportXML() {
   a.download = 'record.xml';
   a.click();
 }
+
+/* ================= XML 导入（模拟 uwLoadCaseDocXml：XML → 文档回填） ================= */
+function importXML() {
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = '.xml,.txt';
+  inp.onchange = () => {
+    const f = inp.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      const xml = String(rd.result);
+      // 解析 <field name="x" value="v"/> → 回填表单
+      const re = /<field name="([^"]+)"\s+type="([^"]+)"\s+value="([^"]*)"/g;
+      const paper = document.getElementById('paper');
+      let m, n = 0;
+      while ((m = re.exec(xml)) !== null) {
+        const el = paper.querySelector('[data-field="' + m[1] + '"]');
+        if (!el) continue;
+        if (el.classList.contains('field-edit') || el.classList.contains('field-hengxian')) {
+          el.textContent = m[3];
+          n++;
+        }
+        // radio 值同步（若匹配选项则更新模板状态）
+        if (el.classList.contains('field-radio')) {
+          const tpl = TEMPLATES[currentTpl];
+          const fd = tpl.fields.find(x => x.name === m[1]);
+          if (fd && fd.options.indexOf(m[3]) >= 0) {
+            fd.value = m[3];
+            renderRadio(el);
+            n++;
+          }
+        }
+      }
+      syncAll();
+      alert('导入完成：回填 ' + n + ' 个字段（模拟 uwLoadCaseDocXml）');
+    };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
 function exportHTML() {
   const paper = document.getElementById('paper');
   const html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>病历导出</title>' +
@@ -1382,6 +1441,7 @@ function printDoc() {
 
 /* ================= CA 电子签名（模拟 u_bs_cajk_ca / d_emr_cajk_sign_*） ================= */
 const caSignatures = [];   // {role, time, digest, sign, doc}
+let caFrozenDigest = '';   // 签名时的文档摘要（篡改检测）
 
 function caSign() {
   const role = document.getElementById('signRole').value;
@@ -1394,6 +1454,7 @@ function caSign() {
   const digest = sha256hex(doc).slice(0, 32).toUpperCase();
   const sign = makeSign(digest, role);
   caSignatures.push({ role, time: ts, digest, sign, doc: currentTpl });
+  caFrozenDigest = digest;
   renderSignList();
   // 追加签名标记到文档（对应签名后写回 EMR_BL_* 表）
   const paper = document.getElementById('paper');
@@ -1408,11 +1469,20 @@ function caSign() {
 function renderSignList() {
   const box = document.getElementById('signList');
   if (!caSignatures.length) { box.innerHTML = '<span style="color:#999">尚无签名记录</span>'; return; }
+  // 篡改检测：当前文档摘要 vs 签名冻结摘要（对应 saf_verifysigndata）
+  const cur = sha256hex(document.getElementById('xmlOut').textContent).slice(0, 32).toUpperCase();
+  const tampered = caFrozenDigest && cur !== caFrozenDigest;
   box.innerHTML = caSignatures.map((s, i) =>
     '<div style="border-bottom:1px dashed #ccc;padding:3px 0">' +
     '<b>#' + (i + 1) + ' ' + s.role + '</b> ' + s.time + '<br>' +
     '摘要 ' + s.digest.slice(0, 12) + '…　签名 ' + s.sign.slice(0, 12) + '…</div>'
-  ).join('');
+  ).join('') +
+  (tampered
+    ? '<div style="color:#c0392b;font-weight:bold;margin-top:6px">⚠ 签名校验失败：' +
+      '文档在签名后已被修改（saf_verifysigndata 检测到摘要不一致）</div>'
+    : (caFrozenDigest
+      ? '<div style="color:#27ae60;margin-top:6px">✓ 签名校验通过：文档未被修改</div>'
+      : ''));
 }
 
 // 模拟 RSA-SHA1 签名值（确定性：摘要+角色 → 大写十六进制）

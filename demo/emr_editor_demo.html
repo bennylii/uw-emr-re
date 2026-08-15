@@ -1489,13 +1489,22 @@ function buildAllOrders() {
   });
 }
 
+/* ================= 日期/时间字段精确判定 ================= */
+function isDateOrTimeField(f) {
+  if (!f) return false;
+  if (/_date$/.test(f)) return true;                  // t1_date/sign_date/report_date/op1_date…
+  if (/time$/.test(f)) return true;                   // in_time/out_time/t1_time/visit_time…
+  if (f === 'birth') return true;                     // 出生日期
+  if (/入院|出院|日期|时间/.test(f)) return true;      // 中文标签类
+  return false;
+}
+
 /* ================= 字段可编辑性：普通字段可输入，日期字段弹日历 ================= */
 function applyFieldEditability() {
   const paper = document.getElementById('paper');
   paper.querySelectorAll('.field-edit, .field-hengxian').forEach(el => {
-    const f = el.dataset.field || '';
     // 日期/时间类字段：保持不可编辑，点击弹出日历/时间面板
-    if (/date|time|birth|visit|入院|出院|日期|时间/.test(f)) {
+    if (isDateOrTimeField(el.dataset.field)) {
       el.contentEditable = 'false';
     } else {
       el.contentEditable = 'true';   // 普通字段：直接点击输入
@@ -1510,7 +1519,7 @@ function bindDatePickers() {
   const paper = document.getElementById('paper');
   paper.querySelectorAll('.field-edit').forEach(el => {
     const f = el.dataset.field || '';
-    if (!/date|time|birth|visit|入院|出院|日期|时间/.test(f)) return;
+    if (!isDateOrTimeField(f)) return;
     if (el.dataset.picker === '1') return;
     el.dataset.picker = '1';
     el.style.cursor = 'pointer';

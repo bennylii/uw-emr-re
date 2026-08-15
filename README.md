@@ -48,10 +48,12 @@
 
 1. **不包含**任何闭源二进制、反汇编代码复制或厂商数据文件
 2. `docs/uwWordDll_api.h` 仅为导出符号清单（接口互操作事实，不含实现）
-3. 上游 AbiWord 为 **GPL v2** 许可（https://github.com/abiword/abiword）：
-   - 若基于本仓库内容构建衍生作品，须遵循 GPL v2 并附带源码
-   - 原始厂商 DLL 的定制层是否遵守 GPL 属其自身合规问题，与本仓库无关
-4. 本仓库内容用于学习与研究；用于任何生产/商业用途前请自行评估许可与合规
+3. **License：GPL v2**（本仓库整体）——原因：`src/uwemr` 为上游
+   **AbiWord 2.8.x（GPL v2）的衍生代码**（继承 fp_FieldRun/fd_Field、使用
+   UT_XML 等 GPL 类），GPL v2 §2(c) 要求衍生作品以 GPL 发布，**不可改为
+   MIT/闭源**。上游：https://github.com/abiword/abiword
+4. 原始厂商 DLL 的定制层是否遵守 GPL 属其自身合规问题，与本仓库无关
+5. 本仓库内容用于学习与研究；用于任何生产/商业用途前请自行评估许可与合规
 
 ## 复现方法
 

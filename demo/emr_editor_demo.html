@@ -70,8 +70,12 @@
   /* 自动补全面板 */
   .ac-panel { position: fixed; z-index: 9998; background: #fff; border: 1px solid #b0b8c0;
     border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,.25); font-size: 13px;
-    max-height: 260px; overflow-y: auto; min-width: 140px; padding: 4px 0; }
-  .ac-item { padding: 6px 12px; cursor: pointer; }
+    min-width: 150px; padding: 6px; }
+  .ac-filter { width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;
+    padding: 4px 6px; font-size: 13px; margin-bottom: 4px; outline: none; }
+  .ac-filter:focus { border-color: #3498db; }
+  .ac-list { max-height: 240px; overflow-y: auto; }
+  .ac-item { padding: 6px 10px; cursor: pointer; border-radius: 4px; }
   .ac-item:hover, .ac-item.sel { background: #3498db; color: #fff; }
   /* 时间选择网格 */
   .dp-time-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px;
@@ -1596,20 +1600,23 @@ function isDateOrTimeField(f) {
   return false;
 }
 
-/* ================= 字段可编辑性：普通字段可输入，日期字段弹日历 ================= */
+/* ================= 字段可编辑性：普通字段可输入，日期/补全字段弹面板 ================= */
 function applyFieldEditability() {
   const paper = document.getElementById('paper');
   paper.querySelectorAll('.field-edit, .field-hengxian').forEach(el => {
+    const f = el.dataset.field || '';
     // 日期/时间类字段：保持不可编辑，点击弹出日历/时间面板
-    if (isDateOrTimeField(el.dataset.field)) {
+    if (isDateOrTimeField(f)) {
       el.contentEditable = 'false';
+    } else if (f === 'nation' || f === 'birthplace' || f === 'native_place') {
+      el.contentEditable = 'false';   // 自动补全字段：点击弹面板点选
     } else {
       el.contentEditable = 'true';   // 普通字段：直接点击输入
     }
   });
 }
 
-/* ================= 自动补全（国籍/出生地/籍贯） ================= */
+/* ================= 自动补全（国籍/出生地/籍贯：点选模式） ================= */
 const NATIONS = ['中国', '美国', '日本', '韩国', '英国', '法国', '德国', '俄罗斯', '加拿大',
   '澳大利亚', '新加坡', '马来西亚', '泰国', '越南', '印度', '意大利', '西班牙', '荷兰',
   '瑞士', '瑞典', '新西兰', '朝鲜', '蒙古', '印尼', '菲律宾', '缅甸', '老挝', '柬埔寨', '其他'];
@@ -1630,65 +1637,69 @@ function bindAutocompletes() {
       : (f === 'birthplace' || f === 'native_place') ? REGIONS : null;
     if (!opts || el.dataset.ac === '1') return;
     el.dataset.ac = '1';
-    el.addEventListener('click', e => { e.stopPropagation(); showAcPanel(el, opts, el.textContent.trim()); });
-    el.addEventListener('input', () => {
-      showAcPanel(el, opts, el.textContent.trim());
-    });
-    el.addEventListener('keydown', e => acKeydown(e, el));
+    el.style.cursor = 'pointer';
+    el.title = '点击选择';
+    el.addEventListener('click', e => { e.stopPropagation(); openAc(el, opts); });
   });
 }
 
 let activeAc = null;
 
-function showAcPanel(el, options, filter) {
+// 点选面板：顶部过滤输入框 + 候选列表（与日历面板同款交互）
+function openAc(el, options) {
   closeAc();
   const rect = el.getBoundingClientRect();
   const panel = document.createElement('div');
   panel.className = 'ac-panel';
-  const kw = (filter || '').toLowerCase();
-  const items = options.filter(o => !kw || o.toLowerCase().indexOf(kw) >= 0).slice(0, 30);
-  if (!items.length) items.push('（无匹配）');
+  const input = document.createElement('input');
+  input.className = 'ac-filter';
+  input.placeholder = '输入过滤…';
+  input.value = '';
+  const list = document.createElement('div');
+  list.className = 'ac-list';
+  panel.appendChild(input);
+  panel.appendChild(list);
   let selIdx = 0;
+
   function render() {
-    panel.innerHTML = '';
+    const kw = input.value.trim().toLowerCase();
+    const items = options.filter(o => !kw || o.toLowerCase().indexOf(kw) >= 0).slice(0, 30);
+    if (!items.length) items.push('（无匹配）');
+    if (selIdx >= items.length) selIdx = 0;
+    list.innerHTML = '';
     items.forEach((o, i) => {
       const d = document.createElement('div');
       d.className = 'ac-item' + (i === selIdx ? ' sel' : '');
       d.textContent = o;
-      d.onclick = () => { setAcValue(el, o); closeAc(); };
-      d.onmouseenter = () => { selIdx = i; render(); };
-      panel.appendChild(d);
+      d.onmousedown = e => { e.preventDefault(); setAcValue(el, o); closeAc(); };
+      d.onmouseenter = () => { selIdx = i; refreshSel(); };
+      list.appendChild(d);
     });
   }
+  function refreshSel() {
+    list.querySelectorAll('.ac-item').forEach((d, i) => d.classList.toggle('sel', i === selIdx));
+    const s = list.querySelectorAll('.ac-item')[selIdx];
+    if (s) s.scrollIntoView({ block: 'nearest' });
+  }
+  input.addEventListener('input', () => { selIdx = 0; render(); });
+  input.addEventListener('keydown', e => {
+    const items = list.querySelectorAll('.ac-item');
+    if (e.key === 'ArrowDown') { e.preventDefault(); selIdx = (selIdx + 1) % items.length; refreshSel(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); selIdx = (selIdx - 1 + items.length) % items.length; refreshSel(); }
+    else if (e.key === 'Enter') { e.preventDefault(); const t = items[selIdx]; if (t && t.textContent !== '（无匹配）') { setAcValue(el, t.textContent); closeAc(); } }
+    else if (e.key === 'Escape') { closeAc(); }
+  });
   render();
   document.body.appendChild(panel);
-  // 定位
   const pw = panel.offsetWidth, ph = panel.offsetHeight;
   let left = rect.left, top = rect.bottom + 4;
   if (left + pw > window.innerWidth - 8) left = Math.max(8, window.innerWidth - pw - 8);
   if (top + ph > window.innerHeight - 8) top = Math.max(8, rect.top - ph - 4);
   panel.style.left = left + 'px';
   panel.style.top = top + 'px';
-  panel.dataset.items = items.length;
-  panel.dataset.sel = '0';
-  activeAc = { panel, items, el, selIdx };
+  activeAc = { panel, el };
+  input.focus();
   document.addEventListener('mousedown', acOutside, true);
-}
-
-function acKeydown(e, el) {
-  if (!activeAc) return;
-  const { panel, items } = activeAc;
-  if (e.key === 'ArrowDown') { e.preventDefault(); activeAc.selIdx = (activeAc.selIdx + 1) % items.length; highlightAc(); }
-  else if (e.key === 'ArrowUp') { e.preventDefault(); activeAc.selIdx = (activeAc.selIdx - 1 + items.length) % items.length; highlightAc(); }
-  else if (e.key === 'Enter') { e.preventDefault(); setAcValue(el, items[activeAc.selIdx]); closeAc(); }
-  else if (e.key === 'Escape') { closeAc(); }
-}
-
-function highlightAc() {
-  const items = activeAc.panel.querySelectorAll('.ac-item');
-  items.forEach((d, i) => d.classList.toggle('sel', i === activeAc.selIdx));
-  const s = items[activeAc.selIdx];
-  if (s) s.scrollIntoView({ block: 'nearest' });
 }
 
 function setAcValue(el, val) {

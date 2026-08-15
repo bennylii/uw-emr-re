@@ -373,11 +373,13 @@ const TEMPLATES = {
   <tr><td>损伤、中毒的外部原因</td><td><span class="field-edit" data-field="injury_cause" contenteditable="false"></span></td>
       <td>疾病编码</td><td><span class="field-edit" data-field="injury_cause_code" contenteditable="false"></span></td></tr>
   <tr><td>病理诊断</td><td><span class="field-edit" data-field="pathology" contenteditable="false"></span></td>
-      <td>疾病编码</td><td><span class="field-edit" data-field="pathology_code" contenteditable="false"></span></td></tr>
+      <td>疾病编码</td><td><span class="field-edit" data-field="pathology_code" contenteditable="false"></span></td>
+      <td>病理号</td><td><span class="field-edit" data-field="pathology_no" contenteditable="false"></span></td></tr>
   <tr><td colspan="8">入院病情：1.有 2.临床未确定 3.情况不明 4.无　出院情况：1.治愈 2.好转 3.未愈 4.死亡 9.其他</td></tr>
 </table>
 <table class="case-table">
-  <tr><td>药物过敏</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td>
+  <tr><td>药物过敏</td><td><span class="field-radio" data-field="allergy_flag"></span></td>
+      <td>过敏药物</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td>
       <td>死亡患者尸检</td><td><span class="field-radio" data-field="autopsy"></span></td></tr>
   <tr><td>诊断符合情况</td><td colspan="7">
       门诊与出院 <span class="field-radio" data-field="match_op"></span>
@@ -510,6 +512,7 @@ const TEMPLATES = {
       { type: 'radio', name: 'rh', caption: 'Rh', options: ['阴性', '阳性', '不详', '未查'], value: '阳性' },
       { type: 'radio', name: 'transfusion', caption: '输血反应', options: ['有', '无'], value: '无' },
       { type: 'radio', name: 'autopsy', caption: '尸检', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'allergy_flag', caption: '药物过敏', options: ['无', '有'], value: '无' },
       { type: 'radio', name: 'nosocomial', caption: '院感', options: ['是', '否'], value: '否' },
       { type: 'radio', name: 'syphilis_scr', caption: '妊娠梅毒筛查', options: ['是', '否'], value: '否' },
       { type: 'radio', name: 'scr_ch', caption: 'CH', options: ['是', '否'], value: '否' },

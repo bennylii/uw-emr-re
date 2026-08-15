@@ -1071,52 +1071,94 @@ const TEMPLATES = {
     ],
   },
   case2012tcm: {
-    title: '中医住院病案首页（WS 445.11，逆向 zyzd/ysqm_zy）',
+    title: '中医住院病案首页（WS 445.11）',
     html: `
-<table class="case-table">
-  <tr><th colspan="8">中医住院病案首页</th></tr>
+<table class="case-table" data-category="患者信息">
+  <tr><th colspan="8">中 医 住 院 病 案 首 页（WS 445.11）</th></tr>
   <tr><td>病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td>
+      <td>住院流水号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
       <td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
-      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
-      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td></tr>
-  <tr><td>入院日期</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
-      <td>出院日期</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
-      <td>住院天数</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span></td>
-      <td>入院途径</td><td><span class="field-radio" data-field="in_route"></span></td></tr>
-  <tr><td>门（急）诊诊断</td><td><span class="field-edit" data-field="diag_outpatient" contenteditable="false"></span></td>
-      <td>疾病编码</td><td><span class="field-edit" data-field="diag_outpatient_code" contenteditable="false"></span></td>
-      <td colspan="4"></td></tr>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td></tr>
+  <tr><td>出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
+      <td>民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
+      <td>身份证号</td><td><span class="field-edit" data-field="idno" contenteditable="false"></span></td></tr>
+  <tr><td>入院途径</td><td><span class="field-radio" data-field="in_route"></span></td>
+      <td>入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
+      <td>出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
+      <td>实际住院</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span>天</td></tr>
+  <tr><td>入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
+      <td>出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
+      <td>病区/床号</td><td><span class="field-edit" data-field="ward" contenteditable="false"></span>/<span class="field-edit" data-field="bed" contenteditable="false"></span></td>
+      <td>门（急）诊诊断</td><td><span class="field-edit" data-field="diag_outpatient" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table">
+<table class="case-table" data-category="中医四诊">
+  <tr><th colspan="8">入院中医四诊信息（望闻问切）</th></tr>
+  <tr><td>望诊</td><td colspan="3"><span class="field-edit" data-field="tcm_wang" contenteditable="false"></span></td>
+      <td>闻诊</td><td colspan="3"><span class="field-edit" data-field="tcm_wen" contenteditable="false"></span></td></tr>
+  <tr><td>问诊</td><td colspan="3"><span class="field-edit" data-field="tcm_wen2" contenteditable="false"></span></td>
+      <td>切诊</td><td colspan="3"><span class="field-edit" data-field="tcm_qie" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table" data-category="出院诊断">
   <tr><th colspan="8">出院诊断</th></tr>
-  <tr><th>中医诊断</th><th>中医病证编码</th><th>西医诊断</th><th>西医疾病编码</th><th>入院病情</th><th>出院情况</th></tr>
-  <tr><td>主要：<span class="field-edit" data-field="tcm_diag_main" contenteditable="false"></span></td>
+  <tr><th>诊断类别</th><th>中医病名/证型</th><th>中医病证编码</th><th>西医诊断</th><th>西医疾病编码</th><th>入院病情</th><th>出院情况</th></tr>
+  <tr><td>主要诊断</td>
+      <td><span class="field-edit" data-field="tcm_diag_main" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="tcm_code_main" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="wm_diag_main" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="wm_code_main" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_main"></span></td>
       <td><span class="field-radio" data-field="out_status_main"></span></td></tr>
-  <tr><td>其他：<span class="field-edit" data-field="tcm_diag_other" contenteditable="false"></span></td>
+  <tr><td>其他诊断</td>
+      <td><span class="field-edit" data-field="tcm_diag_other" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="tcm_code_other" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="wm_diag_other" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="wm_code_other" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other"></span></td>
       <td><span class="field-radio" data-field="out_status_other"></span></td></tr>
+  <tr><td>入院中医诊断</td>
+      <td colspan="2"><span class="field-edit" data-field="tcm_diag_admit" contenteditable="false"></span></td>
+      <td>辨证分型</td>
+      <td colspan="3"><span class="field-edit" data-field="tcm_syndrome" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table">
-  <tr><td>中医治则治法</td><td colspan="3"><span class="field-edit" data-field="tcm_principle" contenteditable="false"></span></td>
-      <td>中医辨证分型</td><td colspan="3"><span class="field-edit" data-field="tcm_syndrome" contenteditable="false"></span></td></tr>
-  <tr><td>入院中医四诊摘要</td><td colspan="7"><span class="field-edit" data-field="tcm_four" contenteditable="false"></span></td></tr>
-  <tr><td>中药使用情况</td><td><span class="field-radio" data-field="tcm_herb"></span></td>
-      <td>针灸治疗</td><td><span class="field-radio" data-field="tcm_acup"></span></td>
-      <td>推拿治疗</td><td><span class="field-radio" data-field="tcm_massage"></span></td>
-      <td>康复治疗</td><td><span class="field-radio" data-field="tcm_rehab"></span></td></tr>
+<table class="case-table" data-category="中医治疗">
+  <tr><th colspan="8">中医治疗情况</th></tr>
+  <tr><td>中医治则治法</td><td colspan="7"><span class="field-edit" data-field="tcm_principle" contenteditable="false"></span></td></tr>
+  <tr><td>中药饮片</td><td><span class="field-radio" data-field="tcm_herb"></span></td>
+      <td>金额(元)</td><td><span class="field-edit" data-field="tcm_herb_fee" contenteditable="false"></span></td>
+      <td>中成药</td><td><span class="field-radio" data-field="tcm_patent"></span></td>
+      <td>金额(元)</td><td><span class="field-edit" data-field="tcm_patent_fee" contenteditable="false"></span></td></tr>
+  <tr><td>中药注射液</td><td><span class="field-radio" data-field="tcm_injection"></span></td>
+      <td>金额(元)</td><td><span class="field-edit" data-field="tcm_injection_fee" contenteditable="false"></span></td>
+      <td colspan="4"></td></tr>
+  <tr><td>中医适宜技术</td><td colspan="7">
+      针灸 <span class="field-radio" data-field="tcm_acup"></span>
+      推拿 <span class="field-radio" data-field="tcm_massage"></span>
+      拔罐 <span class="field-radio" data-field="tcm_cupping"></span>
+      艾灸 <span class="field-radio" data-field="tcm_moxa"></span>
+      刮痧 <span class="field-radio" data-field="tcm_guasha"></span>
+      穴位贴敷 <span class="field-radio" data-field="tcm_acupoint"></span>
+      中药熏蒸 <span class="field-radio" data-field="tcm_fumigation"></span>
+      康复治疗 <span class="field-radio" data-field="tcm_rehab"></span></td></tr>
   <tr><td>手术及操作</td><td colspan="7"><span class="field-edit" data-field="op1_name" contenteditable="false"></span>　编码：<span class="field-edit" data-field="op1_code" contenteditable="false"></span></td></tr>
 </table>
+<table class="case-table" data-category="离院与费用">
+  <tr><td>离院方式</td><td><span class="field-radio" data-field="discharge_mode"></span></td>
+      <td>31天内再住院计划</td><td><span class="field-radio" data-field="readmit_plan"></span></td>
+      <td>住院费用(元)</td><td><span class="field-edit" data-field="total_fee" contenteditable="false"></span></td></tr>
+  <tr><td>中医治疗费(元)</td><td><span class="field-edit" data-field="fee_tcm" contenteditable="false"></span></td>
+      <td>中成药费(元)</td><td><span class="field-edit" data-field="fee_patent" contenteditable="false"></span></td>
+      <td>中草药费(元)</td><td><span class="field-edit" data-field="fee_herb" contenteditable="false"></span></td></tr>
+</table>
 <div class="sign-line">科主任：<span class="field-edit" data-field="sign_dept_head" contenteditable="false"></span>
+  主任（副主任）医师：<span class="field-edit" data-field="sign_chief" contenteditable="false"></span>
   主治医师：<span class="field-edit" data-field="sign_attending" contenteditable="false"></span>
   住院医师：<span class="field-edit" data-field="sign_resident" contenteditable="false"></span>
-  编码员：<span class="field-edit" data-field="sign_coder" contenteditable="false"></span></div>
+  责任护士：<span class="field-edit" data-field="sign_nurse" contenteditable="false"></span>
+  编码员：<span class="field-edit" data-field="sign_coder" contenteditable="false"></span>
+  病案质量：<span class="field-radio" data-field="case_quality"></span>
+  质控医师：<span class="field-edit" data-field="sign_qc_doc" contenteditable="false"></span>
+  质控日期：<span class="field-edit" data-field="sign_qc_date" contenteditable="false"></span></div>
 `,
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
@@ -1125,10 +1167,20 @@ const TEMPLATES = {
       { type: 'radio', name: 'out_status_main', caption: '出院情况(主要)', options: ['1.治愈', '2.好转', '3.未愈', '4.死亡', '9.其他'], value: '1.治愈' },
       { type: 'radio', name: 'adm_status_other', caption: '入院病情(其他)', options: ['1.有', '2.临床未确定', '3.情况不明', '4.无'], value: '1.有' },
       { type: 'radio', name: 'out_status_other', caption: '出院情况(其他)', options: ['1.治愈', '2.好转', '3.未愈', '4.死亡', '9.其他'], value: '2.好转' },
-      { type: 'radio', name: 'tcm_herb', caption: '中药使用', options: ['有', '无'], value: '有' },
+      { type: 'radio', name: 'tcm_herb', caption: '中药饮片', options: ['有', '无'], value: '有' },
+      { type: 'radio', name: 'tcm_patent', caption: '中成药', options: ['有', '无'], value: '有' },
+      { type: 'radio', name: 'tcm_injection', caption: '中药注射液', options: ['有', '无'], value: '无' },
       { type: 'radio', name: 'tcm_acup', caption: '针灸', options: ['有', '无'], value: '有' },
       { type: 'radio', name: 'tcm_massage', caption: '推拿', options: ['有', '无'], value: '无' },
-      { type: 'radio', name: 'tcm_rehab', caption: '康复', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'tcm_cupping', caption: '拔罐', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'tcm_moxa', caption: '艾灸', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'tcm_guasha', caption: '刮痧', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'tcm_acupoint', caption: '穴位贴敷', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'tcm_fumigation', caption: '中药熏蒸', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'tcm_rehab', caption: '康复治疗', options: ['有', '无'], value: '无' },
+      { type: 'radio', name: 'discharge_mode', caption: '离院方式', options: ['医嘱离院', '医嘱转院', '转社区卫生机构', '非医嘱离院', '死亡'], value: '医嘱离院' },
+      { type: 'radio', name: 'readmit_plan', caption: '31天再住院', options: ['无', '有'], value: '无' },
+      { type: 'radio', name: 'case_quality', caption: '病案质量', options: ['甲', '乙', '丙'], value: '甲' },
     ],
   },
   nursing_plan: {

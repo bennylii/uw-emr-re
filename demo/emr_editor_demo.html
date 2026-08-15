@@ -93,6 +93,10 @@
     <option value="catheter">导管风险评估监控表</option>
     <option value="yzb">医嘱单</option>
     <option value="opd">门诊病历</option>
+    <option value="prescription">门诊处方</option>
+    <option value="labreport">检查检验报告单</option>
+    <option value="transfer">转诊(院)记录</option>
+    <option value="treatment">治疗处置记录</option>
   </select>
   <button onclick="loadTemplate()">载入模板</button>
   <button onclick="newDoc()">新文档</button>
@@ -139,6 +143,9 @@
     <div class="foot">
       研究演示：界面与交互为自拟实现，仅复现接口行为（域控件值↔XML 同步、
       gzip 交换、相似度质控），不含厂商代码。基于 AbiWord 2.8.x GPL 分析。
+      <br>文书类型参照 WS 445《电子病历基本数据集》系列（445.1-445.17）与
+      卫医政发〔2011〕84号《住院病案首页》；标准参考：
+      github.com/wanghaisheng/healthcaredatastandard（感谢整理）
     </div>
   </div>
 </div>
@@ -737,6 +744,134 @@ const TEMPLATES = {
     ],
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  prescription: {
+    title: '门（急）诊处方（WS 445.3，EMR_CAJK 处方签名）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">处 方 笺</th></tr>
+  <tr><td>处方编号</td><td><span class="field-edit" data-field="rx_no" contenteditable="false"></span></td>
+      <td>科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td>
+      <td>费别</td><td><span class="field-edit" data-field="fee_type" contenteditable="false"></span></td>
+      <td>处方类型</td><td><span class="field-radio" data-field="rx_type"></span></td></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
+      <td>临床诊断</td><td><span class="field-edit" data-field="diag" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>药品/项目名称</th><th>规格</th><th>数量</th><th>单位</th><th>用法</th><th>频次</th><th>金额</th><th>备注</th></tr>
+  <tr><td><span class="field-edit" data-field="r1_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_spec" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_qty" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_usage" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_freq" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_amt" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_note" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="r2_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_spec" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_qty" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_usage" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_freq" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_amt" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_note" contenteditable="false"></span></td></tr>
+</table>
+<div class="sign-line">医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>
+  药师签名：<span class="field-edit" data-field="sign_pharm" contenteditable="false"></span>
+  日期：<span class="field-edit" data-field="sign_date" contenteditable="false"></span></div>
+`,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'rx_type', caption: '处方类型', options: ['普通处方', '急诊处方', '儿科处方', '麻醉药品处方', '精神药品处方'], value: '普通处方' },
+    ],
+  },
+  labreport: {
+    title: '检查检验记录（WS 445.4）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">检验（检查）报告单</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
+      <td>标本号/检查号</td><td><span class="field-edit" data-field="sample_no" contenteditable="false"></span></td></tr>
+  <tr><td>科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td>
+      <td>病区/床号</td><td><span class="field-edit" data-field="ward" contenteditable="false"></span></td>
+      <td>临床诊断</td><td><span class="field-edit" data-field="diag" contenteditable="false"></span></td>
+      <td>标本类型</td><td><span class="field-edit" data-field="sample_type" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>检验/检查项目</th><th>结果</th><th>单位</th><th>参考范围</th><th>标志</th></tr>
+  <tr><td><span class="field-edit" data-field="l1_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l1_result" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l1_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l1_ref" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l1_flag" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="l2_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l2_result" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l2_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l2_ref" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l2_flag" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="l3_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l3_result" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l3_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l3_ref" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l3_flag" contenteditable="false"></span></td></tr>
+</table>
+<div class="sign-line">送检医师：<span class="field-edit" data-field="sign_request" contenteditable="false"></span>
+  审核技师/医师：<span class="field-edit" data-field="sign_report" contenteditable="false"></span>
+  报告日期：<span class="field-edit" data-field="report_date" contenteditable="false"></span></div>
+`,
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  transfer: {
+    title: '转诊（院）记录（WS 445.16）',
+    paras: [
+      { indent: false, html: '转出科室：<span class="field-edit" data-field="from_dept" contenteditable="false"></span>　转入科室：<span class="field-edit" data-field="to_dept" contenteditable="false"></span>　转诊日期：<span class="field-edit" data-field="transfer_date" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>　入院日期：<span class="field-edit" data-field="in_time" contenteditable="false"></span>' },
+      { indent: true, html: '入院诊断：<span class="field-hengxian" data-field="diag_admit" contenteditable="false"></span>' },
+      { indent: true, html: '目前诊断：<span class="field-hengxian" data-field="diag_now" contenteditable="false"></span>' },
+      { indent: true, html: '目前情况（症状/体征/检查）：' },
+      { indent: true, html: '转诊目的及注意事项：' },
+      { indent: false, html: '转诊医师：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　接收科室意见：<span class="field-edit" data-field="accept_note" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  treatment: {
+    title: '一般治疗处置记录（WS 445.5）',
+    html: `
+<table class="case-table">
+  <tr><th colspan="8">治疗处置记录</th></tr>
+  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>床号</td><td><span class="field-edit" data-field="bed" contenteditable="false"></span></td>
+      <td>住院号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td>
+      <td>处置类别</td><td><span class="field-radio" data-field="treat_type"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th>处置时间</th><th>处置项目</th><th>部位</th><th>操作者</th><th>观察情况</th><th>签名</th></tr>
+  <tr><td><span class="field-edit" data-field="t1_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_site" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_op" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_obs" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t1_sign" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="t2_time" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_site" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_op" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_obs" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="t2_sign" contenteditable="false"></span></td></tr>
+</table>
+`,
+    fields: [
+      { type: 'radio', name: 'treat_type', caption: '处置类别', options: ['清创缝合', '换药', '穿刺引流', '导尿', '灌肠', '吸氧', '雾化', '其他'], value: '换药' },
     ],
   },
 };

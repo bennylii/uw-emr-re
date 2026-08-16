@@ -129,7 +129,11 @@
   .a4-body { flex: 1; }
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
-  .a4-body .case-table { font-size: 10.5px; }
+  .a4-body .case-table { font-size: 10px; table-layout: fixed; }
+  .a4-body .case-table th, .a4-body .case-table td { padding: 1.5px 3px; line-height: 1.3; }
+  .a4-body .case-table td.lbl { white-space: nowrap; width: 76px; font-weight: normal; }
+  .a4-body .case-table td { overflow: hidden; }
+  .a4-body .sign-line { margin-top: 8px; font-size: 11px; line-height: 1.8; }
   .a4-body .case-table th, .a4-body .case-table td { padding: 2px 4px; }
   .a4-body .field-edit, .a4-body .field-hengxian { min-width: 30px; }
   .a4-body .para { margin: 3px 0; line-height: 1.6; }
@@ -143,7 +147,9 @@
     .a4-page { width: auto; min-height: 0; margin: 0; box-shadow: none;
       padding: 12mm 10mm 8mm 10mm; page-break-after: always; }
     .a4-page:last-child { page-break-after: auto; }
-    .case-table { font-size: 10px; }
+    .case-table { font-size: 9.5px; }
+    .case-table th, .case-table td { padding: 1px 2.5px; line-height: 1.25; }
+    .a4-page { padding: 10mm 8mm 6mm 8mm; }
     .field-edit, .field-hengxian { border-bottom: 1px solid #000; }
     .section-title { margin: 4px 0; }
   }
@@ -335,41 +341,42 @@ const TEMPLATES = {
 </div>
 <div class="a4-body">
 <table class="case-table">
-  <tr><th colspan="8">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
-  <tr><td>医疗机构名称</td><td colspan="3"><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
-      <td>组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td>
-      <td>医疗付费方式</td><td><span class="field-edit" data-field="pay_mode" contenteditable="false"></span></td></tr>
-  <tr><td>健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
-      <td>第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td>
-      <td>住院号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
-      <td>病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
-  <tr><td>病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td>
-      <td>住院流水号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
-      <td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
-      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td></tr>
-  <tr><td>出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td>
-      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
-      <td>国籍</td><td><span class="field-edit" data-field="nation" contenteditable="false"></span></td>
-      <td>（不足1周岁）年龄</td><td><span class="field-edit" data-field="age_month" contenteditable="false"></span>月</td></tr>
-  <tr><td>新生儿出生体重</td><td><span class="field-edit" data-field="birth_weight" contenteditable="false"></span>g</td>
-      <td>新生儿入院体重</td><td><span class="field-edit" data-field="admit_weight" contenteditable="false"></span>g</td>
-      <td>出生地</td><td><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td>
-      <td>籍贯</td><td><span class="field-edit" data-field="native_place" contenteditable="false"></span></td></tr>
-  <tr><td>民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
-      <td>身份证件类别</td><td><span class="field-radio" data-field="id_type"></span></td>
-      <td>身份证号</td><td colspan="3"><span class="field-edit" data-field="idno" contenteditable="false"></span></td></tr>
-  <tr><td>现住址</td><td colspan="3"><span class="field-edit" data-field="address" contenteditable="false"></span></td>
-      <td>电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
-      <td>邮编</td><td><span class="field-edit" data-field="zip" contenteditable="false"></span></td></tr>
-  <tr><td>户口地址</td><td colspan="3"><span class="field-edit" data-field="reg_address" contenteditable="false"></span></td>
-      <td>邮编</td><td colspan="3"><span class="field-edit" data-field="reg_zip" contenteditable="false"></span></td></tr>
-  <tr><td>工作单位及地址</td><td colspan="3"><span class="field-edit" data-field="workplace" contenteditable="false"></span></td>
-      <td>单位电话</td><td><span class="field-edit" data-field="work_phone" contenteditable="false"></span></td>
-      <td>邮编</td><td><span class="field-edit" data-field="work_zip" contenteditable="false"></span></td></tr>
-  <tr><td>联系人</td><td><span class="field-edit" data-field="contact" contenteditable="false"></span></td>
-      <td>关系</td><td><span class="field-edit" data-field="relation" contenteditable="false"></span></td>
-      <td>地址</td><td><span class="field-edit" data-field="contact_addr" contenteditable="false"></span></td>
-      <td>电话</td><td><span class="field-edit" data-field="contact_phone" contenteditable="false"></span></td></tr>
+  <tr><th colspan="6">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
+  <tr><td class="lbl">医疗机构名称</td><td colspan="2"><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
+      <td class="lbl">组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td>
+      <td class="lbl">医疗付费方式</td></tr>
+  <tr><td class="lbl">健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
+      <td class="lbl">第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td>
+      <td class="lbl">住院号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
+      <td class="lbl">病案号</td></tr>
+  <tr><td class="lbl">姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td class="lbl">性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td class="lbl">出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span>岁</td>
+      <td class="lbl">（不足1周岁）年龄</td><td><span class="field-edit" data-field="age_month" contenteditable="false"></span>月</td>
+      <td class="lbl">国籍</td><td><span class="field-edit" data-field="nation" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">新生儿出生体重</td><td><span class="field-edit" data-field="birth_weight" contenteditable="false"></span>g</td>
+      <td class="lbl">新生儿入院体重</td><td><span class="field-edit" data-field="admit_weight" contenteditable="false"></span>g</td>
+      <td class="lbl">出生地</td><td><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">籍贯</td><td><span class="field-edit" data-field="native_place" contenteditable="false"></span></td>
+      <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
+      <td class="lbl">身份证件类别</td><td><span class="field-radio" data-field="id_type"></span></td></tr>
+  <tr><td class="lbl">身份证号</td><td colspan="2"><span class="field-edit" data-field="idno" contenteditable="false"></span></td>
+      <td class="lbl">职业</td><td><span class="field-edit" data-field="occupation" contenteditable="false"></span></td>
+      <td class="lbl">婚姻</td></tr>
+  <tr><td class="lbl">现住址</td><td colspan="2"><span class="field-edit" data-field="address" contenteditable="false"></span></td>
+      <td class="lbl">电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
+      <td class="lbl">邮编</td></tr>
+  <tr><td class="lbl">户口地址</td><td colspan="2"><span class="field-edit" data-field="reg_address" contenteditable="false"></span></td>
+      <td class="lbl">邮编</td><td colspan="2"><span class="field-edit" data-field="reg_zip" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">工作单位及地址</td><td colspan="2"><span class="field-edit" data-field="workplace" contenteditable="false"></span></td>
+      <td class="lbl">单位电话</td><td><span class="field-edit" data-field="work_phone" contenteditable="false"></span></td>
+      <td class="lbl">邮编</td></tr>
+  <tr><td class="lbl">联系人</td><td><span class="field-edit" data-field="contact" contenteditable="false"></span></td>
+      <td class="lbl">关系</td><td><span class="field-edit" data-field="relation" contenteditable="false"></span></td>
+      <td class="lbl">地址</td><td><span class="field-edit" data-field="contact_addr" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">联系人电话</td><td colspan="2"><span class="field-edit" data-field="contact_phone" contenteditable="false"></span></td>
+      <td colspan="3"></td></tr>
 </table>
 <table class="case-table">
   <tr><td>入院途径</td><td><span class="field-radio" data-field="in_route"></span></td>
@@ -394,6 +401,18 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="diag_other_code" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other"></span></td>
       <td><span class="field-radio" data-field="out_status_other"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other2" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other2_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other2"></span></td>
+      <td><span class="field-radio" data-field="out_status_other2"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other3" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other3_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other3"></span></td>
+      <td><span class="field-radio" data-field="out_status_other3"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other4" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other4_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other4"></span></td>
+      <td><span class="field-radio" data-field="out_status_other4"></span></td></tr>
   <tr><td>其他诊断：<span class="field-edit" data-field="diag_other2" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="diag_other2_code" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other2"></span></td>

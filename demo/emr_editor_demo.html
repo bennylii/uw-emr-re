@@ -113,14 +113,39 @@
   #patientTable td { padding: 7px 8px; border-bottom: 1px solid #eef1f4; cursor: pointer; }
   #patientTable tr:hover td { background: #eef6fd; }
   #patientTable tr { transition: background .1s; }
+  /* A4 分页（所见即所得） */
+  .a4-page { width: 210mm; min-height: 297mm; background: #fff;
+    margin: 10px auto; padding: 12mm 10mm 8mm 10mm; box-sizing: border-box;
+    box-shadow: 0 2px 10px rgba(0,0,0,.22); position: relative;
+    display: flex; flex-direction: column; }
+  .a4-header { display: flex; align-items: baseline; gap: 12px;
+    border-bottom: 1.5px solid #2c3e50; padding-bottom: 3px; margin-bottom: 8px;
+    font-size: 12px; color: #2c3e50; }
+  .a4-header .h-org { font-size: 15px; letter-spacing: 2px; }
+  .a4-header .h-title { font-size: 15px; font-weight: bold; margin: 0 auto; letter-spacing: 4px; }
+  .a4-header .h-meta { white-space: nowrap; font-size: 11px; }
+  .a4-header .h-meta b { font-weight: normal; border-bottom: 1px solid #999;
+    min-width: 36px; display: inline-block; text-align: center; padding: 0 2px; }
+  .a4-body { flex: 1; }
+  .a4-footer { text-align: center; font-size: 10.5px; color: #666;
+    border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
+  .a4-body .case-table { font-size: 10.5px; }
+  .a4-body .case-table th, .a4-body .case-table td { padding: 2px 4px; }
+  .a4-body .field-edit, .a4-body .field-hengxian { min-width: 30px; }
+  .a4-body .para { margin: 3px 0; line-height: 1.6; }
   /* 打印样式 */
   @media print {
-    #toolbar, #sidePane, .foot { display: none !important; }
+    @page { size: A4 portrait; margin: 0; }
+    #toolbar, #sidePane, .foot, #patientList { display: none !important; }
     #main { display: block; height: auto; }
     #docPane { padding: 0; overflow: visible; }
-    #paper { box-shadow: none; max-width: 100%; padding: 10mm; min-height: 0; }
-    .case-table { font-size: 10.5px; }
+    #paper { box-shadow: none; max-width: 100%; padding: 0; min-height: 0; background: #fff; }
+    .a4-page { width: auto; min-height: 0; margin: 0; box-shadow: none;
+      padding: 12mm 10mm 8mm 10mm; page-break-after: always; }
+    .a4-page:last-child { page-break-after: auto; }
+    .case-table { font-size: 10px; }
     .field-edit, .field-hengxian { border-bottom: 1px solid #000; }
+    .section-title { margin: 4px 0; }
   }
   .sign-area { margin-top: 36px; border-top: 1px solid #ccc; padding-top: 12px;
                font-size: 13px; color: #888; }
@@ -302,7 +327,13 @@ const TEMPLATES = {
   },
   case2012: {
     title: '住院病案首页（2012版·完整）',
-    html: `
+    html: `<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">住 院 病 案 首 页</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
+</div>
+<div class="a4-body">
 <table class="case-table">
   <tr><th colspan="8">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
   <tr><td>医疗机构名称</td><td colspan="3"><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
@@ -378,6 +409,17 @@ const TEMPLATES = {
       <td>病理号</td><td><span class="field-edit" data-field="pathology_no" contenteditable="false"></span></td></tr>
   <tr><td colspan="8">入院病情：1.有 2.临床未确定 3.情况不明 4.无　出院情况：1.治愈 2.好转 3.未愈 4.死亡 9.其他</td></tr>
 </table>
+</div>
+<div class="a4-footer">第 1 页 / 共 2 页　（双面打印请选择“短边翻转”）</div>
+</div>
+
+<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">住 院 病 案 首 页（续）</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
+</div>
+<div class="a4-body">
 <table class="case-table">
   <tr><td>药物过敏</td><td><span class="field-radio" data-field="allergy_flag"></span></td>
       <td>过敏药物</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td>
@@ -497,6 +539,10 @@ const TEMPLATES = {
   质控医师：<span class="field-edit" data-field="sign_qc_doc" contenteditable="false"></span>
   质控护士：<span class="field-edit" data-field="sign_qc_nurse" contenteditable="false"></span>
   质控日期：<span class="field-edit" data-field="sign_qc_date" contenteditable="false"></span></div>
+
+</div>
+<div class="a4-footer">第 2 页 / 共 2 页　（双面打印请选择“短边翻转”）</div>
+</div>
 `,
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
@@ -570,34 +616,43 @@ const TEMPLATES = {
       { indent: false, html: '医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>' },
     ],
   },
-  progress: {
+    progress: {
     title: '住院病程记录（WS 445.13）',
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
     ],
-    paras: [
-      { indent: false, html: '住院号：<span class="field-edit" data-field="zyh" contenteditable="false"></span>　科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>' },
-      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁　记录日期时间：<span class="field-edit" data-field="record_time" contenteditable="false"></span>' },
-      { indent: false, html: '主诉：<span class="field-hengxian" data-field="chief" contenteditable="false"></span>' },
-      { indent: true, html: '病例特点：<span class="field-hengxian" data-field="case_features" contenteditable="false"></span>' },
-      { indent: true, html: '中医四诊观察：<span class="field-hengxian" data-field="tcm_four" contenteditable="false"></span>' },
-      { indent: true, html: '诊断依据：<span class="field-hengxian" data-field="diag_basis" contenteditable="false"></span>' },
-      { indent: true, html: '初步诊断：<span class="field-edit" data-field="diag" contenteditable="false"></span>　编码：<span class="field-edit" data-field="diag_code" contenteditable="false"></span>' },
-      { indent: true, html: '鉴别诊断：<span class="field-hengxian" data-field="diff_diag" contenteditable="false"></span>' },
-      { indent: true, html: '诊疗计划：<span class="field-hengxian" data-field="plan" contenteditable="false"></span>　治则治法：<span class="field-hengxian" data-field="tcm_principle" contenteditable="false"></span>' },
-      { indent: true, html: '住院病程：<span class="field-hengxian" data-field="course" contenteditable="false"></span>' },
-      { indent: true, html: '今日查体：T <span class="field-edit" data-field="exam_t" contenteditable="false"></span>℃，P <span class="field-edit" data-field="exam_p" contenteditable="false"></span>次/分，R <span class="field-edit" data-field="exam_r" contenteditable="false"></span>次/分，BP <span class="field-edit" data-field="exam_bp" contenteditable="false"></span>mmHg' },
-      { indent: true, html: '辨证论治：<span class="field-hengxian" data-field="tcm_treat" contenteditable="false"></span>　中药煎煮：<span class="field-edit" data-field="herb_decoct" contenteditable="false"></span>　中药用法：<span class="field-edit" data-field="herb_usage" contenteditable="false"></span>' },
-      { indent: true, html: '查房记录（主任/主治查房）：' },
-      { indent: false, html: '查房日期：<span class="field-edit" data-field="round_time" contenteditable="false"></span>　查房记录：<span class="field-hengxian" data-field="round_note" contenteditable="false"></span>' },
-      { indent: true, html: '讨论记录（疑难病例讨论）：' },
-      { indent: false, html: '讨论日期：<span class="field-edit" data-field="disc_time" contenteditable="false"></span>　地点：<span class="field-edit" data-field="disc_place" contenteditable="false"></span>　参加人员：<span class="field-edit" data-field="disc_members" contenteditable="false"></span>　讨论意见：<span class="field-hengxian" data-field="disc_opinion" contenteditable="false"></span>' },
-      { indent: true, html: '转科记录：' },
-      { indent: false, html: '转科类型：<span class="field-edit" data-field="transfer_type" contenteditable="false"></span>　转出日期：<span class="field-edit" data-field="transfer_out" contenteditable="false"></span>　转入日期：<span class="field-edit" data-field="transfer_in" contenteditable="false"></span>　转科目地：<span class="field-hengxian" data-field="transfer_purpose" contenteditable="false"></span>　今后治疗方案：<span class="field-hengxian" data-field="future_plan" contenteditable="false"></span>' },
-      { indent: false, html: '记录医师：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>' },
-    ],
-  },
-  surgery: {
+    html: `
+<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">住 院 病 程 记 录</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="dept"></b>　住院号 <b data-header="zyh"></b></span>
+</div>
+<div class="a4-body">
+<div class="para">住院号：<span class="field-edit" data-field="zyh" contenteditable="false"></span>　科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span></div>
+<div class="para">姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁　记录日期时间：<span class="field-edit" data-field="record_time" contenteditable="false"></span></div>
+<div class="para">主诉：<span class="field-hengxian" data-field="chief" contenteditable="false"></span></div>
+<div class="para">病例特点：<span class="field-hengxian" data-field="case_features" contenteditable="false"></span></div>
+<div class="para">中医四诊观察：<span class="field-hengxian" data-field="tcm_four" contenteditable="false"></span></div>
+<div class="para">诊断依据：<span class="field-hengxian" data-field="diag_basis" contenteditable="false"></span></div>
+<div class="para">初步诊断：<span class="field-edit" data-field="diag" contenteditable="false"></span>　编码：<span class="field-edit" data-field="diag_code" contenteditable="false"></span></div>
+<div class="para">鉴别诊断：<span class="field-hengxian" data-field="diff_diag" contenteditable="false"></span></div>
+<div class="para">诊疗计划：<span class="field-hengxian" data-field="plan" contenteditable="false"></span>　治则治法：<span class="field-hengxian" data-field="tcm_principle" contenteditable="false"></span></div>
+<div class="para">住院病程：<span class="field-hengxian" data-field="course" contenteditable="false"></span></div>
+<div class="para">今日查体：T <span class="field-edit" data-field="exam_t" contenteditable="false"></span>℃，P <span class="field-edit" data-field="exam_p" contenteditable="false"></span>次/分，R <span class="field-edit" data-field="exam_r" contenteditable="false"></span>次/分，BP <span class="field-edit" data-field="exam_bp" contenteditable="false"></span>mmHg</div>
+<div class="para">辨证论治：<span class="field-hengxian" data-field="tcm_treat" contenteditable="false"></span>　中药煎煮：<span class="field-edit" data-field="herb_decoct" contenteditable="false"></span>　中药用法：<span class="field-edit" data-field="herb_usage" contenteditable="false"></span></div>
+<div class="para">查房记录（主任/主治查房）：</div>
+<div class="para">查房日期：<span class="field-edit" data-field="round_time" contenteditable="false"></span>　查房记录：<span class="field-hengxian" data-field="round_note" contenteditable="false"></span></div>
+<div class="para">讨论记录（疑难病例讨论）：</div>
+<div class="para">讨论日期：<span class="field-edit" data-field="disc_time" contenteditable="false"></span>　地点：<span class="field-edit" data-field="disc_place" contenteditable="false"></span>　参加人员：<span class="field-edit" data-field="disc_members" contenteditable="false"></span>　讨论意见：<span class="field-hengxian" data-field="disc_opinion" contenteditable="false"></span></div>
+<div class="para">转科记录：</div>
+<div class="para">转科类型：<span class="field-edit" data-field="transfer_type" contenteditable="false"></span>　转出日期：<span class="field-edit" data-field="transfer_out" contenteditable="false"></span>　转入日期：<span class="field-edit" data-field="transfer_in" contenteditable="false"></span>　转科目地：<span class="field-hengxian" data-field="transfer_purpose" contenteditable="false"></span>　今后治疗方案：<span class="field-hengxian" data-field="future_plan" contenteditable="false"></span></div>
+<div class="para">记录医师：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span></div>
+</div>
+<div class="a4-footer">第 <span class="pg-cur">1</span> 页</div>
+</div>
+`,
+  },surgery: {
     title: '手术记录',
     fields: [],    paras: [
       { indent: false, html: '手术名称：<span class="field-edit" data-field="op_name" contenteditable="false"></span>' },
@@ -2082,6 +2137,7 @@ function syncAll() {
   updateMissing(tpl);
   drawTempChart();   // 体温单图形（ENR_TZJL 体温单绘制）
   autoCalc();        // 病案首页自动计算（年龄/住院天数/费用合计）
+  refreshA4Headers(); // A4 页眉（机构/姓名/科室/病案号）实时回填
 }
 
 /* ================= 体温单图形（模拟 ENR_TZJL 体温单绘制） ================= */
@@ -2299,7 +2355,22 @@ function exportHTML() {
   a.download = 'record.html';
   a.click();
 }
+function refreshA4Headers() {
+  document.querySelectorAll('.a4-header').forEach(header => {
+    header.querySelectorAll('[data-header]').forEach(b => {
+      const f = b.dataset.header;
+      const el = document.querySelector('[data-field="' + f + '"]');
+      let v = el ? el.textContent.trim() : '';
+      if (!v && b.dataset.dflt === '1') v = '×××医院';
+      b.textContent = v;
+    });
+  });
+}
+
 function printDoc() {
+  refreshA4Headers();
+  const pages = document.querySelectorAll('.a4-page').length;
+  if (!confirm('共 ' + pages + ' 页，将调用浏览器打印。\n\n纸质双面使用请选择「双面打印 - 短边翻转」。\n\n继续打印？')) return;
   window.print();
 }
 

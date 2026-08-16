@@ -571,17 +571,30 @@ const TEMPLATES = {
     ],
   },
   progress: {
-    title: '病程记录',
-    fields: [],
+    title: '住院病程记录（WS 445.13）',
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
     paras: [
-      { indent: false, html: '日期：<span class="field-edit" data-field="date" contenteditable="false"></span>　' +
-                            '时间：<span class="field-edit" data-field="time" contenteditable="false"></span>' },
-      { indent: true, html: '今日患者神志清，精神可，饮食睡眠可，大小便正常。' },
-      { indent: true, html: '查体：T <span class="field-edit" data-field="temp" contenteditable="false"></span>℃，' +
-                            'P <span class="field-edit" data-field="pulse" contenteditable="false"></span>次/分，' +
-                            'R <span class="field-edit" data-field="resp" contenteditable="false"></span>次/分，' +
-                            'BP <span class="field-edit" data-field="bp" contenteditable="false"></span>mmHg。' },
-      { indent: true, html: '双肺呼吸音清，未及明显干湿性啰音。' },
+      { indent: false, html: '住院号：<span class="field-edit" data-field="zyh" contenteditable="false"></span>　科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁　记录日期时间：<span class="field-edit" data-field="record_time" contenteditable="false"></span>' },
+      { indent: false, html: '主诉：<span class="field-hengxian" data-field="chief" contenteditable="false"></span>' },
+      { indent: true, html: '病例特点：<span class="field-hengxian" data-field="case_features" contenteditable="false"></span>' },
+      { indent: true, html: '中医四诊观察：<span class="field-hengxian" data-field="tcm_four" contenteditable="false"></span>' },
+      { indent: true, html: '诊断依据：<span class="field-hengxian" data-field="diag_basis" contenteditable="false"></span>' },
+      { indent: true, html: '初步诊断：<span class="field-edit" data-field="diag" contenteditable="false"></span>　编码：<span class="field-edit" data-field="diag_code" contenteditable="false"></span>' },
+      { indent: true, html: '鉴别诊断：<span class="field-hengxian" data-field="diff_diag" contenteditable="false"></span>' },
+      { indent: true, html: '诊疗计划：<span class="field-hengxian" data-field="plan" contenteditable="false"></span>　治则治法：<span class="field-hengxian" data-field="tcm_principle" contenteditable="false"></span>' },
+      { indent: true, html: '住院病程：<span class="field-hengxian" data-field="course" contenteditable="false"></span>' },
+      { indent: true, html: '今日查体：T <span class="field-edit" data-field="exam_t" contenteditable="false"></span>℃，P <span class="field-edit" data-field="exam_p" contenteditable="false"></span>次/分，R <span class="field-edit" data-field="exam_r" contenteditable="false"></span>次/分，BP <span class="field-edit" data-field="exam_bp" contenteditable="false"></span>mmHg' },
+      { indent: true, html: '辨证论治：<span class="field-hengxian" data-field="tcm_treat" contenteditable="false"></span>　中药煎煮：<span class="field-edit" data-field="herb_decoct" contenteditable="false"></span>　中药用法：<span class="field-edit" data-field="herb_usage" contenteditable="false"></span>' },
+      { indent: true, html: '查房记录（主任/主治查房）：' },
+      { indent: false, html: '查房日期：<span class="field-edit" data-field="round_time" contenteditable="false"></span>　查房记录：<span class="field-hengxian" data-field="round_note" contenteditable="false"></span>' },
+      { indent: true, html: '讨论记录（疑难病例讨论）：' },
+      { indent: false, html: '讨论日期：<span class="field-edit" data-field="disc_time" contenteditable="false"></span>　地点：<span class="field-edit" data-field="disc_place" contenteditable="false"></span>　参加人员：<span class="field-edit" data-field="disc_members" contenteditable="false"></span>　讨论意见：<span class="field-hengxian" data-field="disc_opinion" contenteditable="false"></span>' },
+      { indent: true, html: '转科记录：' },
+      { indent: false, html: '转科类型：<span class="field-edit" data-field="transfer_type" contenteditable="false"></span>　转出日期：<span class="field-edit" data-field="transfer_out" contenteditable="false"></span>　转入日期：<span class="field-edit" data-field="transfer_in" contenteditable="false"></span>　转科目地：<span class="field-hengxian" data-field="transfer_purpose" contenteditable="false"></span>　今后治疗方案：<span class="field-hengxian" data-field="future_plan" contenteditable="false"></span>' },
+      { indent: false, html: '记录医师：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>' },
     ],
   },
   surgery: {
@@ -1000,37 +1013,53 @@ const TEMPLATES = {
     ],
   },
   prescription: {
-    title: '门（急）诊处方（WS 445.3，EMR_CAJK 处方签名）',
+    title: '门（急）诊处方（WS 445.3）',
     html: `
 <table class="case-table">
-  <tr><th colspan="8">处 方 笺</th></tr>
+  <tr><th colspan="8">处 方 笺（WS 445.3）</th></tr>
   <tr><td>处方编号</td><td><span class="field-edit" data-field="rx_no" contenteditable="false"></span></td>
-      <td>科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td>
-      <td>费别</td><td><span class="field-edit" data-field="fee_type" contenteditable="false"></span></td>
-      <td>处方类型</td><td><span class="field-radio" data-field="rx_type"></span></td></tr>
-  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td>处方开立日期</td><td><span class="field-edit" data-field="rx_date" contenteditable="false"></span></td>
+      <td>有效天数</td><td><span class="field-edit" data-field="rx_days" contenteditable="false"></span></td>
+      <td>开立科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td></tr>
+  <tr><td>门（急）诊号</td><td><span class="field-edit" data-field="opd_no" contenteditable="false"></span></td>
+      <td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
       <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
-      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
-      <td>临床诊断</td><td><span class="field-edit" data-field="diag" contenteditable="false"></span></td></tr>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span>岁</td></tr>
+  <tr><td>疾病诊断</td><td><span class="field-edit" data-field="diag" contenteditable="false"></span></td>
+      <td>诊断编码</td><td><span class="field-edit" data-field="diag_code" contenteditable="false"></span></td>
+      <td>中医病名</td><td><span class="field-edit" data-field="tcm_diag" contenteditable="false"></span></td>
+      <td>治则治法</td><td><span class="field-edit" data-field="tcm_principle" contenteditable="false"></span></td></tr>
 </table>
 <table class="case-table">
-  <tr><th>药品/项目名称</th><th>规格</th><th>数量</th><th>单位</th><th>用法</th><th>频次</th><th>金额</th><th>备注</th></tr>
-  <tr><td><span class="field-edit" data-field="r1_name" contenteditable="false"></span></td>
+  <tr><th>药品组号</th><th>药物名称</th><th>规格</th><th>剂型</th><th>次剂量</th><th>剂量单位</th><th>频次</th><th>用药途径</th><th>总剂量</th><th>金额</th><th>备注</th></tr>
+  <tr><td><span class="field-edit" data-field="r1_grp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_name" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r1_spec" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="r1_qty" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_form" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_dose" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r1_unit" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="r1_usage" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r1_freq" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_route" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r1_total" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r1_amt" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r1_note" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="r2_name" contenteditable="false"></span></td>
+  <tr><td><span class="field-edit" data-field="r2_grp" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_name" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r2_spec" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="r2_qty" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_form" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_dose" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r2_unit" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="r2_usage" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r2_freq" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_route" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="r2_total" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r2_amt" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="r2_note" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><td>中药饮片处方</td><td><span class="field-radio" data-field="herb_rx"></span></td>
+      <td>饮片剂数</td><td><span class="field-edit" data-field="herb_cnt" contenteditable="false"></span>剂</td>
+      <td>煎煮法</td><td><span class="field-edit" data-field="herb_decoct" contenteditable="false"></span></td>
+      <td>中药用法</td><td><span class="field-edit" data-field="herb_usage" contenteditable="false"></span></td></tr>
 </table>
 <div class="sign-line">医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>
   药师签名：<span class="field-edit" data-field="sign_pharm" contenteditable="false"></span>
@@ -1038,10 +1067,10 @@ const TEMPLATES = {
 `,
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
-      { type: 'radio', name: 'rx_type', caption: '处方类型', options: ['普通处方', '急诊处方', '儿科处方', '麻醉药品处方', '精神药品处方'], value: '普通处方' },
+      { type: 'radio', name: 'herb_rx', caption: '中药饮片处方', options: ['是', '否'], value: '否' },
     ],
   },
-  labreport: {
+labreport: {
     title: '检查检验记录（WS 445.4）',
     html: `
 <table class="case-table">

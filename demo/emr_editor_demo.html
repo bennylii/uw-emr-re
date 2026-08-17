@@ -350,7 +350,7 @@ const TEMPLATES = {
   <tr><th colspan="6">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
   <tr><td class="lbl">医疗机构名称</td><td><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
       <td class="lbl">组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td>
-      <td class="lbl">医疗付费方式</td><td><span class="field-edit" data-field="pay_mode" contenteditable="false"></span></td></tr>
+      <td class="lbl">医疗付费方式</td><td><select class="field-select" data-field="pay_mode"></select></td></tr>
   <tr><td class="lbl">健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
       <td class="lbl" colspan="2">第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td>
       <td class="lbl">病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
@@ -404,7 +404,7 @@ const TEMPLATES = {
 </table>
 <table class="case-table">
   <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
-  <tr><td class="lbl">入院途径</td><td><span class="field-radio" data-field="in_route"></span></td>
+  <tr><td class="lbl">入院途径</td><td><select class="field-select" data-field="in_route"></select></td>
       <td class="lbl">入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
       <td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
@@ -554,20 +554,20 @@ const TEMPLATES = {
   <tr><td><span class="field-edit" data-field="op1_name" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_code" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op1_level" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op1_incision" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op1_heal" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op1_anesthesia" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op1_level"></select></td>
+      <td><select class="field-select" data-field="op1_incision"></select></td>
+      <td><select class="field-select" data-field="op1_heal"></select></td>
+      <td><select class="field-select" data-field="op1_anesthesia"></select></td>
       <td><span class="field-edit" data-field="op1_surgeon" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_anest_doc" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_assist" contenteditable="false"></span></td></tr>
   <tr><td><span class="field-edit" data-field="op2_name" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_code" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op2_level" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op2_incision" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op2_heal" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op2_anesthesia" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op2_level"></select></td>
+      <td><select class="field-select" data-field="op2_incision"></select></td>
+      <td><select class="field-select" data-field="op2_heal"></select></td>
+      <td><select class="field-select" data-field="op2_anesthesia"></select></td>
       <td><span class="field-edit" data-field="op2_surgeon" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_anest_doc" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_assist" contenteditable="false"></span></td></tr>
@@ -641,7 +641,8 @@ const TEMPLATES = {
       { type: 'select', name: 'id_type', caption: '身份证件类别', options: ['居民身份证', '军官证', '护照', '港澳通行证', '台胞证', '其他'], value: '居民身份证' },
       { type: 'select', name: 'marriage', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '未说明'], value: '已婚' },
       { type: 'select', name: 'marital', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '未说明'], value: '已婚' },
-      { type: 'radio', name: 'in_route', caption: '入院途径', options: ['急诊', '门诊', '其他医疗机构转入', '其他'], value: '门诊' },
+      { type: 'select', name: 'pay_mode', caption: '医疗付费方式', options: ['城镇职工基本医疗保险', '城镇居民基本医疗保险', '新型农村合作医疗', '贫困救助', '商业医疗保险', '全公费', '全自费', '其他社会保险', '其他'], value: '城镇职工基本医疗保险' },
+      { type: 'select', name: 'in_route', caption: '入院途径', options: ['门诊', '急诊', '其他医疗机构转入', '其他'], value: '门诊' },
       { type: 'select', name: 'occupation', caption: '职业', options: ['各类专业技术人员', '国家机关、党群组织、企事业单位负责人', '办事人员和有关人员', '商业工作人员', '服务性工作人员', '农林牧渔劳动者', '生产工人、运输工人和有关人员', '不便分类的其他劳动者', '在校学生', '无业'], value: '各类专业技术人员' },
       { type: 'select', name: 'relation', caption: '关系', options: ['本人或户主', '配偶', '儿子', '女儿', '孙子/孙女', '父母', '祖父母/外祖父母', '兄弟姐妹', '其他亲属', '非亲属'], value: '配偶' },
       { type: 'radio', name: 'adm_status_main', caption: '入院病情(主要)', options: ['1', '2', '3', '4'], value: '1.有' },
@@ -689,10 +690,18 @@ const TEMPLATES = {
       { type: 'radio', name: 'match_preop', caption: '术前与术后符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
       { type: 'radio', name: 'match_rp', caption: '放射与病理符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
       { type: 'radio', name: 'match_cp', caption: '临床与病理符合', options: ['0.未做', '1.符合', '2.不符合', '3.不确定'], value: '1.符合' },
-      { type: 'radio', name: 'discharge_mode', caption: '离院方式', options: ['医嘱离院', '医嘱转院', '转社区卫生机构', '非医嘱离院', '死亡'], value: '医嘱离院' },
+      { type: 'radio', name: 'discharge_mode', caption: '离院方式', options: ['医嘱离院', '医嘱转院', '医嘱转社区卫生服务机构/乡镇卫生院', '非医嘱离院', '死亡', '其他'], value: '医嘱离院' },
       { type: 'radio', name: 'readmit_plan', caption: '31天再住院', options: ['无', '有'], value: '无' },
       { type: 'radio', name: 'case_quality', caption: '病案质量', options: ['甲', '乙', '丙'], value: '甲' },
       { type: 'radio', name: 'drg_status', caption: 'DRG入组', options: ['已入组', '未入组', '歧义组(QY)', '歧义组(QW)', '未上报'], value: '已入组' },
+      { type: 'select', name: 'op1_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
+      { type: 'select', name: 'op1_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'op1_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'op2_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
+      { type: 'select', name: 'op2_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'op2_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'op1_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'op2_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
       { type: 'radio', name: 'drg_match', caption: '手术诊断匹配', options: ['匹配', '不匹配'], value: '匹配' },
     ],
   },

@@ -115,7 +115,7 @@
   #patientTable tr { transition: background .1s; }
   /* A4 分页（所见即所得） */
   .a4-page { width: 210mm; min-height: 297mm; background: #fff;
-    margin: 10px auto; padding: 12mm 10mm 8mm 10mm; box-sizing: border-box;
+    margin: 10px auto; padding: 10mm 8mm 6mm 8mm; box-sizing: border-box;
     box-shadow: 0 2px 10px rgba(0,0,0,.22); position: relative;
     display: flex; flex-direction: column; }
   .a4-header { display: flex; align-items: baseline; gap: 12px;
@@ -144,12 +144,11 @@
     #main { display: block; height: auto; }
     #docPane { padding: 0; overflow: visible; }
     #paper { box-shadow: none; max-width: 100%; padding: 0; min-height: 0; background: #fff; }
-    .a4-page { width: auto; min-height: 0; margin: 0; box-shadow: none;
-      padding: 12mm 10mm 8mm 10mm; page-break-after: always; }
+    .a4-page { width: 210mm !important; min-height: 297mm !important; margin: 0 auto; box-shadow: none;
+      padding: 10mm 8mm 6mm 8mm; page-break-after: always; box-sizing: border-box; }
     .a4-page:last-child { page-break-after: auto; }
     .case-table { font-size: 10.5px; }
     .case-table th, .case-table td { padding: 2px 3px; line-height: 1.35; }
-    .a4-page { padding: 10mm 8mm 6mm 8mm; }
     .field-edit, .field-hengxian { border-bottom: 1px solid #000; }
     .section-title { margin: 4px 0; }
   }
@@ -343,31 +342,32 @@ const TEMPLATES = {
 <table class="case-table">
   <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
   <tr><th colspan="6">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
-  <tr><td class="lbl">医疗机构名称</td><td colspan="2"><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
+  <tr><td class="lbl">医疗机构名称</td><td><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
       <td class="lbl">组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td>
       <td class="lbl">医疗付费方式</td><td><span class="field-edit" data-field="pay_mode" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
       <td class="lbl" colspan="2">第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td>
-      <td class="lbl">住院号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td>
-      <td class="lbl">姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
-      <td class="lbl">性别</td><td><span class="field-radio" data-field="sex"></span></td></tr>
-  <tr><td class="lbl">出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td>
-      <td class="lbl">年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span>岁</td>
-      <td class="lbl">国籍</td><td><span class="field-edit" data-field="nation" contenteditable="false"></span></td></tr>
+      <td class="lbl">病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td class="lbl">性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td class="lbl">出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span>岁</td>
+      <td class="lbl">国籍</td><td><span class="field-edit" data-field="nation" contenteditable="false"></span></td>
+      <td class="lbl">新生儿年龄</td><td><span class="field-edit" data-field="nb_age" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">新生儿出生体重</td><td><span class="field-edit" data-field="birth_weight" contenteditable="false"></span>g</td>
       <td class="lbl">新生儿入院体重</td><td><span class="field-edit" data-field="admit_weight" contenteditable="false"></span>g</td>
       <td class="lbl">出生地</td><td><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">籍贯</td><td><span class="field-edit" data-field="native_place" contenteditable="false"></span></td>
       <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
-      <td class="lbl">身份证件类别</td><td colspan="1"><span class="field-radio" data-field="id_type"></span></td></tr>
-  <tr><td class="lbl">身份证号</td><td colspan="5"><span class="field-edit" data-field="idno" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">婚姻</td><td><span class="field-edit" data-field="marital" contenteditable="false"></span></td>
-      <td class="lbl">职业</td><td><span class="field-edit" data-field="occupation" contenteditable="false"></span></td>
-      <td class="lbl">电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td></tr>
+      <td class="lbl">身份证件类别</td><td><span class="field-radio" data-field="id_type"></span></td></tr>
+  <tr><td class="lbl">身份证号</td><td colspan="3"><span class="field-edit" data-field="idno" contenteditable="false"></span></td>
+      <td class="lbl">婚姻</td><td><span class="field-edit" data-field="marital" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">职业</td><td><span class="field-edit" data-field="occupation" contenteditable="false"></span></td>
+      <td class="lbl">电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
+      <td class="lbl">邮编</td><td><span class="field-edit" data-field="zip" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">现住址</td><td colspan="5"><span class="field-edit" data-field="address" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">户口地址</td><td colspan="3"><span class="field-edit" data-field="reg_address" contenteditable="false"></span></td>
-      <td class="lbl">邮编</td><td><span class="field-edit" data-field="reg_zip" contenteditable="false"></span></td></tr>
+      <td class="lbl">户口邮编</td><td><span class="field-edit" data-field="reg_zip" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">工作单位及地址</td><td colspan="5"><span class="field-edit" data-field="workplace" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">单位电话</td><td><span class="field-edit" data-field="work_phone" contenteditable="false"></span></td>
       <td class="lbl">单位邮编</td><td><span class="field-edit" data-field="work_zip" contenteditable="false"></span></td>
@@ -380,14 +380,14 @@ const TEMPLATES = {
   <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
   <tr><td class="lbl">入院途径</td><td><span class="field-radio" data-field="in_route"></span></td>
       <td class="lbl">入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
-      <td class="lbl">入院后确诊日期</td><td><span class="field-edit" data-field="confirm_date" contenteditable="false"></span></td></tr>
+      <td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
-      <td class="lbl">病房</td><td><span class="field-edit" data-field="ward" contenteditable="false"></span></td>
-      <td class="lbl">转科科别</td><td><span class="field-edit" data-field="transfer_dept" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
       <td class="lbl">出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
-      <td class="lbl">出院病房</td><td><span class="field-edit" data-field="out_ward" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">实际住院</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span> 天</td>
+      <td class="lbl">转科科别</td><td><span class="field-edit" data-field="transfer_dept" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">入院病房</td><td><span class="field-edit" data-field="in_ward" contenteditable="false"></span></td>
+      <td class="lbl">出院病房</td><td><span class="field-edit" data-field="out_ward" contenteditable="false"></span></td>
+      <td class="lbl">实际住院</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span> 天</td></tr>
+  <tr><td class="lbl">入院后确诊日期</td><td><span class="field-edit" data-field="confirm_date" contenteditable="false"></span></td>
       <td class="lbl">入院病情</td><td colspan="2"><span class="field-radio" data-field="adm_status_main"></span></td></tr>
 </table>
 <table class="case-table">

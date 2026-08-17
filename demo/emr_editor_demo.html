@@ -373,8 +373,8 @@ const TEMPLATES = {
       <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
       <td class="lbl">身份证件类别</td><td><select class="field-select" data-field="id_type"></select></td></tr>
   <tr><td class="lbl">身份证号</td><td colspan="3"><span class="field-edit" data-field="idno" contenteditable="false"></span></td>
-      <td class="lbl">婚姻</td><td><span class="field-edit" data-field="marital" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">职业</td><td><span class="field-edit" data-field="occupation" contenteditable="false"></span></td>
+      <td class="lbl">婚姻</td><td><select class="field-select" data-field="marital"></select></td></tr>
+  <tr><td class="lbl">职业</td><td><select class="field-select" data-field="occupation"></select></td>
       <td class="lbl">电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
       <td class="lbl">邮编</td><td><span class="field-edit" data-field="zip" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">现住址</td><td colspan="5">
@@ -395,7 +395,7 @@ const TEMPLATES = {
   <tr><td class="lbl">单位电话</td><td><span class="field-edit" data-field="work_phone" contenteditable="false"></span></td>
       <td class="lbl">单位邮编</td><td><span class="field-edit" data-field="work_zip" contenteditable="false"></span></td>
       <td class="lbl">联系人</td><td><span class="field-edit" data-field="contact" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">关系</td><td><span class="field-edit" data-field="relation" contenteditable="false"></span></td>
+  <tr><td class="lbl">关系</td><td><select class="field-select" data-field="relation"></select></td>
       <td class="lbl">联系人地址</td><td colspan="2">
         <select class="region-select" data-field="contact_addr" data-level="prov"></select>
         <select class="region-select" data-field="contact_addr" data-level="city"></select>
@@ -638,9 +638,12 @@ const TEMPLATES = {
       { type: 'text', name: 'workplace', caption: '工作单位及地址', value: '' },
       { type: 'text', name: 'workplace_detail', caption: '工作单位详细', value: '' },
       { type: 'text', name: 'contact_addr', caption: '联系人地址', value: '' },
-      { type: 'radio', name: 'id_type', caption: '身份证件类别', options: ['居民身份证', '军官证', '护照', '港澳通行证', '台胞证', '其他'], value: '居民身份证' },
-      { type: 'radio', name: 'marriage', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '其他'], value: '已婚' },
+      { type: 'select', name: 'id_type', caption: '身份证件类别', options: ['居民身份证', '军官证', '护照', '港澳通行证', '台胞证', '其他'], value: '居民身份证' },
+      { type: 'select', name: 'marriage', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '未说明'], value: '已婚' },
+      { type: 'select', name: 'marital', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '未说明'], value: '已婚' },
       { type: 'radio', name: 'in_route', caption: '入院途径', options: ['急诊', '门诊', '其他医疗机构转入', '其他'], value: '门诊' },
+      { type: 'select', name: 'occupation', caption: '职业', options: ['各类专业技术人员', '国家机关、党群组织、企事业单位负责人', '办事人员和有关人员', '商业工作人员', '服务性工作人员', '农林牧渔劳动者', '生产工人、运输工人和有关人员', '不便分类的其他劳动者', '在校学生', '无业'], value: '各类专业技术人员' },
+      { type: 'select', name: 'relation', caption: '关系', options: ['本人或户主', '配偶', '儿子', '女儿', '孙子/孙女', '父母', '祖父母/外祖父母', '兄弟姐妹', '其他亲属', '非亲属'], value: '配偶' },
       { type: 'radio', name: 'adm_status_main', caption: '入院病情(主要)', options: ['1', '2', '3', '4'], value: '1.有' },
       { type: 'radio', name: 'out_status_main', caption: '出院情况(主要)', options: ['1', '2', '3', '4', '9'], value: '1.治愈' },
       { type: 'radio', name: 'adm_status_other', caption: '入院病情(其他1)', options: ['1', '2', '3', '4'], value: '1.有' },

@@ -25,6 +25,9 @@
   .para.indent { text-indent: 2em; }
   .field-radio { display: inline-block; padding: 0 2px; cursor: pointer; color: #2980b9;
                  user-select: none; }
+  .field-select { border: none; border-bottom: 1.5px solid #555; background: transparent;
+                  font-size: inherit; color: #16a085; padding: 0 2px; cursor: pointer;
+                  outline: none; min-width: 90px; }
   .field-radio.on { color: #16a085; font-weight: bold; }
   .field-edit { display: inline-block; min-width: 90px; border-bottom: 1.5px solid #555;
                 padding: 0 4px; cursor: text; outline: none; color: #16a085; }
@@ -359,7 +362,7 @@ const TEMPLATES = {
       <td class="lbl">出生地</td><td><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">籍贯</td><td><span class="field-edit" data-field="native_place" contenteditable="false"></span></td>
       <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
-      <td class="lbl">身份证件类别</td><td><span class="field-radio" data-field="id_type"></span></td></tr>
+      <td class="lbl">身份证件类别</td><td><select class="field-select" data-field="id_type"></select></td></tr>
   <tr><td class="lbl">身份证号</td><td colspan="3"><span class="field-edit" data-field="idno" contenteditable="false"></span></td>
       <td class="lbl">婚姻</td><td><span class="field-edit" data-field="marital" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">职业</td><td><span class="field-edit" data-field="occupation" contenteditable="false"></span></td>
@@ -1591,6 +1594,8 @@ function renderTemplate(tpl) {
   }
   // 单选域渲染
   paper.querySelectorAll('.field-radio').forEach(el => renderRadio(el));
+  // 下拉框渲染
+  paper.querySelectorAll('.field-select').forEach(el => renderSelect(el));
   applyFieldEditability();
   bindDatePickers();
   bindAutocompletes();
@@ -2168,6 +2173,24 @@ function renderRadio(el) {
   });
 }
 
+function renderSelect(el) {
+  const tpl = TEMPLATES[currentTpl];
+  const f = tpl.fields.find(x => x.name === el.dataset.field);
+  if (!f) return;
+  el.innerHTML = '';
+  f.options.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o;
+    opt.textContent = o;
+    if (o === f.value) opt.selected = true;
+    el.appendChild(opt);
+  });
+  el.addEventListener('change', () => {
+    f.value = el.value;
+    syncAll();
+  });
+}
+
 /* ================= XML 双向绑定（模拟 fd_Field::setValue + updateFragobject） ================= */
 function esc(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -2201,7 +2224,7 @@ function syncAll() {
     sec.querySelectorAll('.field-radio, .field-hengxian, .field-edit').forEach(node => {
       const f = node.dataset.field;
       let type = 'edit';
-      if (node.classList.contains('field-radio')) type = 'radio';
+      if (node.classList.contains('field-radio') || node.classList.contains('field-select')) type = 'radio';
       else if (node.classList.contains('field-hengxian')) type = 'hengxian';
       const val = type === 'radio'
         ? (tpl.fields.find(x => x.name === f) || {}).value || ''

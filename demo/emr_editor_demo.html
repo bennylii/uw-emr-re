@@ -31,7 +31,7 @@
   .field-hengxian { display: inline-block; min-width: 130px; border-bottom: 1.5px solid #555; }
   .section-title { font-weight: bold; margin: 16px 0 6px; font-size: 15px; }
   /* 病案首页表格 */
-  .case-table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 12.5px; }
+  .case-table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 12.5px; }
   .case-table th, .case-table td { border: 1px solid #999; padding: 4px 6px; }
   .case-table th { background: #f0f3f6; text-align: center; font-weight: bold; }
   .case-table .field-edit { min-width: 60px; }
@@ -129,8 +129,8 @@
   .a4-body { flex: 1; }
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
-  .a4-body .case-table { font-size: 9.5px; table-layout: fixed; }
-  .a4-body .case-table th, .a4-body .case-table td { padding: 1px 2.5px; line-height: 1.25; }
+  .a4-body .case-table { font-size: 11px; table-layout: fixed; margin: 4px 0; }
+  .a4-body .case-table th, .a4-body .case-table td { padding: 2.5px 3.5px; line-height: 1.45; }
   .a4-body .case-table td.lbl { white-space: nowrap; width: 76px; font-weight: normal; overflow: hidden; }
   .a4-body .case-table td { overflow: hidden; }
   .a4-body .case-table .field-radio { font-size: 9px; line-height: 1.2; }
@@ -147,8 +147,8 @@
     .a4-page { width: auto; min-height: 0; margin: 0; box-shadow: none;
       padding: 12mm 10mm 8mm 10mm; page-break-after: always; }
     .a4-page:last-child { page-break-after: auto; }
-    .case-table { font-size: 9.5px; }
-    .case-table th, .case-table td { padding: 1px 2.5px; line-height: 1.25; }
+    .case-table { font-size: 10.5px; }
+    .case-table th, .case-table td { padding: 2px 3px; line-height: 1.35; }
     .a4-page { padding: 10mm 8mm 6mm 8mm; }
     .field-edit, .field-hengxian { border-bottom: 1px solid #000; }
     .section-title { margin: 4px 0; }
@@ -343,7 +343,7 @@ const TEMPLATES = {
 <table class="case-table">
   <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
   <tr><th colspan="6">住 院 病 案 首 页（卫医政发〔2011〕84号）</th></tr>
-  <tr><td class="lbl">医疗机构名称</td><td><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
+  <tr><td class="lbl">医疗机构名称</td><td colspan="2"><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
       <td class="lbl">组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td>
       <td class="lbl">医疗付费方式</td><td><span class="field-edit" data-field="pay_mode" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
@@ -355,21 +355,20 @@ const TEMPLATES = {
   <tr><td class="lbl">出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td>
       <td class="lbl">年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span>岁</td>
       <td class="lbl">国籍</td><td><span class="field-edit" data-field="nation" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">（不足1周岁）年龄</td><td><span class="field-edit" data-field="age_month" contenteditable="false"></span>月</td>
-      <td class="lbl">新生儿出生体重</td><td><span class="field-edit" data-field="birth_weight" contenteditable="false"></span>g</td>
-      <td class="lbl">新生儿入院体重</td><td><span class="field-edit" data-field="admit_weight" contenteditable="false"></span>g</td></tr>
-  <tr><td class="lbl">出生地</td><td><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td>
-      <td class="lbl">籍贯</td><td><span class="field-edit" data-field="native_place" contenteditable="false"></span></td>
-      <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">身份证件类别</td><td colspan="2"><span class="field-radio" data-field="id_type"></span></td>
-      <td class="lbl">身份证号</td><td colspan="2"><span class="field-edit" data-field="idno" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">新生儿出生体重</td><td><span class="field-edit" data-field="birth_weight" contenteditable="false"></span>g</td>
+      <td class="lbl">新生儿入院体重</td><td><span class="field-edit" data-field="admit_weight" contenteditable="false"></span>g</td>
+      <td class="lbl">出生地</td><td><span class="field-edit" data-field="birthplace" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">籍贯</td><td><span class="field-edit" data-field="native_place" contenteditable="false"></span></td>
+      <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
+      <td class="lbl">身份证件类别</td><td colspan="1"><span class="field-radio" data-field="id_type"></span></td></tr>
+  <tr><td class="lbl">身份证号</td><td colspan="5"><span class="field-edit" data-field="idno" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">婚姻</td><td><span class="field-edit" data-field="marital" contenteditable="false"></span></td>
-      <td class="lbl">现住址</td><td colspan="3"><span class="field-edit" data-field="address" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
-      <td class="lbl">邮编</td><td><span class="field-edit" data-field="zip" contenteditable="false"></span></td>
-      <td class="lbl">户口地址</td><td><span class="field-edit" data-field="reg_address" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">户口邮编</td><td><span class="field-edit" data-field="reg_zip" contenteditable="false"></span></td>
-      <td class="lbl">工作单位及地址</td><td colspan="3"><span class="field-edit" data-field="workplace" contenteditable="false"></span></td></tr>
+      <td class="lbl">职业</td><td><span class="field-edit" data-field="occupation" contenteditable="false"></span></td>
+      <td class="lbl">电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">现住址</td><td colspan="5"><span class="field-edit" data-field="address" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">户口地址</td><td colspan="3"><span class="field-edit" data-field="reg_address" contenteditable="false"></span></td>
+      <td class="lbl">邮编</td><td><span class="field-edit" data-field="reg_zip" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">工作单位及地址</td><td colspan="5"><span class="field-edit" data-field="workplace" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">单位电话</td><td><span class="field-edit" data-field="work_phone" contenteditable="false"></span></td>
       <td class="lbl">单位邮编</td><td><span class="field-edit" data-field="work_zip" contenteditable="false"></span></td>
       <td class="lbl">联系人</td><td><span class="field-edit" data-field="contact" contenteditable="false"></span></td></tr>
@@ -388,8 +387,8 @@ const TEMPLATES = {
   <tr><td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
       <td class="lbl">出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
       <td class="lbl">出院病房</td><td><span class="field-edit" data-field="out_ward" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">实际住院</td><td colspan="3"><span class="field-edit" data-field="stay_days" contenteditable="false"></span> 天</td>
-      <td class="lbl">入院病情</td><td><span class="field-radio" data-field="adm_status_main"></span></td></tr>
+  <tr><td class="lbl">实际住院</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span> 天</td>
+      <td class="lbl">入院病情</td><td colspan="2"><span class="field-radio" data-field="adm_status_main"></span></td></tr>
 </table>
 <table class="case-table">
   <colgroup><col style="width:38%"><col style="width:22%"><col style="width:20%"><col style="width:20%"></colgroup>
@@ -415,6 +414,38 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="diag_other4_code" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other4"></span></td>
       <td><span class="field-radio" data-field="out_status_other4"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other5" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other5_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other5"></span></td>
+      <td><span class="field-radio" data-field="out_status_other5"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other6" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other6_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other6"></span></td>
+      <td><span class="field-radio" data-field="out_status_other6"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other7" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other7_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other7"></span></td>
+      <td><span class="field-radio" data-field="out_status_other7"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other8" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other8_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other8"></span></td>
+      <td><span class="field-radio" data-field="out_status_other8"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other9" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other9_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other9"></span></td>
+      <td><span class="field-radio" data-field="out_status_other9"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other10" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other10_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other10"></span></td>
+      <td><span class="field-radio" data-field="out_status_other10"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other11" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other11_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other11"></span></td>
+      <td><span class="field-radio" data-field="out_status_other11"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other12" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other12_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other12"></span></td>
+      <td><span class="field-radio" data-field="out_status_other12"></span></td></tr>
   <tr><td>门（急）诊诊断</td>
       <td><span class="field-edit" data-field="diag_outpatient_code" contenteditable="false"></span></td>
       <td colspan="2"></td></tr>
@@ -575,6 +606,26 @@ const TEMPLATES = {
       { type: 'radio', name: 'out_status_other', caption: '出院情况(其他1)', options: ['1', '2', '3', '4', '9'], value: '2.好转' },
       { type: 'radio', name: 'adm_status_other2', caption: '入院病情(其他2)', options: ['1', '2', '3', '4'], value: '1.有' },
       { type: 'radio', name: 'out_status_other2', caption: '出院情况(其他2)', options: ['1', '2', '3', '4', '9'], value: '2.好转' },
+      { type: 'radio', name: 'adm_status_other3', caption: '入院病情(其他3)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other3', caption: '出院情况(其他3)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other4', caption: '入院病情(其他4)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other4', caption: '出院情况(其他4)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other5', caption: '入院病情(其他5)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other5', caption: '出院情况(其他5)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other6', caption: '入院病情(其他6)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other6', caption: '出院情况(其他6)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other7', caption: '入院病情(其他7)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other7', caption: '出院情况(其他7)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other8', caption: '入院病情(其他8)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other8', caption: '出院情况(其他8)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other9', caption: '入院病情(其他9)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other9', caption: '出院情况(其他9)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other10', caption: '入院病情(其他10)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other10', caption: '出院情况(其他10)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other11', caption: '入院病情(其他11)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other11', caption: '出院情况(其他11)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other12', caption: '入院病情(其他12)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other12', caption: '出院情况(其他12)', options: ['1', '2', '3', '4', '9'], value: '1' },
       { type: 'radio', name: 'blood_type', caption: '血型', options: ['A', 'B', 'O', 'AB', '不详', '未查'], value: 'O' },
       { type: 'radio', name: 'rh', caption: 'Rh', options: ['阴性', '阳性', '不详', '未查'], value: '阳性' },
       { type: 'radio', name: 'transfusion', caption: '输血反应', options: ['有', '无'], value: '无' },

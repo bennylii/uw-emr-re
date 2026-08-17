@@ -550,7 +550,7 @@ const TEMPLATES = {
 </table>
 <table class="case-table">
   <tr><th colspan="8">手术及操作 <button class="add-row" onclick="addOpRow()">＋新增手术</button></th></tr>
-  <tr><th>手术及操作名称</th><th>编码</th><th>日期</th><th>手术级别</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>术者</th><th>麻醉医师</th><th>I/II助</th></tr>
+  <tr><th>手术及操作名称</th><th>编码</th><th>日期</th><th>手术级别</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>术者</th><th>麻醉医师</th><th>I助</th><th>II助</th></tr>
   <tr><td><span class="field-edit" data-field="op1_name" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_code" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_date" contenteditable="false"></span></td>
@@ -560,7 +560,8 @@ const TEMPLATES = {
       <td><select class="field-select" data-field="op1_anesthesia"></select></td>
       <td><span class="field-edit" data-field="op1_surgeon" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op1_assist" contenteditable="false"></span></td></tr>
+      <td><span class="field-edit" data-field="op1_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_assist2" contenteditable="false"></span></td></tr>
   <tr><td><span class="field-edit" data-field="op2_name" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_code" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_date" contenteditable="false"></span></td>
@@ -570,7 +571,8 @@ const TEMPLATES = {
       <td><select class="field-select" data-field="op2_anesthesia"></select></td>
       <td><span class="field-edit" data-field="op2_surgeon" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op2_assist" contenteditable="false"></span></td></tr>
+      <td><span class="field-edit" data-field="op2_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_assist2" contenteditable="false"></span></td></tr>
 </table>
 <table class="case-table">
   <tr><th colspan="8">DRG 分组信息（逆向 w_emr_archive_case2012_drg / DRG 审计）</th></tr>

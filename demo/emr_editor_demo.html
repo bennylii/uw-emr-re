@@ -136,6 +136,9 @@
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
   .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 3px 0; }
+  .a4-body .case-table.cmpt { font-size: 9.5px; }
+  .a4-body .case-table.cmpt th, .a4-body .case-table.cmpt td { padding: 1px 2.5px; line-height: 1.2; }
+  .a4-body .case-table.cmpt .field-edit { min-width: 20px; }
   .a4-body .case-table th, .a4-body .case-table td { padding: 2px 3px; line-height: 1.35; }
   .a4-body .case-table td.lbl { white-space: nowrap; width: 76px; font-weight: normal; overflow: hidden; }
   .a4-body .case-table td { overflow: hidden; }
@@ -550,7 +553,7 @@ const TEMPLATES = {
       <span class="field-edit" data-field="coma_post_h" contenteditable="false"></span>小时
       <span class="field-edit" data-field="coma_post_m" contenteditable="false"></span>分钟</td></tr>
 </table>
-<table class="case-table">
+<table class="case-table cmpt">
   <tr><th colspan="8">手术及操作 <button class="add-row" onclick="addOpRow()">＋新增手术</button></th></tr>
   <tr><th>手术及操作名称</th><th>编码</th><th>日期</th><th>手术级别</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>术者</th><th>麻醉医师</th><th>I助</th><th>II助</th></tr>
   <tr><td><span class="field-edit" data-field="op1_name" contenteditable="false"></span></td>
@@ -642,7 +645,75 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="op8_assist" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op8_assist2" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table">
+<table class="case-table cmpt">
+  <tr><th colspan="8">操作（非手术操作，WS 445.10 手术及操作编码）</th></tr>
+  <tr><th>操作名称</th><th>编码</th><th>日期</th><th>术者</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>麻醉医师</th></tr>
+  <tr><td><span class="field-edit" data-field="cz1_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz1_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz1_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz1_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz1_incision"></select></td>
+      <td><select class="field-select" data-field="cz1_heal"></select></td>
+      <td><select class="field-select" data-field="cz1_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz1_anest_doc" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="cz2_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz2_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz2_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz2_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz2_incision"></select></td>
+      <td><select class="field-select" data-field="cz2_heal"></select></td>
+      <td><select class="field-select" data-field="cz2_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz2_anest_doc" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="cz3_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz3_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz3_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz3_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz3_incision"></select></td>
+      <td><select class="field-select" data-field="cz3_heal"></select></td>
+      <td><select class="field-select" data-field="cz3_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz3_anest_doc" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="cz4_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz4_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz4_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz4_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz4_incision"></select></td>
+      <td><select class="field-select" data-field="cz4_heal"></select></td>
+      <td><select class="field-select" data-field="cz4_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz4_anest_doc" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="cz5_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz5_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz5_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz5_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz5_incision"></select></td>
+      <td><select class="field-select" data-field="cz5_heal"></select></td>
+      <td><select class="field-select" data-field="cz5_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz5_anest_doc" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="cz6_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz6_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz6_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz6_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz6_incision"></select></td>
+      <td><select class="field-select" data-field="cz6_heal"></select></td>
+      <td><select class="field-select" data-field="cz6_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz6_anest_doc" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="cz7_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz7_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz7_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz7_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz7_incision"></select></td>
+      <td><select class="field-select" data-field="cz7_heal"></select></td>
+      <td><select class="field-select" data-field="cz7_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz7_anest_doc" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="cz8_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz8_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz8_date" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="cz8_surgeon" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="cz8_incision"></select></td>
+      <td><select class="field-select" data-field="cz8_heal"></select></td>
+      <td><select class="field-select" data-field="cz8_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="cz8_anest_doc" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table cmpt">
   <tr><th colspan="8">DRG 分组信息（逆向 w_emr_archive_case2012_drg / DRG 审计）</th></tr>
   <tr><td>DRG 编码</td><td><span class="field-edit" data-field="drg_code" contenteditable="false"></span></td>
       <td>DRG 名称</td><td><span class="field-edit" data-field="drg_name" contenteditable="false"></span></td>
@@ -653,7 +724,7 @@ const TEMPLATES = {
       <td>支付标准</td><td><span class="field-edit" data-field="drg_pay" contenteditable="false"></span></td>
       <td colspan="2">主要手术/操作与主要诊断匹配：<span class="field-radio" data-field="drg_match"></span></td></tr>
 </table>
-<table class="case-table">
+<table class="case-table cmpt">
   <tr><td colspan="8"><b>住院费用（元）（WS 445.10 24 项明细）</b>　总费用：<span class="field-edit" data-field="total_fee" contenteditable="false"></span>
       自付金额：<span class="field-edit" data-field="self_pay" contenteditable="false"></span>
       自费金额：<span class="field-edit" data-field="self_fee" contenteditable="false"></span>
@@ -801,6 +872,30 @@ const TEMPLATES = {
       { type: 'select', name: 'op8_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
       { type: 'select', name: 'op8_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
       { type: 'select', name: 'op8_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz1_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz1_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz1_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz2_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz2_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz2_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz3_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz3_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz3_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz4_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz4_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz4_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz5_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz5_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz5_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz6_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz6_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz6_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz7_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz7_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz7_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
+      { type: 'select', name: 'cz8_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
+      { type: 'select', name: 'cz8_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
+      { type: 'select', name: 'cz8_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
       { type: 'radio', name: 'drg_match', caption: '手术诊断匹配', options: ['匹配', '不匹配'], value: '匹配' },
       { type: 'radio', name: 'teaching_case', caption: '示教病例', options: ['是', '否'], value: '否' },
       { type: 'radio', name: 'critical_patient', caption: '是否危重病人', options: ['是', '否'], value: '否' },

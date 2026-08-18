@@ -136,7 +136,7 @@
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
   .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 3px 0; }
-  .a4-body .case-table.cmpt { font-size: 9.5px; }
+  .a4-body .case-table.cmpt { font-size: 9px; }
   .a4-body .case-table.cmpt th, .a4-body .case-table.cmpt td { padding: 1px 2.5px; line-height: 1.2; }
   .a4-body .case-table.cmpt .field-edit { min-width: 20px; }
   .a4-body .case-table th, .a4-body .case-table td { padding: 2px 3px; line-height: 1.35; }
@@ -522,7 +522,7 @@ const TEMPLATES = {
 <span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
 </div>
 <div class="a4-body">
-<table class="case-table">
+<table class="case-table cmpt">
   <tr><td>诊断符合情况</td><td colspan="7">
       门诊与出院 <span class="field-radio" data-field="match_op"></span>
       入院与出院 <span class="field-radio" data-field="match_ad"></span>
@@ -543,7 +543,9 @@ const TEMPLATES = {
       <td>新生儿性别</td><td><span class="field-radio" data-field="nb_sex"></span></td>
       <td>新生儿体重</td><td><span class="field-edit" data-field="nb_weight" contenteditable="false"></span>g</td></tr>
   <tr><td>离院方式</td><td><span class="field-radio" data-field="discharge_mode"></span></td>
-      <td colspan="6">拟接收医疗机构：<span class="field-edit" data-field="transfer_org" contenteditable="false"></span></td></tr>
+      <td colspan="6">医嘱转院接收医疗机构：<span class="field-edit" data-field="transfer_org" contenteditable="false"></span></td></tr>
+  <tr><td colspan="2">医嘱转社区接收医疗机构：<span class="field-edit" data-field="transfer_community" contenteditable="false"></span></td>
+      <td colspan="6"></td></tr>
   <tr><td>31天内再住院计划</td><td><span class="field-radio" data-field="readmit_plan"></span></td>
       <td colspan="6">目的：<span class="field-edit" data-field="readmit_purpose" contenteditable="false"></span></td></tr>
   <tr><td>颅脑损伤昏迷时间</td><td colspan="7">入院前 <span class="field-edit" data-field="coma_pre_d" contenteditable="false"></span>天
@@ -903,6 +905,7 @@ const TEMPLATES = {
       { type: 'text', name: 'tumor_morphology', caption: '肿瘤形态学名称', value: '' },
       { type: 'text', name: 'tumor_basis', caption: '肿瘤诊断依据', value: '' },
       { type: 'text', name: 'email', caption: 'Email地址', value: '' },
+      { type: 'text', name: 'transfer_community', caption: '医嘱转社区接收医疗机构', value: '' },
     ],
   },
   admission: {

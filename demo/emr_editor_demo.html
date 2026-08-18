@@ -135,12 +135,12 @@
   .a4-body { flex: 1; }
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
-  .a4-body .case-table { font-size: 11px; table-layout: fixed; margin: 4px 0; }
-  .a4-body .case-table th, .a4-body .case-table td { padding: 2.5px 3.5px; line-height: 1.45; }
+  .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 3px 0; }
+  .a4-body .case-table th, .a4-body .case-table td { padding: 2px 3px; line-height: 1.35; }
   .a4-body .case-table td.lbl { white-space: nowrap; width: 76px; font-weight: normal; overflow: hidden; }
   .a4-body .case-table td { overflow: hidden; }
   .a4-body .case-table .field-radio { font-size: 9px; line-height: 1.2; }
-  .a4-body .sign-line { margin-top: 8px; font-size: 11px; line-height: 1.8; }
+  .a4-body .sign-line { margin-top: 6px; font-size: 10.5px; line-height: 1.6; }
   .a4-body .field-edit, .a4-body .field-hengxian { min-width: 30px; }
   .a4-body .para { margin: 3px 0; line-height: 1.6; }
   /* 打印样式 */
@@ -405,8 +405,11 @@ const TEMPLATES = {
 <table class="case-table">
   <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
   <tr><td class="lbl">入院途径</td><td><select class="field-select" data-field="in_route"></select></td>
-      <td class="lbl">入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
-      <td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td></tr>
+      <td class="lbl">示教病例</td><td><span class="field-radio" data-field="teaching_case"></span></td>
+      <td class="lbl">是否危重</td><td><span class="field-radio" data-field="critical_patient"></span></td></tr>
+  <tr><td class="lbl">入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
+      <td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
+      <td class="lbl">是否入径</td><td><span class="field-radio" data-field="in_pathway"></span></td></tr>
   <tr><td class="lbl">入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
       <td class="lbl">出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
       <td class="lbl">转科科别</td><td><span class="field-edit" data-field="transfer_dept" contenteditable="false"></span></td></tr>
@@ -464,14 +467,6 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="diag_other10_code" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other10"></span></td>
       <td><span class="field-radio" data-field="out_status_other10"></span></td></tr>
-  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other11" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="diag_other11_code" contenteditable="false"></span></td>
-      <td><span class="field-radio" data-field="adm_status_other11"></span></td>
-      <td><span class="field-radio" data-field="out_status_other11"></span></td></tr>
-  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other12" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="diag_other12_code" contenteditable="false"></span></td>
-      <td><span class="field-radio" data-field="adm_status_other12"></span></td>
-      <td><span class="field-radio" data-field="out_status_other12"></span></td></tr>
   <tr><td>门（急）诊诊断</td>
       <td><span class="field-edit" data-field="diag_outpatient" contenteditable="false"></span></td>
       <td>疾病编码</td>
@@ -488,7 +483,19 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="pathology_code" contenteditable="false"></span></td></tr>
   <tr><td>病理号</td>
       <td colspan="3"><span class="field-edit" data-field="pathology_no" contenteditable="false"></span></td></tr>
+  <tr><td>肿瘤形态学名称</td>
+      <td colspan="3"><span class="field-edit" data-field="tumor_morphology" contenteditable="false"></span></td></tr>
+  <tr><td>肿瘤诊断依据</td>
+      <td colspan="3"><span class="field-edit" data-field="tumor_basis" contenteditable="false"></span></td></tr>
   <tr><td colspan="4">入院病情：1.有 2.未确 3.不明 4.无　出院情况：1.治愈 2.好转 3.未愈 4.死亡 9.其他</td></tr>
+</table>
+<table class="case-table">
+  <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
+  <tr><td class="lbl">药物过敏</td><td><span class="field-radio" data-field="allergy_flag"></span></td>
+      <td class="lbl">过敏药物</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">死亡患者尸检</td><td><span class="field-radio" data-field="autopsy"></span></td>
+      <td class="lbl">血型</td><td><span class="field-radio" data-field="blood_type"></span></td>
+      <td class="lbl">Rh</td><td><span class="field-radio" data-field="rh"></span></td></tr>
 </table>
 <div class="sign-line">科主任：<span class="field-edit" data-field="sign_dept_head" contenteditable="false"></span>
   主任（副主任）医师：<span class="field-edit" data-field="sign_chief" contenteditable="false"></span>
@@ -513,9 +520,6 @@ const TEMPLATES = {
 </div>
 <div class="a4-body">
 <table class="case-table">
-  <tr><td>药物过敏</td><td><span class="field-radio" data-field="allergy_flag"></span></td>
-      <td>过敏药物</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td>
-      <td>死亡患者尸检</td><td><span class="field-radio" data-field="autopsy"></span></td></tr>
   <tr><td>诊断符合情况</td><td colspan="7">
       门诊与出院 <span class="field-radio" data-field="match_op"></span>
       入院与出院 <span class="field-radio" data-field="match_ad"></span>
@@ -524,8 +528,6 @@ const TEMPLATES = {
       临床与病理 <span class="field-radio" data-field="match_cp"></span></td></tr>
   <tr><td>抢救次数</td><td><span class="field-edit" data-field="rescue_cnt" contenteditable="false"></span></td>
       <td>成功次数</td><td><span class="field-edit" data-field="rescue_ok" contenteditable="false"></span></td>
-      <td>血型</td><td><span class="field-radio" data-field="blood_type"></span></td></tr>
-  <tr><td>Rh</td><td><span class="field-radio" data-field="rh"></span></td>
       <td>输血反应</td><td><span class="field-radio" data-field="transfusion"></span></td>
       <td>是否院感</td><td><span class="field-radio" data-field="nosocomial"></span></td></tr>
   <tr><td>妊娠梅毒筛查</td><td><span class="field-radio" data-field="syphilis_scr"></span></td>
@@ -624,6 +626,7 @@ const TEMPLATES = {
       <td>（22）治疗用一次性医用材料费</td><td><span class="field-edit" data-field="fee22" contenteditable="false"></span></td>
       <td>（23）手术用一次性医用材料费</td><td><span class="field-edit" data-field="fee23" contenteditable="false"></span></td>
       <td>（24）其他费</td><td><span class="field-edit" data-field="fee24" contenteditable="false"></span></td></tr>
+  <tr><td colspan="8">Email地址：<span class="field-edit" data-field="email" contenteditable="false"></span></td></tr>
 </table>
 
 </div>
@@ -705,6 +708,12 @@ const TEMPLATES = {
       { type: 'select', name: 'op1_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
       { type: 'select', name: 'op2_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
       { type: 'radio', name: 'drg_match', caption: '手术诊断匹配', options: ['匹配', '不匹配'], value: '匹配' },
+      { type: 'radio', name: 'teaching_case', caption: '示教病例', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'critical_patient', caption: '是否危重病人', options: ['是', '否'], value: '否' },
+      { type: 'radio', name: 'in_pathway', caption: '是否入径', options: ['是', '否'], value: '否' },
+      { type: 'text', name: 'tumor_morphology', caption: '肿瘤形态学名称', value: '' },
+      { type: 'text', name: 'tumor_basis', caption: '肿瘤诊断依据', value: '' },
+      { type: 'text', name: 'email', caption: 'Email地址', value: '' },
     ],
   },
   admission: {

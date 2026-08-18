@@ -135,15 +135,12 @@
   .a4-body { flex: 1; }
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
-  .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 3px 0; }
-  .a4-body .case-table.cmpt { font-size: 9px; }
-  .a4-body .case-table.cmpt th, .a4-body .case-table.cmpt td { padding: 1px 2.5px; line-height: 1.2; }
-  .a4-body .case-table.cmpt .field-edit { min-width: 20px; }
-  .a4-body .case-table th, .a4-body .case-table td { padding: 2px 3px; line-height: 1.35; }
+  .a4-body .case-table { font-size: 11px; table-layout: fixed; margin: 4px 0; }
+  .a4-body .case-table th, .a4-body .case-table td { padding: 2.5px 3.5px; line-height: 1.45; }
   .a4-body .case-table td.lbl { white-space: nowrap; width: 76px; font-weight: normal; overflow: hidden; }
   .a4-body .case-table td { overflow: hidden; }
   .a4-body .case-table .field-radio { font-size: 9px; line-height: 1.2; }
-  .a4-body .sign-line { margin-top: 6px; font-size: 10.5px; line-height: 1.6; }
+  .a4-body .sign-line { margin-top: 8px; font-size: 11px; line-height: 1.8; }
   .a4-body .field-edit, .a4-body .field-hengxian { min-width: 30px; }
   .a4-body .para { margin: 3px 0; line-height: 1.6; }
   /* 打印样式 */
@@ -408,11 +405,8 @@ const TEMPLATES = {
 <table class="case-table">
   <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
   <tr><td class="lbl">入院途径</td><td><select class="field-select" data-field="in_route"></select></td>
-      <td class="lbl">示教病例</td><td><span class="field-radio" data-field="teaching_case"></span></td>
-      <td class="lbl">是否危重</td><td><span class="field-radio" data-field="critical_patient"></span></td></tr>
-  <tr><td class="lbl">入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
-      <td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
-      <td class="lbl">是否入径</td><td><span class="field-radio" data-field="in_pathway"></span></td></tr>
+      <td class="lbl">入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
+      <td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
       <td class="lbl">出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
       <td class="lbl">转科科别</td><td><span class="field-edit" data-field="transfer_dept" contenteditable="false"></span></td></tr>
@@ -470,6 +464,14 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="diag_other10_code" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other10"></span></td>
       <td><span class="field-radio" data-field="out_status_other10"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other11" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other11_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other11"></span></td>
+      <td><span class="field-radio" data-field="out_status_other11"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other12" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other12_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other12"></span></td>
+      <td><span class="field-radio" data-field="out_status_other12"></span></td></tr>
   <tr><td>门（急）诊诊断</td>
       <td><span class="field-edit" data-field="diag_outpatient" contenteditable="false"></span></td>
       <td>疾病编码</td>
@@ -486,19 +488,7 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="pathology_code" contenteditable="false"></span></td></tr>
   <tr><td>病理号</td>
       <td colspan="3"><span class="field-edit" data-field="pathology_no" contenteditable="false"></span></td></tr>
-  <tr><td>肿瘤形态学名称</td>
-      <td colspan="3"><span class="field-edit" data-field="tumor_morphology" contenteditable="false"></span></td></tr>
-  <tr><td>肿瘤诊断依据</td>
-      <td colspan="3"><span class="field-edit" data-field="tumor_basis" contenteditable="false"></span></td></tr>
   <tr><td colspan="4">入院病情：1.有 2.未确 3.不明 4.无　出院情况：1.治愈 2.好转 3.未愈 4.死亡 9.其他</td></tr>
-</table>
-<table class="case-table">
-  <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
-  <tr><td class="lbl">药物过敏</td><td><span class="field-radio" data-field="allergy_flag"></span></td>
-      <td class="lbl">过敏药物</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td></tr>
-  <tr><td class="lbl">死亡患者尸检</td><td><span class="field-radio" data-field="autopsy"></span></td>
-      <td class="lbl">血型</td><td><span class="field-radio" data-field="blood_type"></span></td>
-      <td class="lbl">Rh</td><td><span class="field-radio" data-field="rh"></span></td></tr>
 </table>
 <div class="sign-line">科主任：<span class="field-edit" data-field="sign_dept_head" contenteditable="false"></span>
   主任（副主任）医师：<span class="field-edit" data-field="sign_chief" contenteditable="false"></span>
@@ -522,7 +512,10 @@ const TEMPLATES = {
 <span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
 </div>
 <div class="a4-body">
-<table class="case-table cmpt">
+<table class="case-table">
+  <tr><td>药物过敏</td><td><span class="field-radio" data-field="allergy_flag"></span></td>
+      <td>过敏药物</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td>
+      <td>死亡患者尸检</td><td><span class="field-radio" data-field="autopsy"></span></td></tr>
   <tr><td>诊断符合情况</td><td colspan="7">
       门诊与出院 <span class="field-radio" data-field="match_op"></span>
       入院与出院 <span class="field-radio" data-field="match_ad"></span>
@@ -531,6 +524,8 @@ const TEMPLATES = {
       临床与病理 <span class="field-radio" data-field="match_cp"></span></td></tr>
   <tr><td>抢救次数</td><td><span class="field-edit" data-field="rescue_cnt" contenteditable="false"></span></td>
       <td>成功次数</td><td><span class="field-edit" data-field="rescue_ok" contenteditable="false"></span></td>
+      <td>血型</td><td><span class="field-radio" data-field="blood_type"></span></td></tr>
+  <tr><td>Rh</td><td><span class="field-radio" data-field="rh"></span></td>
       <td>输血反应</td><td><span class="field-radio" data-field="transfusion"></span></td>
       <td>是否院感</td><td><span class="field-radio" data-field="nosocomial"></span></td></tr>
   <tr><td>妊娠梅毒筛查</td><td><span class="field-radio" data-field="syphilis_scr"></span></td>
@@ -543,9 +538,7 @@ const TEMPLATES = {
       <td>新生儿性别</td><td><span class="field-radio" data-field="nb_sex"></span></td>
       <td>新生儿体重</td><td><span class="field-edit" data-field="nb_weight" contenteditable="false"></span>g</td></tr>
   <tr><td>离院方式</td><td><span class="field-radio" data-field="discharge_mode"></span></td>
-      <td colspan="6">医嘱转院接收医疗机构：<span class="field-edit" data-field="transfer_org" contenteditable="false"></span></td></tr>
-  <tr><td colspan="2">医嘱转社区接收医疗机构：<span class="field-edit" data-field="transfer_community" contenteditable="false"></span></td>
-      <td colspan="6"></td></tr>
+      <td colspan="6">拟接收医疗机构：<span class="field-edit" data-field="transfer_org" contenteditable="false"></span></td></tr>
   <tr><td>31天内再住院计划</td><td><span class="field-radio" data-field="readmit_plan"></span></td>
       <td colspan="6">目的：<span class="field-edit" data-field="readmit_purpose" contenteditable="false"></span></td></tr>
   <tr><td>颅脑损伤昏迷时间</td><td colspan="7">入院前 <span class="field-edit" data-field="coma_pre_d" contenteditable="false"></span>天
@@ -555,7 +548,7 @@ const TEMPLATES = {
       <span class="field-edit" data-field="coma_post_h" contenteditable="false"></span>小时
       <span class="field-edit" data-field="coma_post_m" contenteditable="false"></span>分钟</td></tr>
 </table>
-<table class="case-table cmpt">
+<table class="case-table">
   <tr><th colspan="8">手术及操作 <button class="add-row" onclick="addOpRow()">＋新增手术</button></th></tr>
   <tr><th>手术及操作名称</th><th>编码</th><th>日期</th><th>手术级别</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>术者</th><th>麻醉医师</th><th>I助</th><th>II助</th></tr>
   <tr><td><span class="field-edit" data-field="op1_name" contenteditable="false"></span></td>
@@ -580,142 +573,8 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="op2_anest_doc" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_assist" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op2_assist2" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="op3_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op3_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op3_date" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="op3_level"></select></td>
-      <td><select class="field-select" data-field="op3_incision"></select></td>
-      <td><select class="field-select" data-field="op3_heal"></select></td>
-      <td><select class="field-select" data-field="op3_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="op3_surgeon" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op3_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op3_assist" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op3_assist2" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="op4_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op4_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op4_date" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="op4_level"></select></td>
-      <td><select class="field-select" data-field="op4_incision"></select></td>
-      <td><select class="field-select" data-field="op4_heal"></select></td>
-      <td><select class="field-select" data-field="op4_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="op4_surgeon" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op4_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op4_assist" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op4_assist2" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="op5_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op5_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op5_date" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="op5_level"></select></td>
-      <td><select class="field-select" data-field="op5_incision"></select></td>
-      <td><select class="field-select" data-field="op5_heal"></select></td>
-      <td><select class="field-select" data-field="op5_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="op5_surgeon" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op5_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op5_assist" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op5_assist2" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="op6_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op6_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op6_date" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="op6_level"></select></td>
-      <td><select class="field-select" data-field="op6_incision"></select></td>
-      <td><select class="field-select" data-field="op6_heal"></select></td>
-      <td><select class="field-select" data-field="op6_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="op6_surgeon" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op6_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op6_assist" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op6_assist2" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="op7_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op7_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op7_date" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="op7_level"></select></td>
-      <td><select class="field-select" data-field="op7_incision"></select></td>
-      <td><select class="field-select" data-field="op7_heal"></select></td>
-      <td><select class="field-select" data-field="op7_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="op7_surgeon" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op7_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op7_assist" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op7_assist2" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="op8_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op8_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op8_date" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="op8_level"></select></td>
-      <td><select class="field-select" data-field="op8_incision"></select></td>
-      <td><select class="field-select" data-field="op8_heal"></select></td>
-      <td><select class="field-select" data-field="op8_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="op8_surgeon" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op8_anest_doc" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op8_assist" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="op8_assist2" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table cmpt">
-  <tr><th colspan="8">操作（非手术操作，WS 445.10 手术及操作编码）</th></tr>
-  <tr><th>操作名称</th><th>编码</th><th>日期</th><th>术者</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>麻醉医师</th></tr>
-  <tr><td><span class="field-edit" data-field="cz1_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz1_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz1_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz1_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz1_incision"></select></td>
-      <td><select class="field-select" data-field="cz1_heal"></select></td>
-      <td><select class="field-select" data-field="cz1_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz1_anest_doc" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="cz2_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz2_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz2_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz2_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz2_incision"></select></td>
-      <td><select class="field-select" data-field="cz2_heal"></select></td>
-      <td><select class="field-select" data-field="cz2_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz2_anest_doc" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="cz3_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz3_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz3_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz3_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz3_incision"></select></td>
-      <td><select class="field-select" data-field="cz3_heal"></select></td>
-      <td><select class="field-select" data-field="cz3_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz3_anest_doc" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="cz4_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz4_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz4_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz4_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz4_incision"></select></td>
-      <td><select class="field-select" data-field="cz4_heal"></select></td>
-      <td><select class="field-select" data-field="cz4_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz4_anest_doc" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="cz5_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz5_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz5_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz5_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz5_incision"></select></td>
-      <td><select class="field-select" data-field="cz5_heal"></select></td>
-      <td><select class="field-select" data-field="cz5_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz5_anest_doc" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="cz6_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz6_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz6_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz6_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz6_incision"></select></td>
-      <td><select class="field-select" data-field="cz6_heal"></select></td>
-      <td><select class="field-select" data-field="cz6_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz6_anest_doc" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="cz7_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz7_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz7_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz7_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz7_incision"></select></td>
-      <td><select class="field-select" data-field="cz7_heal"></select></td>
-      <td><select class="field-select" data-field="cz7_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz7_anest_doc" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="cz8_name" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz8_code" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz8_date" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="cz8_surgeon" contenteditable="false"></span></td>
-      <td><select class="field-select" data-field="cz8_incision"></select></td>
-      <td><select class="field-select" data-field="cz8_heal"></select></td>
-      <td><select class="field-select" data-field="cz8_anesthesia"></select></td>
-      <td><span class="field-edit" data-field="cz8_anest_doc" contenteditable="false"></span></td></tr>
-</table>
-<table class="case-table cmpt">
+<table class="case-table">
   <tr><th colspan="8">DRG 分组信息（逆向 w_emr_archive_case2012_drg / DRG 审计）</th></tr>
   <tr><td>DRG 编码</td><td><span class="field-edit" data-field="drg_code" contenteditable="false"></span></td>
       <td>DRG 名称</td><td><span class="field-edit" data-field="drg_name" contenteditable="false"></span></td>
@@ -726,32 +585,28 @@ const TEMPLATES = {
       <td>支付标准</td><td><span class="field-edit" data-field="drg_pay" contenteditable="false"></span></td>
       <td colspan="2">主要手术/操作与主要诊断匹配：<span class="field-radio" data-field="drg_match"></span></td></tr>
 </table>
-<table class="case-table cmpt">
-  <tr><td colspan="8"><b>住院费用（元）（WS 445.10 明细 + 床位/诊察）</b>　总费用：<span class="field-edit" data-field="total_fee" contenteditable="false"></span>
+<table class="case-table">
+  <tr><td colspan="8"><b>住院费用（元）（WS 445.10 24 项明细）</b>　总费用：<span class="field-edit" data-field="total_fee" contenteditable="false"></span>
       自付金额：<span class="field-edit" data-field="self_pay" contenteditable="false"></span>
       自费金额：<span class="field-edit" data-field="self_fee" contenteditable="false"></span>
       其他支付：<span class="field-edit" data-field="other_pay" contenteditable="false"></span></td></tr>
   <tr><td colspan="2">1.综合医疗服务类</td><td colspan="2">2.诊断类</td><td colspan="2">3.治疗类</td><td colspan="2">4.康复类</td></tr>
   <tr><td>（1）一般医疗服务费</td><td><span class="field-edit" data-field="fee01" contenteditable="false"></span></td>
-      <td>（1a）诊察费</td><td><span class="field-edit" data-field="fee01a" contenteditable="false"></span></td>
       <td>（5）病理诊断费</td><td><span class="field-edit" data-field="fee05" contenteditable="false"></span></td>
-      <td>（9）非手术治疗项目费</td><td><span class="field-edit" data-field="fee09" contenteditable="false"></span></td></tr>
+      <td>（9）非手术治疗项目费</td><td><span class="field-edit" data-field="fee09" contenteditable="false"></span></td>
+      <td>（11）康复费</td><td><span class="field-edit" data-field="fee11" contenteditable="false"></span></td></tr>
   <tr><td>（2）一般治疗操作费</td><td><span class="field-edit" data-field="fee02" contenteditable="false"></span></td>
-      <td>（2a）普通床位费</td><td><span class="field-edit" data-field="fee02a" contenteditable="false"></span></td>
       <td>（6）实验室诊断费</td><td><span class="field-edit" data-field="fee06" contenteditable="false"></span></td>
-      <td>（10）手术治疗费</td><td><span class="field-edit" data-field="fee10" contenteditable="false"></span></td></tr>
-  <tr><td>（3）护理费</td><td><span class="field-edit" data-field="fee03" contenteditable="false"></span></td>
-      <td>（3a）重症监护床位费</td><td><span class="field-edit" data-field="fee03a" contenteditable="false"></span></td>
-      <td>（7）影像学诊断费</td><td><span class="field-edit" data-field="fee07" contenteditable="false"></span></td>
+      <td>（10）手术治疗费</td><td><span class="field-edit" data-field="fee10" contenteditable="false"></span></td>
       <td>（12）中医治疗费</td><td><span class="field-edit" data-field="fee12" contenteditable="false"></span></td></tr>
-  <tr><td>9a.临床物理治疗费</td><td><span class="field-edit" data-field="fee09a" contenteditable="false"></span></td>
-      <td colspan="6"></td></tr>
+  <tr><td>（3）护理费</td><td><span class="field-edit" data-field="fee03" contenteditable="false"></span></td>
+      <td>（7）影像学诊断费</td><td><span class="field-edit" data-field="fee07" contenteditable="false"></span></td>
+      <td>9a.临床物理治疗费</td><td><span class="field-edit" data-field="fee09a" contenteditable="false"></span></td>
+      <td>5.中医类（12）已含</td><td></td></tr>
   <tr><td>（4）其他费用</td><td><span class="field-edit" data-field="fee04" contenteditable="false"></span></td>
       <td>（8）临床诊断项目费</td><td><span class="field-edit" data-field="fee08" contenteditable="false"></span></td>
-      <td>（11）康复费</td><td><span class="field-edit" data-field="fee11" contenteditable="false"></span></td>
-      <td>10a.麻醉费</td><td><span class="field-edit" data-field="fee10a" contenteditable="false"></span></td></tr>
-  <tr><td>10b.手术费</td><td><span class="field-edit" data-field="fee10b" contenteditable="false"></span></td>
-      <td colspan="6"></td></tr>
+      <td>10a.麻醉费</td><td><span class="field-edit" data-field="fee10a" contenteditable="false"></span></td>
+      <td>10b.手术费</td><td><span class="field-edit" data-field="fee10b" contenteditable="false"></span></td></tr>
   <tr><td colspan="2">5.中医类</td><td colspan="2">6.西药类</td><td colspan="2">7.中药类</td><td colspan="2">8.血液和血液制品类</td></tr>
   <tr><td>（14）中成药费</td><td><span class="field-edit" data-field="fee14" contenteditable="false"></span></td>
       <td>（13）西药费</td><td><span class="field-edit" data-field="fee13" contenteditable="false"></span></td>
@@ -769,7 +624,6 @@ const TEMPLATES = {
       <td>（22）治疗用一次性医用材料费</td><td><span class="field-edit" data-field="fee22" contenteditable="false"></span></td>
       <td>（23）手术用一次性医用材料费</td><td><span class="field-edit" data-field="fee23" contenteditable="false"></span></td>
       <td>（24）其他费</td><td><span class="field-edit" data-field="fee24" contenteditable="false"></span></td></tr>
-  <tr><td colspan="8">Email地址：<span class="field-edit" data-field="email" contenteditable="false"></span></td></tr>
 </table>
 
 </div>
@@ -787,10 +641,10 @@ const TEMPLATES = {
       { type: 'text', name: 'workplace_detail', caption: '工作单位详细', value: '' },
       { type: 'text', name: 'contact_addr', caption: '联系人地址', value: '' },
       { type: 'select', name: 'id_type', caption: '身份证件类别', options: ['居民身份证', '军官证', '护照', '港澳通行证', '台胞证', '其他'], value: '居民身份证' },
-      { type: 'select', name: 'marriage', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '其他'], value: '已婚' },
-      { type: 'select', name: 'marital', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '其他'], value: '已婚' },
+      { type: 'select', name: 'marriage', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '未说明'], value: '已婚' },
+      { type: 'select', name: 'marital', caption: '婚姻', options: ['未婚', '已婚', '丧偶', '离婚', '未说明'], value: '已婚' },
       { type: 'select', name: 'pay_mode', caption: '医疗付费方式', options: ['城镇职工基本医疗保险', '城镇居民基本医疗保险', '新型农村合作医疗', '贫困救助', '商业医疗保险', '全公费', '全自费', '其他社会保险', '其他'], value: '城镇职工基本医疗保险' },
-      { type: 'select', name: 'in_route', caption: '入院途径', options: ['急诊', '门诊', '省级三甲医院转入', '省级专科医院转入', '其他三级医院转入', '二级医院转入', '乡镇卫生院或社区卫生服务中心转入', '其他'], value: '门诊' },
+      { type: 'select', name: 'in_route', caption: '入院途径', options: ['门诊', '急诊', '其他医疗机构转入', '其他'], value: '门诊' },
       { type: 'select', name: 'occupation', caption: '职业', options: ['各类专业技术人员', '国家机关、党群组织、企事业单位负责人', '办事人员和有关人员', '商业工作人员', '服务性工作人员', '农林牧渔劳动者', '生产工人、运输工人和有关人员', '不便分类的其他劳动者', '在校学生', '无业'], value: '各类专业技术人员' },
       { type: 'select', name: 'relation', caption: '关系', options: ['本人或户主', '配偶', '儿子', '女儿', '孙子/孙女', '父母', '祖父母/外祖父母', '兄弟姐妹', '其他亲属', '非亲属'], value: '配偶' },
       { type: 'radio', name: 'adm_status_main', caption: '入院病情(主要)', options: ['1', '2', '3', '4'], value: '1.有' },
@@ -850,62 +704,7 @@ const TEMPLATES = {
       { type: 'select', name: 'op2_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
       { type: 'select', name: 'op1_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
       { type: 'select', name: 'op2_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'op3_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
-      { type: 'select', name: 'op3_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'op3_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'op3_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'op4_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
-      { type: 'select', name: 'op4_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'op4_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'op4_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'op5_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
-      { type: 'select', name: 'op5_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'op5_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'op5_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'op6_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
-      { type: 'select', name: 'op6_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'op6_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'op6_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'op7_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
-      { type: 'select', name: 'op7_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'op7_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'op7_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'op8_level', caption: '手术级别', options: ['一级手术', '二级手术', '三级手术', '四级手术'], value: '一级手术' },
-      { type: 'select', name: 'op8_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'op8_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'op8_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz1_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz1_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz1_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz2_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz2_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz2_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz3_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz3_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz3_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz4_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz4_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz4_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz5_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz5_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz5_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz6_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz6_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz6_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz7_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz7_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz7_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
-      { type: 'select', name: 'cz8_incision', caption: '切口类别', options: ['0类切口', 'I类切口', 'Ⅱ类切口', 'Ⅲ类切口'], value: 'I类切口' },
-      { type: 'select', name: 'cz8_heal', caption: '愈合等级', options: ['甲', '乙', '丙', '其他'], value: '甲' },
-      { type: 'select', name: 'cz8_anesthesia', caption: '麻醉方式', options: ['全身麻醉', '椎管内麻醉', '局部麻醉', '神经阻滞麻醉', '复合麻醉', '其他'], value: '全身麻醉' },
       { type: 'radio', name: 'drg_match', caption: '手术诊断匹配', options: ['匹配', '不匹配'], value: '匹配' },
-      { type: 'radio', name: 'teaching_case', caption: '示教病例', options: ['是', '否'], value: '否' },
-      { type: 'radio', name: 'critical_patient', caption: '是否危重病人', options: ['是', '否'], value: '否' },
-      { type: 'radio', name: 'in_pathway', caption: '是否入径', options: ['是', '否'], value: '否' },
-      { type: 'text', name: 'tumor_morphology', caption: '肿瘤形态学名称', value: '' },
-      { type: 'text', name: 'tumor_basis', caption: '肿瘤诊断依据', value: '' },
-      { type: 'text', name: 'email', caption: 'Email地址', value: '' },
-      { type: 'text', name: 'transfer_community', caption: '医嘱转社区接收医疗机构', value: '' },
     ],
   },
   admission: {
@@ -1100,17 +899,15 @@ const TEMPLATES = {
 </table>
 <div class="tab-pane" id="tab-all">
 <table class="case-table" data-category="所有医嘱">
-  <tr><th>类别</th><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>用法</th><th>频次</th><th>停止时间</th><th>医师签名</th></tr>
+  <tr><th>类别</th><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>医师签名</th></tr>
 </table>
 </div>
 <div class="tab-pane" id="tab-ld">
 <table class="case-table" data-category="长期医嘱">
-  <tr><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>每日次数</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
   <tr><td><span class="field-edit" data-field="y1_start" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_dose" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="y1_unit" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="y1_mrcs" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_usage" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_freq" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_stop" contenteditable="false"></span></td>
@@ -1119,8 +916,6 @@ const TEMPLATES = {
   <tr><td><span class="field-edit" data-field="y2_start" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_dose" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="y2_unit" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="y2_mrcs" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_usage" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_freq" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_stop" contenteditable="false"></span></td>
@@ -1130,12 +925,12 @@ const TEMPLATES = {
 </div>
 <div class="tab-pane" id="tab-ls" style="display:none">
 <table class="case-table" data-category="临时医嘱">
-  <tr><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>次数</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
 </table>
 </div>
 <div class="tab-pane" id="tab-jz" style="display:none">
 <table class="case-table" data-category="急诊医嘱">
-  <tr><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>次数</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
 </table>
 </div>
 <div class="tab-pane" id="tab-cy" style="display:none">
@@ -1561,95 +1356,274 @@ labreport: {
   },
   case2012tcm: {
     title: '中医住院病案首页（WS 445.11）',
-    html: `
-<table class="case-table" data-category="患者信息">
-  <tr><th colspan="8">中 医 住 院 病 案 首 页（WS 445.11）</th></tr>
-  <tr><td>病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td>
-      <td>住院流水号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
-      <td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
-      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td></tr>
-  <tr><td>出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td>
-      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
-      <td>民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td>
-      <td>身份证号</td><td><span class="field-edit" data-field="idno" contenteditable="false"></span></td></tr>
-  <tr><td>入院途径</td><td><span class="field-radio" data-field="in_route"></span></td>
-      <td>入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
-      <td>出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td>
-      <td>实际住院</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span>天</td></tr>
-  <tr><td>入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
-      <td>出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
-      <td>病区/床号</td><td><span class="field-edit" data-field="ward" contenteditable="false"></span>/<span class="field-edit" data-field="bed" contenteditable="false"></span></td>
-      <td>门（急）诊诊断</td><td><span class="field-edit" data-field="diag_outpatient" contenteditable="false"></span></td></tr>
+    html: `<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">中 医 住 院 病 案 首 页</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
+</div>
+<div class="a4-body">
+<table class="case-table">
+  <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
+  <tr><th colspan="6">中 医 住 院 病 案 首 页（WS 445.11）</th></tr>
+  <tr><td class="lbl">医疗机构名称</td><td><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
+      <td class="lbl">组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td>
+      <td class="lbl">医疗付费方式</td><td><select class="field-select" data-field="pay_mode"></select></td></tr>
+  <tr><td class="lbl">健康卡号</td><td><span class="field-edit" data-field="healthcard" contenteditable="false"></span></td>
+      <td class="lbl" colspan="2">第<input class="mini" data-field="visit_no" contenteditable="false">次住院</td>
+      <td class="lbl">病案号</td><td><span class="field-edit" data-field="case_no" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
+      <td class="lbl">性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td class="lbl">出生日期</td><td><span class="field-edit" data-field="birth" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span>岁</td>
+      <td class="lbl">国籍</td><td><span class="field-edit" data-field="nation" contenteditable="false"></span></td>
+      <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">新生儿出生体重</td><td><span class="field-edit" data-field="birth_weight" contenteditable="false"></span>g</td>
+      <td class="lbl">新生儿入院体重</td><td><span class="field-edit" data-field="admit_weight" contenteditable="false"></span>g</td>
+      <td class="lbl">出生地</td><td colspan="3">
+        <select class="region-select" data-field="birthplace" data-level="prov"></select>
+        <select class="region-select" data-field="birthplace" data-level="city"></select>
+        <select class="region-select" data-field="birthplace" data-level="dist"></select></td></tr>
+  <tr><td class="lbl">籍贯</td><td colspan="3">
+        <select class="region-select" data-field="native_place" data-level="prov"></select>
+        <select class="region-select" data-field="native_place" data-level="city"></select>
+        <select class="region-select" data-field="native_place" data-level="dist"></select></td>
+      <td class="lbl">身份证件类别</td><td><select class="field-select" data-field="id_type"></select></td></tr>
+  <tr><td class="lbl">身份证号</td><td colspan="3"><span class="field-edit" data-field="idno" contenteditable="false"></span></td>
+      <td class="lbl">婚姻</td><td><select class="field-select" data-field="marital"></select></td></tr>
+  <tr><td class="lbl">职业</td><td><select class="field-select" data-field="occupation"></select></td>
+      <td class="lbl">电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
+      <td class="lbl">邮编</td><td><span class="field-edit" data-field="zip" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">现住址</td><td colspan="5">
+        <select class="region-select" data-field="address" data-level="prov"></select>
+        <select class="region-select" data-field="address" data-level="city"></select>
+        <select class="region-select" data-field="address" data-level="dist"></select>
+        <span class="field-edit" data-field="address_detail" contenteditable="false" style="min-width:120px"></span></td></tr>
+  <tr><td class="lbl">户口地址</td><td colspan="3">
+        <select class="region-select" data-field="reg_address" data-level="prov"></select>
+        <select class="region-select" data-field="reg_address" data-level="city"></select>
+        <select class="region-select" data-field="reg_address" data-level="dist"></select></td>
+      <td class="lbl">户口邮编</td><td><span class="field-edit" data-field="reg_zip" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">工作单位及地址</td><td colspan="5">
+        <select class="region-select" data-field="workplace" data-level="prov"></select>
+        <select class="region-select" data-field="workplace" data-level="city"></select>
+        <select class="region-select" data-field="workplace" data-level="dist"></select>
+        <span class="field-edit" data-field="workplace_detail" contenteditable="false" style="min-width:120px"></span></td></tr>
+  <tr><td class="lbl">单位电话</td><td><span class="field-edit" data-field="work_phone" contenteditable="false"></span></td>
+      <td class="lbl">单位邮编</td><td><span class="field-edit" data-field="work_zip" contenteditable="false"></span></td>
+      <td class="lbl">联系人</td><td><span class="field-edit" data-field="contact" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">关系</td><td><select class="field-select" data-field="relation"></select></td>
+      <td class="lbl">联系人地址</td><td colspan="2">
+        <select class="region-select" data-field="contact_addr" data-level="prov"></select>
+        <select class="region-select" data-field="contact_addr" data-level="city"></select>
+        <select class="region-select" data-field="contact_addr" data-level="dist"></select></td>
+      <td class="lbl">联系人电话</td><td><span class="field-edit" data-field="contact_phone" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table" data-category="中医四诊">
-  <tr><th colspan="8">入院中医四诊信息（望闻问切）</th></tr>
-  <tr><td>望诊</td><td colspan="3"><span class="field-edit" data-field="tcm_wang" contenteditable="false"></span></td>
-      <td>闻诊</td><td colspan="3"><span class="field-edit" data-field="tcm_wen" contenteditable="false"></span></td></tr>
-  <tr><td>问诊</td><td colspan="3"><span class="field-edit" data-field="tcm_wen2" contenteditable="false"></span></td>
-      <td>切诊</td><td colspan="3"><span class="field-edit" data-field="tcm_qie" contenteditable="false"></span></td></tr>
+<table class="case-table">
+  <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
+  <tr><td class="lbl">入院途径</td><td><select class="field-select" data-field="in_route"></select></td>
+      <td class="lbl">入院时间</td><td><span class="field-edit" data-field="in_time" contenteditable="false"></span></td>
+      <td class="lbl">出院时间</td><td><span class="field-edit" data-field="out_time" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">入院科别</td><td><span class="field-edit" data-field="in_dept" contenteditable="false"></span></td>
+      <td class="lbl">出院科别</td><td><span class="field-edit" data-field="out_dept" contenteditable="false"></span></td>
+      <td class="lbl">转科科别</td><td><span class="field-edit" data-field="transfer_dept" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">入院病房</td><td><span class="field-edit" data-field="in_ward" contenteditable="false"></span></td>
+      <td class="lbl">出院病房</td><td><span class="field-edit" data-field="out_ward" contenteditable="false"></span></td>
+      <td class="lbl">实际住院</td><td><span class="field-edit" data-field="stay_days" contenteditable="false"></span> 天</td></tr>
+  <tr><td class="lbl">入院后确诊日期</td><td><span class="field-edit" data-field="confirm_date" contenteditable="false"></span></td>
+      <td class="lbl">门（急）诊中医诊断</td><td><span class="field-edit" data-field="tcm_diag_opd" contenteditable="false"></span></td>
+      <td class="lbl">门（急）诊西医诊断</td><td><span class="field-edit" data-field="wm_diag_opd" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table" data-category="出院诊断">
-  <tr><th colspan="8">出院诊断</th></tr>
-  <tr><th>诊断类别</th><th>中医病名/证型</th><th>中医病证编码</th><th>西医诊断</th><th>西医疾病编码</th><th>入院病情</th><th>出院情况</th></tr>
-  <tr><td>主要诊断</td>
-      <td><span class="field-edit" data-field="tcm_diag_main" contenteditable="false"></span></td>
+<table class="case-table">
+  <tr><th colspan="6">入院中医四诊信息（望闻问切）</th></tr>
+  <tr><td class="lbl">望诊</td><td colspan="2"><span class="field-edit" data-field="tcm_wang" contenteditable="false"></span></td>
+      <td class="lbl">闻诊</td><td colspan="2"><span class="field-edit" data-field="tcm_wen" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">问诊</td><td colspan="2"><span class="field-edit" data-field="tcm_wen2" contenteditable="false"></span></td>
+      <td class="lbl">切诊</td><td colspan="2"><span class="field-edit" data-field="tcm_qie" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table">
+  <tr><th colspan="6">出院中医诊断（主病 + 主征4）</th></tr>
+  <tr><th>诊断类别</th><th>中医病名/证型</th><th>中医病证编码</th><th>入院病情</th><th>出院情况</th></tr>
+  <tr><td>主病</td><td><span class="field-edit" data-field="tcm_diag_main" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="tcm_code_main" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="wm_diag_main" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_main"></span></td>
+      <td><span class="field-radio" data-field="out_status_main"></span></td></tr>
+  <tr><td>主征1</td><td><span class="field-edit" data-field="tcm_syndrome1" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="tcm_code_syndrome1" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other"></span></td>
+      <td><span class="field-radio" data-field="out_status_other"></span></td></tr>
+  <tr><td>主征2</td><td><span class="field-edit" data-field="tcm_syndrome2" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="tcm_code_syndrome2" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other2"></span></td>
+      <td><span class="field-radio" data-field="out_status_other2"></span></td></tr>
+  <tr><td>主征3</td><td><span class="field-edit" data-field="tcm_syndrome3" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="tcm_code_syndrome3" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other3"></span></td>
+      <td><span class="field-radio" data-field="out_status_other3"></span></td></tr>
+  <tr><td>主征4</td><td><span class="field-edit" data-field="tcm_syndrome4" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="tcm_code_syndrome4" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other4"></span></td>
+      <td><span class="field-radio" data-field="out_status_other4"></span></td></tr>
+  <tr><td colspan="6">入院病情：1.有 2.未确 3.不明 4.无　出院情况：1.治愈 2.好转 3.未愈 4.死亡 9.其他</td></tr>
+</table>
+<table class="case-table">
+  <tr><th colspan="6">出院西医诊断（1 主要 + 5 其他）</th></tr>
+  <tr><th>诊断类别</th><th>西医诊断</th><th>西医疾病编码</th><th>入院病情</th><th>出院情况</th></tr>
+  <tr><td>主要诊断</td><td><span class="field-edit" data-field="wm_diag_main" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="wm_code_main" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_main"></span></td>
       <td><span class="field-radio" data-field="out_status_main"></span></td></tr>
-  <tr><td>其他诊断</td>
-      <td><span class="field-edit" data-field="tcm_diag_other" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="tcm_code_other" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="wm_diag_other" contenteditable="false"></span></td>
+  <tr><td>其他诊断1</td><td><span class="field-edit" data-field="wm_diag_other" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="wm_code_other" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other"></span></td>
       <td><span class="field-radio" data-field="out_status_other"></span></td></tr>
-  <tr><td>入院中医诊断</td>
-      <td colspan="2"><span class="field-edit" data-field="tcm_diag_admit" contenteditable="false"></span></td>
-      <td>辨证分型</td>
-      <td colspan="3"><span class="field-edit" data-field="tcm_syndrome" contenteditable="false"></span></td></tr>
+  <tr><td>其他诊断2</td><td><span class="field-edit" data-field="wm_diag_other2" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="wm_code_other2" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other2"></span></td>
+      <td><span class="field-radio" data-field="out_status_other2"></span></td></tr>
+  <tr><td>其他诊断3</td><td><span class="field-edit" data-field="wm_diag_other3" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="wm_code_other3" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other3"></span></td>
+      <td><span class="field-radio" data-field="out_status_other3"></span></td></tr>
+  <tr><td>其他诊断4</td><td><span class="field-edit" data-field="wm_diag_other4" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="wm_code_other4" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other4"></span></td>
+      <td><span class="field-radio" data-field="out_status_other4"></span></td></tr>
+  <tr><td>其他诊断5</td><td><span class="field-edit" data-field="wm_diag_other5" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="wm_code_other5" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other5"></span></td>
+      <td><span class="field-radio" data-field="out_status_other5"></span></td></tr>
+  <tr><td>损伤、中毒的外部原因</td><td colspan="2"><span class="field-edit" data-field="injury_cause" contenteditable="false"></span></td>
+      <td colspan="2"><span class="field-edit" data-field="injury_cause_code" contenteditable="false"></span></td></tr>
+  <tr><td>病理诊断</td><td colspan="2"><span class="field-edit" data-field="pathology" contenteditable="false"></span></td>
+      <td>病理号</td><td><span class="field-edit" data-field="pathology_no" contenteditable="false"></span></td></tr>
 </table>
-<table class="case-table" data-category="中医治疗">
-  <tr><th colspan="8">中医治疗情况</th></tr>
-  <tr><td>中医治则治法</td><td colspan="7"><span class="field-edit" data-field="tcm_principle" contenteditable="false"></span></td></tr>
-  <tr><td>中药饮片</td><td><span class="field-radio" data-field="tcm_herb"></span></td>
-      <td>金额(元)</td><td><span class="field-edit" data-field="tcm_herb_fee" contenteditable="false"></span></td>
-      <td>中成药</td><td><span class="field-radio" data-field="tcm_patent"></span></td>
-      <td>金额(元)</td><td><span class="field-edit" data-field="tcm_patent_fee" contenteditable="false"></span></td></tr>
-  <tr><td>中药注射液</td><td><span class="field-radio" data-field="tcm_injection"></span></td>
-      <td>金额(元)</td><td><span class="field-edit" data-field="tcm_injection_fee" contenteditable="false"></span></td>
-      <td colspan="4"></td></tr>
-  <tr><td>中医适宜技术</td><td colspan="7">
-      针灸 <span class="field-radio" data-field="tcm_acup"></span>
-      推拿 <span class="field-radio" data-field="tcm_massage"></span>
-      拔罐 <span class="field-radio" data-field="tcm_cupping"></span>
-      艾灸 <span class="field-radio" data-field="tcm_moxa"></span>
-      刮痧 <span class="field-radio" data-field="tcm_guasha"></span>
-      穴位贴敷 <span class="field-radio" data-field="tcm_acupoint"></span>
-      中药熏蒸 <span class="field-radio" data-field="tcm_fumigation"></span>
-      康复治疗 <span class="field-radio" data-field="tcm_rehab"></span></td></tr>
-  <tr><td>手术及操作</td><td colspan="7"><span class="field-edit" data-field="op1_name" contenteditable="false"></span>　编码：<span class="field-edit" data-field="op1_code" contenteditable="false"></span></td></tr>
-</table>
-<table class="case-table" data-category="离院与费用">
-  <tr><td>离院方式</td><td><span class="field-radio" data-field="discharge_mode"></span></td>
-      <td>31天内再住院计划</td><td><span class="field-radio" data-field="readmit_plan"></span></td>
-      <td>住院费用(元)</td><td><span class="field-edit" data-field="total_fee" contenteditable="false"></span></td></tr>
-  <tr><td>中医治疗费(元)</td><td><span class="field-edit" data-field="fee_tcm" contenteditable="false"></span></td>
-      <td>中成药费(元)</td><td><span class="field-edit" data-field="fee_patent" contenteditable="false"></span></td>
-      <td>中草药费(元)</td><td><span class="field-edit" data-field="fee_herb" contenteditable="false"></span></td></tr>
+<table class="case-table">
+  <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
+  <tr><td class="lbl">药物过敏</td><td><span class="field-radio" data-field="allergy_flag"></span></td>
+      <td class="lbl">过敏药物</td><td colspan="3"><span class="field-edit" data-field="allergy" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">死亡患者尸检</td><td><span class="field-radio" data-field="autopsy"></span></td>
+      <td class="lbl">血型</td><td><span class="field-radio" data-field="blood_type"></span></td>
+      <td class="lbl">Rh</td><td><span class="field-radio" data-field="rh"></span></td></tr>
 </table>
 <div class="sign-line">科主任：<span class="field-edit" data-field="sign_dept_head" contenteditable="false"></span>
   主任（副主任）医师：<span class="field-edit" data-field="sign_chief" contenteditable="false"></span>
   主治医师：<span class="field-edit" data-field="sign_attending" contenteditable="false"></span>
   住院医师：<span class="field-edit" data-field="sign_resident" contenteditable="false"></span>
   责任护士：<span class="field-edit" data-field="sign_nurse" contenteditable="false"></span>
-  编码员：<span class="field-edit" data-field="sign_coder" contenteditable="false"></span>
+  编码员：<span class="field-edit" data-field="sign_coder" contenteditable="false"></span><br>
   病案质量：<span class="field-radio" data-field="case_quality"></span>
   质控医师：<span class="field-edit" data-field="sign_qc_doc" contenteditable="false"></span>
+  质控护士：<span class="field-edit" data-field="sign_qc_nurse" contenteditable="false"></span>
   质控日期：<span class="field-edit" data-field="sign_qc_date" contenteditable="false"></span></div>
-`,
-    fields: [
+</div>
+<div class="a4-footer">第 1 页 / 共 2 页　（双面打印请选择“短边翻转”）</div>
+</div>
+<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">中 医 住 院 病 案 首 页（续）</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
+</div>
+<div class="a4-body">
+<table class="case-table cmpt">
+  <tr><th colspan="8">手术及操作（8 行）</th></tr>
+  <tr><th>手术及操作名称</th><th>编码</th><th>日期</th><th>手术级别</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>术者</th><th>麻醉医师</th><th>I助</th><th>II助</th></tr>
+  <tr><td><span class="field-edit" data-field="op1_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op1_level"></select></td>
+      <td><select class="field-select" data-field="op1_incision"></select></td>
+      <td><select class="field-select" data-field="op1_heal"></select></td>
+      <td><select class="field-select" data-field="op1_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op1_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op1_assist2" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table cmpt">
+  <tr><th colspan="8">中医治疗情况</th></tr>
+  <tr><td>辨证论治费</td><td><span class="field-edit" data-field="fee_tcm_bz" contenteditable="false"></span></td>
+      <td>辨证论治会诊费</td><td><span class="field-edit" data-field="fee_tcm_hz" contenteditable="false"></span></td>
+      <td>中医诊断费</td><td><span class="field-edit" data-field="fee_tcm_zd" contenteditable="false"></span></td>
+      <td>中医治疗费</td><td><span class="field-edit" data-field="fee_tcm_zl" contenteditable="false"></span></td></tr>
+  <tr><td>中医肛肠治疗费</td><td><span class="field-edit" data-field="fee_tcm_gc" contenteditable="false"></span></td>
+      <td>中医骨伤费</td><td><span class="field-edit" data-field="fee_tcm_gs" contenteditable="false"></span></td>
+      <td>针刺与灸法费</td><td><span class="field-edit" data-field="fee_tcm_zj" contenteditable="false"></span></td>
+      <td>中医推拿治疗费</td><td><span class="field-edit" data-field="fee_tcm_tn" contenteditable="false"></span></td></tr>
+  <tr><td>中医外治费</td><td><span class="field-edit" data-field="fee_tcm_wz" contenteditable="false"></span></td>
+      <td>中医特殊治疗费</td><td><span class="field-edit" data-field="fee_tcm_ts" contenteditable="false"></span></td>
+      <td>中医其他费</td><td><span class="field-edit" data-field="fee_tcm_qt" contenteditable="false"></span></td>
+      <td>中药特殊调配加工费</td><td><span class="field-edit" data-field="fee_tcm_tp" contenteditable="false"></span></td></tr>
+  <tr><td>辩证施膳费</td><td><span class="field-edit" data-field="fee_tcm_ss" contenteditable="false"></span></td>
+      <td>医疗机构中药制剂费</td><td><span class="field-edit" data-field="fee_tcm_zj2" contenteditable="false"></span></td>
+      <td colspan="4"></td></tr>
+</table>
+<table class="case-table cmpt">
+  <tr><th colspan="8">护理与监护</th></tr>
+  <tr><td>抢救次数</td><td><span class="field-edit" data-field="rescue_cnt" contenteditable="false"></span></td>
+      <td>成功次数</td><td><span class="field-edit" data-field="rescue_ok" contenteditable="false"></span></td>
+      <td>特级护理天数</td><td><span class="field-edit" data-field="care_tj" contenteditable="false"></span></td>
+      <td>一级护理天数</td><td><span class="field-edit" data-field="care_yj" contenteditable="false"></span></td></tr>
+  <tr><td>二级护理天数</td><td><span class="field-edit" data-field="care_ej" contenteditable="false"></span></td>
+      <td>三级护理天数</td><td><span class="field-edit" data-field="care_sj" contenteditable="false"></span></td>
+      <td>重症监护室</td><td><span class="field-edit" data-field="icu_name" contenteditable="false"></span></td>
+      <td>进入/退出</td><td><span class="field-edit" data-field="icu_in" contenteditable="false"></span>/<span class="field-edit" data-field="icu_out" contenteditable="false"></span></td></tr>
+  <tr><td>呼吸机使用时间</td><td colspan="3"><span class="field-edit" data-field="vent_d" contenteditable="false"></span>天
+      <span class="field-edit" data-field="vent_h" contenteditable="false"></span>小时
+      <span class="field-edit" data-field="vent_m" contenteditable="false"></span>分钟</td>
+      <td>随诊</td><td><span class="field-edit" data-field="followup" contenteditable="false"></span>周</td>
+      <td colspan="2"></td></tr>
+  <tr><td>离院方式</td><td><span class="field-radio" data-field="discharge_mode"></span></td>
+      <td colspan="6">医嘱转院接收医疗机构：<span class="field-edit" data-field="transfer_org" contenteditable="false"></span></td></tr>
+  <tr><td colspan="2">医嘱转社区接收医疗机构：<span class="field-edit" data-field="transfer_community" contenteditable="false"></span></td>
+      <td colspan="6"></td></tr>
+  <tr><td>31天内再住院计划</td><td><span class="field-radio" data-field="readmit_plan"></span></td>
+      <td colspan="6">目的：<span class="field-edit" data-field="readmit_purpose" contenteditable="false"></span></td></tr>
+  <tr><td>颅脑损伤昏迷时间</td><td colspan="7">入院前 <span class="field-edit" data-field="coma_pre_d" contenteditable="false"></span>天
+      <span class="field-edit" data-field="coma_pre_h" contenteditable="false"></span>小时
+      <span class="field-edit" data-field="coma_pre_m" contenteditable="false"></span>分钟　入院后
+      <span class="field-edit" data-field="coma_post_d" contenteditable="false"></span>天
+      <span class="field-edit" data-field="coma_post_h" contenteditable="false"></span>小时
+      <span class="field-edit" data-field="coma_post_m" contenteditable="false"></span>分钟</td></tr>
+</table>
+<table class="case-table cmpt">
+  <tr><td colspan="8"><b>住院费用（元）</b>　总费用：<span class="field-edit" data-field="total_fee" contenteditable="false"></span>
+      自付金额：<span class="field-edit" data-field="self_pay" contenteditable="false"></span></td></tr>
+  <tr><td colspan="2">1.综合医疗服务类</td><td colspan="2">2.诊断类</td><td colspan="2">3.治疗类</td><td colspan="2">4.康复类</td></tr>
+  <tr><td>一般医疗服务费</td><td><span class="field-edit" data-field="fee01" contenteditable="false"></span></td>
+      <td>病理诊断费</td><td><span class="field-edit" data-field="fee05" contenteditable="false"></span></td>
+      <td>非手术治疗项目费</td><td><span class="field-edit" data-field="fee09" contenteditable="false"></span></td>
+      <td>康复费</td><td><span class="field-edit" data-field="fee11" contenteditable="false"></span></td></tr>
+  <tr><td>一般治疗操作费</td><td><span class="field-edit" data-field="fee02" contenteditable="false"></span></td>
+      <td>实验室诊断费</td><td><span class="field-edit" data-field="fee06" contenteditable="false"></span></td>
+      <td>手术治疗费</td><td><span class="field-edit" data-field="fee10" contenteditable="false"></span></td>
+      <td>中医治疗费</td><td><span class="field-edit" data-field="fee12" contenteditable="false"></span></td></tr>
+  <tr><td>护理费</td><td><span class="field-edit" data-field="fee03" contenteditable="false"></span></td>
+      <td>影像学诊断费</td><td><span class="field-edit" data-field="fee07" contenteditable="false"></span></td>
+      <td>临床物理治疗费</td><td><span class="field-edit" data-field="fee09a" contenteditable="false"></span></td>
+      <td>麻醉费</td><td><span class="field-edit" data-field="fee10a" contenteditable="false"></span></td></tr>
+  <tr><td>其他费用</td><td><span class="field-edit" data-field="fee04" contenteditable="false"></span></td>
+      <td>临床诊断项目费</td><td><span class="field-edit" data-field="fee08" contenteditable="false"></span></td>
+      <td>手术费</td><td><span class="field-edit" data-field="fee10b" contenteditable="false"></span></td>
+      <td>西药费</td><td><span class="field-edit" data-field="fee13" contenteditable="false"></span></td></tr>
+  <tr><td>抗菌药物费用</td><td><span class="field-edit" data-field="fee13a" contenteditable="false"></span></td>
+      <td>中成药费</td><td><span class="field-edit" data-field="fee14" contenteditable="false"></span></td>
+      <td>中草药费</td><td><span class="field-edit" data-field="fee15" contenteditable="false"></span></td>
+      <td>血费</td><td><span class="field-edit" data-field="fee16" contenteditable="false"></span></td></tr>
+  <tr><td>白蛋白类制品费</td><td><span class="field-edit" data-field="fee17" contenteditable="false"></span></td>
+      <td>球蛋白类制品费</td><td><span class="field-edit" data-field="fee18" contenteditable="false"></span></td>
+      <td>凝血因子类制品费</td><td><span class="field-edit" data-field="fee19" contenteditable="false"></span></td>
+      <td>细胞因子类制品费</td><td><span class="field-edit" data-field="fee20" contenteditable="false"></span></td></tr>
+  <tr><td>检查用一次性医用材料费</td><td><span class="field-edit" data-field="fee21" contenteditable="false"></span></td>
+      <td>治疗用一次性医用材料费</td><td><span class="field-edit" data-field="fee22" contenteditable="false"></span></td>
+      <td>手术用一次性医用材料费</td><td><span class="field-edit" data-field="fee23" contenteditable="false"></span></td>
+      <td>其他费</td><td><span class="field-edit" data-field="fee24" contenteditable="false"></span></td></tr>
+</table>
+</div>
+<div class="a4-footer">第 2 页 / 共 2 页　（双面打印请选择“短边翻转”）</div>
+</div>
+`,fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
       { type: 'radio', name: 'in_route', caption: '入院途径', options: ['急诊', '门诊', '其他医疗机构转入', '其他'], value: '门诊' },
       { type: 'radio', name: 'adm_status_main', caption: '入院病情(主要)', options: ['1', '2', '3', '4'], value: '1.有' },
@@ -2866,17 +2840,14 @@ function addOpRow() {
     '<td><span class="field-edit" data-field="op' + seq + '_name" contenteditable="false"></span></td>' +
     '<td><span class="field-edit" data-field="op' + seq + '_code" contenteditable="false"></span></td>' +
     '<td><span class="field-edit" data-field="op' + seq + '_date" contenteditable="false"></span></td>' +
-    '<td><select class="field-select" data-field="op' + seq + '_level"></select></td>' +
-    '<td><select class="field-select" data-field="op' + seq + '_incision"></select></td>' +
-    '<td><select class="field-select" data-field="op' + seq + '_heal"></select></td>' +
-    '<td><select class="field-select" data-field="op' + seq + '_anesthesia"></select></td>' +
+    '<td><span class="field-edit" data-field="op' + seq + '_level" contenteditable="false"></span></td>' +
+    '<td><span class="field-edit" data-field="op' + seq + '_grade" contenteditable="false"></span></td>' +
+    '<td><span class="field-edit" data-field="op' + seq + '_anesthesia" contenteditable="false"></span></td>' +
     '<td><span class="field-edit" data-field="op' + seq + '_surgeon" contenteditable="false"></span></td>' +
-    '<td><span class="field-edit" data-field="op' + seq + '_anest_doc" contenteditable="false"></span></td>' +
-    '<td><span class="field-edit" data-field="op' + seq + '_assist" contenteditable="false"></span></td>' +
-    '<td><span class="field-edit" data-field="op' + seq + '_assist2" contenteditable="false"></span>' +
+    '<td><span class="field-edit" data-field="op' + seq + '_anest_doc" contenteditable="false"></span>　' +
+    '<span class="field-edit" data-field="op' + seq + '_assist" contenteditable="false"></span>' +
     '<button class="row-del" onclick="delOpRow(this)" title="删除本行">×</button></td>';
   table.appendChild(tr);
-  tr.querySelectorAll('.field-select').forEach(el => renderSelect(el));
   applyFieldEditability();
   bindDatePickers();
   syncAll();

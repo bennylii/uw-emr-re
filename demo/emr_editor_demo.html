@@ -1097,15 +1097,17 @@ const TEMPLATES = {
 </table>
 <div class="tab-pane" id="tab-all">
 <table class="case-table" data-category="所有医嘱">
-  <tr><th>类别</th><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>医师签名</th></tr>
+  <tr><th>类别</th><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>用法</th><th>频次</th><th>停止时间</th><th>医师签名</th></tr>
 </table>
 </div>
 <div class="tab-pane" id="tab-ld">
 <table class="case-table" data-category="长期医嘱">
-  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+  <tr><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>每日次数</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
   <tr><td><span class="field-edit" data-field="y1_start" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_dose" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y1_mrcs" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_usage" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_freq" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y1_stop" contenteditable="false"></span></td>
@@ -1114,6 +1116,8 @@ const TEMPLATES = {
   <tr><td><span class="field-edit" data-field="y2_start" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_dose" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="y2_mrcs" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_usage" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_freq" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="y2_stop" contenteditable="false"></span></td>
@@ -1123,12 +1127,12 @@ const TEMPLATES = {
 </div>
 <div class="tab-pane" id="tab-ls" style="display:none">
 <table class="case-table" data-category="临时医嘱">
-  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+  <tr><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>次数</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
 </table>
 </div>
 <div class="tab-pane" id="tab-jz" style="display:none">
 <table class="case-table" data-category="急诊医嘱">
-  <tr><th>起始时间</th><th>医嘱内容</th><th>剂量</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
+  <tr><th>起始时间</th><th>医嘱内容</th><th>一次剂量</th><th>剂量单位</th><th>次数</th><th>用法</th><th>频次</th><th>停止时间</th><th>停止医师</th><th>医师签名</th></tr>
 </table>
 </div>
 <div class="tab-pane" id="tab-cy" style="display:none">

@@ -138,6 +138,9 @@
   .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 3px 0; }
   .a4-body .case-table.cmpt { font-size: 8.5px; }
   .a4-body .case-table.cmpt th, .a4-body .case-table.cmpt td { padding: 0.5px 2px; line-height: 1.15; }
+  .a4-body .case-table.diag { font-size: 9px; }
+  .a4-body .case-table.diag th, .a4-body .case-table.diag td { padding: 0.5px 2px; line-height: 1.15; }
+  .a4-body .case-table.diag .field-edit { min-width: 20px; }
   .a4-body .case-table.cmpt .field-edit { min-width: 20px; }
   .a4-body .case-table th, .a4-body .case-table td { padding: 2px 3px; line-height: 1.35; }
   .a4-body .case-table td.lbl { white-space: nowrap; width: 76px; font-weight: normal; overflow: hidden; }
@@ -422,7 +425,7 @@ const TEMPLATES = {
   <tr><td class="lbl">入院后确诊日期</td><td><span class="field-edit" data-field="confirm_date" contenteditable="false"></span></td>
       <td class="lbl">入院病情</td><td colspan="2"><span class="field-radio" data-field="adm_status_main"></span></td></tr>
 </table>
-<table class="case-table">
+<table class="case-table diag">
   <colgroup><col style="width:38%"><col style="width:22%"><col style="width:20%"><col style="width:20%"></colgroup>
   <tr><th colspan="4">出院诊断（疾病编码 · 入院病情 · 出院情况）</th></tr>
   <tr><th>诊断名称</th><th>疾病编码</th><th>入院病情</th><th>出院情况</th></tr>
@@ -470,6 +473,55 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="diag_other10_code" contenteditable="false"></span></td>
       <td><span class="field-radio" data-field="adm_status_other10"></span></td>
       <td><span class="field-radio" data-field="out_status_other10"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other11" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other11_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other11"></span></td>
+      <td><span class="field-radio" data-field="out_status_other11"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other12" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other12_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other12"></span></td>
+      <td><span class="field-radio" data-field="out_status_other12"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other13" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other13_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other13"></span></td>
+      <td><span class="field-radio" data-field="out_status_other13"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other14" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other14_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other14"></span></td>
+      <td><span class="field-radio" data-field="out_status_other14"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other15" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other15_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other15"></span></td>
+      <td><span class="field-radio" data-field="out_status_other15"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other16" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other16_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other16"></span></td>
+      <td><span class="field-radio" data-field="out_status_other16"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other17" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other17_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other17"></span></td>
+      <td><span class="field-radio" data-field="out_status_other17"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other18" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other18_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other18"></span></td>
+      <td><span class="field-radio" data-field="out_status_other18"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other19" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other19_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other19"></span></td>
+      <td><span class="field-radio" data-field="out_status_other19"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other20" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other20_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other20"></span></td>
+      <td><span class="field-radio" data-field="out_status_other20"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other21" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other21_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other21"></span></td>
+      <td><span class="field-radio" data-field="out_status_other21"></span></td></tr>
+  <tr><td>其他诊断：<span class="field-edit" data-field="diag_other22" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="diag_other22_code" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="adm_status_other22"></span></td>
+      <td><span class="field-radio" data-field="out_status_other22"></span></td></tr>
+
   <tr><td>门（急）诊诊断</td>
       <td><span class="field-edit" data-field="diag_outpatient" contenteditable="false"></span></td>
       <td>疾病编码</td>
@@ -835,6 +887,30 @@ const TEMPLATES = {
       { type: 'radio', name: 'out_status_other9', caption: '出院情况(其他9)', options: ['1', '2', '3', '4', '9'], value: '1' },
       { type: 'radio', name: 'adm_status_other10', caption: '入院病情(其他10)', options: ['1', '2', '3', '4'], value: '1' },
       { type: 'radio', name: 'out_status_other10', caption: '出院情况(其他10)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other11', caption: '入院病情(其他11)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other11', caption: '出院情况(其他11)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other12', caption: '入院病情(其他12)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other12', caption: '出院情况(其他12)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other13', caption: '入院病情(其他13)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other13', caption: '出院情况(其他13)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other14', caption: '入院病情(其他14)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other14', caption: '出院情况(其他14)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other15', caption: '入院病情(其他15)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other15', caption: '出院情况(其他15)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other16', caption: '入院病情(其他16)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other16', caption: '出院情况(其他16)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other17', caption: '入院病情(其他17)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other17', caption: '出院情况(其他17)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other18', caption: '入院病情(其他18)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other18', caption: '出院情况(其他18)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other19', caption: '入院病情(其他19)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other19', caption: '出院情况(其他19)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other20', caption: '入院病情(其他20)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other20', caption: '出院情况(其他20)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other21', caption: '入院病情(其他21)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other21', caption: '出院情况(其他21)', options: ['1', '2', '3', '4', '9'], value: '1' },
+      { type: 'radio', name: 'adm_status_other22', caption: '入院病情(其他22)', options: ['1', '2', '3', '4'], value: '1' },
+      { type: 'radio', name: 'out_status_other22', caption: '出院情况(其他22)', options: ['1', '2', '3', '4', '9'], value: '1' },
       { type: 'radio', name: 'adm_status_other11', caption: '入院病情(其他11)', options: ['1', '2', '3', '4'], value: '1' },
       { type: 'radio', name: 'out_status_other11', caption: '出院情况(其他11)', options: ['1', '2', '3', '4', '9'], value: '1' },
       { type: 'radio', name: 'adm_status_other12', caption: '入院病情(其他12)', options: ['1', '2', '3', '4'], value: '1' },

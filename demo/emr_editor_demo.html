@@ -136,8 +136,8 @@
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
   .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 3px 0; }
-  .a4-body .case-table.cmpt { font-size: 9px; }
-  .a4-body .case-table.cmpt th, .a4-body .case-table.cmpt td { padding: 1px 2.5px; line-height: 1.2; }
+  .a4-body .case-table.cmpt { font-size: 8.5px; }
+  .a4-body .case-table.cmpt th, .a4-body .case-table.cmpt td { padding: 0.5px 2px; line-height: 1.15; }
   .a4-body .case-table.cmpt .field-edit { min-width: 20px; }
   .a4-body .case-table th, .a4-body .case-table td { padding: 2px 3px; line-height: 1.35; }
   .a4-body .case-table td.lbl { white-space: nowrap; width: 76px; font-weight: normal; overflow: hidden; }
@@ -716,7 +716,8 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="cz8_anest_doc" contenteditable="false"></span></td></tr>
 </table>
 <table class="case-table cmpt">
-  <tr><th colspan="8">DRG 分组信息（逆向 w_emr_archive_case2012_drg / DRG 审计）</th></tr>
+  <tr><th colspan="8"><table class="case-table cmpt">
+  <tr><th colspan="8">DRG 分组信息（逆向 drg_basj 154 字段）</th></tr>
   <tr><td>DRG 编码</td><td><span class="field-edit" data-field="drg_code" contenteditable="false"></span></td>
       <td>DRG 名称</td><td><span class="field-edit" data-field="drg_name" contenteditable="false"></span></td>
       <td>ADRG</td><td><span class="field-edit" data-field="drg_adrg" contenteditable="false"></span></td>
@@ -725,6 +726,25 @@ const TEMPLATES = {
       <td>费率</td><td><span class="field-edit" data-field="drg_rate" contenteditable="false"></span></td>
       <td>支付标准</td><td><span class="field-edit" data-field="drg_pay" contenteditable="false"></span></td>
       <td colspan="2">主要手术/操作与主要诊断匹配：<span class="field-radio" data-field="drg_match"></span></td></tr>
+  <tr><td>上报时间</td><td><span class="field-edit" data-field="drg_sj" contenteditable="false"></span></td>
+      <td>上报工号</td><td><span class="field-edit" data-field="drg_sbgh" contenteditable="false"></span></td>
+      <td>上报日期</td><td><span class="field-edit" data-field="drg_sbrq" contenteditable="false"></span></td>
+      <td>病案号</td><td><span class="field-edit" data-field="drg_bah" contenteditable="false"></span></td></tr>
+  <tr><td>离院方式</td><td><span class="field-edit" data-field="drg_lyfs" contenteditable="false"></span></td>
+      <td>入院途径</td><td><span class="field-edit" data-field="drg_rytj" contenteditable="false"></span></td>
+      <td>抢救次数</td><td><span class="field-edit" data-field="drg_qjcs" contenteditable="false"></span></td>
+      <td>成功次数</td><td><span class="field-edit" data-field="drg_qjcg" contenteditable="false"></span></td></tr>
+  <tr><td>呼吸机使用时间</td><td colspan="3"><span class="field-edit" data-field="drg_hxjsysj" contenteditable="false"></span></td>
+      <td>特级护理天数</td><td><span class="field-edit" data-field="drg_tjhl" contenteditable="false"></span></td>
+      <td>一级护理天数</td><td><span class="field-edit" data-field="drg_yjhl" contenteditable="false"></span></td></tr>
+  <tr><td>二级护理天数</td><td><span class="field-edit" data-field="drg_ejhl" contenteditable="false"></span></td>
+      <td>三级护理天数</td><td><span class="field-edit" data-field="drg_sjhl" contenteditable="false"></span></td>
+      <td>监护室(CCU)</td><td><span class="field-edit" data-field="drg_rzccu" contenteditable="false"></span></td>
+      <td>监护室(ICU)</td><td><span class="field-edit" data-field="drg_rzicu" contenteditable="false"></span></td></tr>
+  <tr><td>监护室(EICU)</td><td><span class="field-edit" data-field="drg_rzeicu" contenteditable="false"></span></td>
+      <td>监护室(SICU)</td><td><span class="field-edit" data-field="drg_rzsicu" contenteditable="false"></span></td>
+      <td>监护室(PICU)</td><td><span class="field-edit" data-field="drg_rzpicu" contenteditable="false"></span></td>
+      <td>其他监护室</td><td><span class="field-edit" data-field="drg_rzqtjhs" contenteditable="false"></span></td></tr>
 </table>
 <table class="case-table cmpt">
   <tr><td colspan="8"><b>住院费用（元）（WS 445.10 明细 + 床位/诊察）</b>　总费用：<span class="field-edit" data-field="total_fee" contenteditable="false"></span>

@@ -43,7 +43,7 @@
   .case-table .field-edit { min-width: 60px; }
   .case-table .mini { width: 30px; border: none; border-bottom: 1px solid #555;
                       text-align: center; outline: none; background: transparent; }
-  .sign-line { margin-top: 24px; font-size: 13px; line-height: 2.2; }
+  .sign-line { margin-top: 6px; font-size: 13px; line-height: 2.2; }
   .ca-sig-line { margin-top: 10px; padding: 6px 8px; border: 1px solid #e74c3c;
                  background: #fdf0ef; color: #c0392b; font-size: 12px;
                  border-radius: 4px; }
@@ -132,10 +132,12 @@
   .a4-header .h-meta { white-space: nowrap; font-size: 11px; }
   .a4-header .h-meta b { font-weight: normal; border-bottom: 1px solid #999;
     min-width: 36px; display: inline-block; text-align: center; padding: 0 2px; }
-  .a4-body { flex: 1; }
+  .a4-body { flex: 1; display: flex; flex-direction: column; }
+  .a4-body .case-table { flex: 1 1 auto; }
+  .a4-body .case-table td, .a4-body .case-table th { height: 1px; }
   .a4-footer { text-align: center; font-size: 10.5px; color: #666;
     border-top: 0.5px solid #ccc; padding-top: 2px; margin-top: 6px; }
-  .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 3px 0; }
+  .a4-body .case-table { font-size: 10.5px; table-layout: fixed; margin: 0; }
   .a4-body .case-table.cmpt { font-size: 8.5px; }
   .a4-body .case-table.cmpt th, .a4-body .case-table.cmpt td { padding: 0.5px 2px; line-height: 1.15; }
   .a4-body .case-table.diag { font-size: 9px; }
@@ -768,7 +770,6 @@ const TEMPLATES = {
       <td><span class="field-edit" data-field="cz8_anest_doc" contenteditable="false"></span></td></tr>
 </table>
 <table class="case-table cmpt">
-  <tr><th colspan="8"><table class="case-table cmpt">
   <tr><th colspan="8">DRG 分组信息（逆向 drg_basj 154 字段）</th></tr>
   <tr><td>DRG 编码</td><td><span class="field-edit" data-field="drg_code" contenteditable="false"></span></td>
       <td>DRG 名称</td><td><span class="field-edit" data-field="drg_name" contenteditable="false"></span></td>

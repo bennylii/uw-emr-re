@@ -22,7 +22,10 @@
 │   └── emr_editor_demo.html    # 病历编辑器交互演示（双击浏览器打开）
 ├── docs/
 │   ├── uwWordDll-abiword-diff.md   # 定制层对比报告（版本判定/定制类/API 清单/实现反推）
-│   └── uwWordDll_api.h             # 8117 导出接口清单（互操作事实）
+│   ├── uwWordDll_api.h             # 8117 导出接口清单（互操作事实）
+│   └── standards/                  # 电子病历标准 OCR 全文（WS 445 系列）
+│       ├── WS445.10-2014-住院病案首页-OCR.md   # 148 数据元 + 值域代码表
+│       └── WS445.11-2014-中医住院病案首页-OCR.md # 164 数据元（MinerU 分段 OCR）
 ├── src/uwemr/                  # 定制层 clean-room 源码（已编译验证）
 └── tools/
     ├── compare_uwabiword.py        # 导出类名 vs 上游源码匹配率对比

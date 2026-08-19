@@ -1604,41 +1604,83 @@ const TEMPLATES = {
 labreport: {
     title: '检查检验记录（WS 445.4）',
     html: `
+<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">检 验（检 查）报 告 单</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="dept"></b>　住院号 <b data-header="zyh"></b></span>
+</div>
+<div class="a4-body">
 <table class="case-table">
-  <tr><th colspan="8">检验（检查）报告单</th></tr>
-  <tr><td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td>
-      <td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
-      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span></td>
-      <td>标本号/检查号</td><td><span class="field-edit" data-field="sample_no" contenteditable="false"></span></td></tr>
-  <tr><td>科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td>
-      <td>病区/床号</td><td><span class="field-edit" data-field="ward" contenteditable="false"></span></td>
-      <td>临床诊断</td><td><span class="field-edit" data-field="diag" contenteditable="false"></span></td>
-      <td>标本类型</td><td><span class="field-edit" data-field="sample_type" contenteditable="false"></span></td></tr>
+  <tr><th colspan="8">检查/检验申请（WS 445.4）</th></tr>
+  <tr><td>门（急）诊号</td><td><span class="field-edit" data-field="opd_no" contenteditable="false"></span></td>
+      <td>住院号</td><td><span class="field-edit" data-field="zyh" contenteditable="false"></span></td>
+      <td>患者类型</td><td><select class="field-select" data-field="pat_type"></select></td>
+      <td>姓名</td><td><span class="field-edit" data-field="name" contenteditable="false"></span></td></tr>
+  <tr><td>性别</td><td><span class="field-radio" data-field="sex"></span></td>
+      <td>年龄</td><td><span class="field-edit" data-field="age" contenteditable="false"></span>岁</td>
+      <td>电话</td><td><span class="field-edit" data-field="phone" contenteditable="false"></span></td>
+      <td>科室</td><td><span class="field-edit" data-field="dept" contenteditable="false"></span></td></tr>
+  <tr><td>病区</td><td><span class="field-edit" data-field="ward" contenteditable="false"></span></td>
+      <td>病房/床号</td><td><span class="field-edit" data-field="room" contenteditable="false"></span>/<span class="field-edit" data-field="bed" contenteditable="false"></span></td>
+      <td>电子申请单编号</td><td><span class="field-edit" data-field="apply_no" contenteditable="false"></span></td>
+      <td>申请机构</td><td><span class="field-edit" data-field="apply_org" contenteditable="false"></span></td></tr>
+  <tr><td>申请科室</td><td><span class="field-edit" data-field="apply_dept" contenteditable="false"></span></td>
+      <td>疾病诊断编码</td><td><span class="field-edit" data-field="diag_code" contenteditable="false"></span></td>
+      <td>诊断日期</td><td><span class="field-edit" data-field="diag_date" contenteditable="false"></span></td>
+      <td>主诉</td><td><span class="field-edit" data-field="chief" contenteditable="false"></span></td></tr>
+  <tr><td>标本类别</td><td><select class="field-select" data-field="sample_type"></select></td>
+      <td>标本号</td><td><span class="field-edit" data-field="sample_no" contenteditable="false"></span></td>
+      <td>标本状态</td><td><span class="field-edit" data-field="sample_status" contenteditable="false"></span></td>
+      <td>固定液名称</td><td><span class="field-edit" data-field="sample_fix" contenteditable="false"></span></td></tr>
+  <tr><td>采样日期</td><td><span class="field-edit" data-field="sample_time" contenteditable="false"></span></td>
+      <td>接收日期</td><td><span class="field-edit" data-field="receive_time" contenteditable="false"></span></td>
+      <td>检查方法</td><td><span class="field-edit" data-field="method" contenteditable="false"></span></td>
+      <td>检查类别</td><td><select class="field-select" data-field="exam_type"></select></td></tr>
 </table>
 <table class="case-table">
-  <tr><th>检验/检查项目</th><th>结果</th><th>单位</th><th>参考范围</th><th>标志</th></tr>
-  <tr><td><span class="field-edit" data-field="l1_item" contenteditable="false"></span></td>
+  <tr><th colspan="5">检查/检验结果</th></tr>
+  <tr><th>项目代码</th><th>项目名称</th><th>结果</th><th>单位</th><th>参考范围</th></tr>
+  <tr><td><span class="field-edit" data-field="l1_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l1_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="l1_result" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="l1_unit" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="l1_ref" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="l1_flag" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="l2_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l1_ref" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="l2_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l2_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="l2_result" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="l2_unit" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="l2_ref" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="l2_flag" contenteditable="false"></span></td></tr>
-  <tr><td><span class="field-edit" data-field="l3_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l2_ref" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="l3_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l3_item" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="l3_result" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="l3_unit" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="l3_ref" contenteditable="false"></span></td>
-      <td><span class="field-edit" data-field="l3_flag" contenteditable="false"></span></td></tr>
+      <td><span class="field-edit" data-field="l3_ref" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="l4_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l4_item" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l4_result" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l4_unit" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="l4_ref" contenteditable="false"></span></td></tr>
 </table>
-<div class="sign-line">送检医师：<span class="field-edit" data-field="sign_request" contenteditable="false"></span>
-  审核技师/医师：<span class="field-edit" data-field="sign_report" contenteditable="false"></span>
+<table class="case-table">
+  <tr><td>报告结论（客观所见）</td><td colspan="3"><span class="field-edit" data-field="result_obj" contenteditable="false"></span></td></tr>
+  <tr><td>报告结论（主观提示）</td><td colspan="3"><span class="field-edit" data-field="result_subj" contenteditable="false"></span></td></tr>
+  <tr><td>报告备注</td><td colspan="3"><span class="field-edit" data-field="report_note" contenteditable="false"></span></td></tr>
+  <tr><td>报告单编号</td><td><span class="field-edit" data-field="report_no" contenteditable="false"></span></td>
+      <td>报告机构</td><td><span class="field-edit" data-field="report_org" contenteditable="false"></span></td></tr>
+</table>
+<div class="sign-line">技师签名：<span class="field-edit" data-field="sign_tech" contenteditable="false"></span>
+  报告医师：<span class="field-edit" data-field="sign_report" contenteditable="false"></span>
+  审核医师：<span class="field-edit" data-field="sign_audit" contenteditable="false"></span>
   报告日期：<span class="field-edit" data-field="report_date" contenteditable="false"></span></div>
-`,
-    fields: [
+</div>
+<div class="a4-footer">第 1 页 / 共 1 页</div>
+</div>
+`,fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'select', name: 'pat_type', caption: '患者类型', options: ['门诊', '住院', '急诊'], value: '住院' },
+      { type: 'select', name: 'sample_type', caption: '标本类别', options: ['血液', '尿液', '粪便', '痰液', '脑脊液', '组织', '其他'], value: '血液' },
+      { type: 'select', name: 'exam_type', caption: '检查类别', options: ['临床检验', '影像学', '病理', '内镜', '其他'], value: '临床检验' }
     ],
   },
   transfer: {

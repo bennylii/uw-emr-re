@@ -1111,12 +1111,22 @@ const TEMPLATES = {
   },surgery: {
     title: '手术记录',
     fields: [],    paras: [
-      { indent: false, html: '手术名称：<span class="field-edit" data-field="op_name" contenteditable="false"></span>' },
-      { indent: false, html: '手术日期：<span class="field-edit" data-field="op_date" contenteditable="false"></span>　' +
-                            '手术者：<span class="field-edit" data-field="op_doc" contenteditable="false"></span>' },
-      { indent: true, html: '麻醉方式：<span class="field-edit" data-field="anesthesia" contenteditable="false"></span>' },
-      { indent: true, html: '术前诊断：<span class="field-hengxian" data-field="pre_diag" contenteditable="false"></span>' },
-      { indent: true, html: '术中情况：' },
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '术前诊断：<span class="field-hengxian" data-field="pre_diag" contenteditable="false"></span>　术中诊断：<span class="field-hengxian" data-field="intra_diag" contenteditable="false"></span>' },
+      { indent: false, html: '手术名称：<span class="field-hengxian" data-field="op_name" contenteditable="false"></span>　手术编号：<span class="field-edit" data-field="op_no" contenteditable="false"></span>' },
+      { indent: false, html: '手术日期时间：<span class="field-edit" data-field="op_date" contenteditable="false"></span>　开始时间：<span class="field-edit" data-field="op_begin" contenteditable="false"></span>　结束时间：<span class="field-edit" data-field="op_end" contenteditable="false"></span>' },
+      { indent: false, html: '麻醉方式：<span class="field-hengxian" data-field="anesthesia" contenteditable="false"></span>　麻醉医师：<span class="field-edit" data-field="anesth_doc" contenteditable="false"></span>' },
+      { indent: false, html: '手术者：<span class="field-edit" data-field="op_surgeon" contenteditable="false"></span>　第一助手：<span class="field-edit" data-field="op_assist1" contenteditable="false"></span>　第二助手：<span class="field-edit" data-field="op_assist2" contenteditable="false"></span>　第三助手：<span class="field-edit" data-field="op_assist3" contenteditable="false"></span>' },
+      { indent: false, html: '洗手护士：<span class="field-edit" data-field="scrub_nurse" contenteditable="false"></span>　巡回护士：<span class="field-edit" data-field="circulate_nurse" contenteditable="false"></span>' },
+      { indent: true, html: '手术经过：' },
+      { indent: false, html: '术中所见：<span class="field-hengxian" data-field="intra_find" contenteditable="false"></span>' },
+      { indent: false, html: '手术过程：<span class="field-hengxian" data-field="op_process" contenteditable="false"></span>' },
+      { indent: false, html: '术中出血量：<span class="field-edit" data-field="blood_loss" contenteditable="false"></span>ml　输血量：<span class="field-edit" data-field="blood_trans" contenteditable="false"></span>ml　输液量：<span class="field-edit" data-field="infusion" contenteditable="false"></span>ml' },
+      { indent: false, html: '引流情况：<span class="field-hengxian" data-field="drainage" contenteditable="false"></span>　送检标本：<span class="field-hengxian" data-field="specimen" contenteditable="false"></span>' },
+      { indent: false, html: '术后诊断：<span class="field-hengxian" data-field="post_diag" contenteditable="false"></span>　诊断符合情况：<span class="field-radio" data-field="diag_match"></span>' },
+      { indent: false, html: '备注说明：<span class="field-hengxian" data-field="remark" contenteditable="false"></span>' },
+      { indent: false, html: '记录医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_time" contenteditable="false"></span>' },
     ],
   },
   consent: {

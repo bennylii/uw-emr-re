@@ -197,6 +197,7 @@
       <option value="summary">病历概要(WS 445.1)</option>
       <option value="case2012">病案首页(2012版 卫医政发84号)</option>
       <option value="case2012tcm">中医病案首页(WS 445.11)</option>
+      <option value="case_old">病案首页(旧版·拼音)</option>
       <option value="admission">入院记录</option>
       <option value="progress">病程记录</option>
       <option value="discharge">出院记录</option>
@@ -1159,6 +1160,259 @@ const TEMPLATES = {
     ],
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  case_old: {
+    title: '住院病案首页（旧版·拼音字段）',
+    html: `<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">住 院 病 案 首 页</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
+</div>
+<div class="a4-body">
+<table class="case-table">
+  <colgroup><col style="width:90px"><col style="width:170px"><col style="width:90px"><col style="width:150px"><col style="width:90px"><col style="width:188px"></colgroup>
+  <tr><th colspan="6">住院病案首页（旧版格式·卫统表）</th></tr>
+  <tr><td class="lbl">医疗付费方式</td><td><select class="field-select" data-field="brjbqk_syylfkfs"></select></td>
+      <td class="lbl">医保卡号</td><td><span class="field-edit" data-field="brjbqk_syybkh" contenteditable="false"></span></td>
+      <td class="lbl">第 <input class="mini" data-field="brjbqk_syzycs" contenteditable="false"> 次住院</td></tr>
+  <tr><td class="lbl">住院号</td><td colspan="5"><span class="field-edit" data-field="brrcz_syzyh" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">姓名</td><td><span class="field-edit" data-field="brjbqk_syxm" contenteditable="false"></span></td>
+      <td class="lbl">性别</td><td><span class="field-radio" data-field="brjbqk_syxb"></span></td>
+      <td class="lbl">出生年月</td><td><span class="field-edit" data-field="brjbqk_sycsny" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">年龄</td><td><span class="field-edit" data-field="brjbqk_synl" contenteditable="false"></span></td>
+      <td class="lbl">国籍</td><td><span class="field-edit" data-field="brjbqk_sygj" contenteditable="false"></span></td>
+      <td class="lbl">民族</td><td><span class="field-edit" data-field="brjbqk_symz" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">婚姻</td><td><select class="field-select" data-field="brjbqk_syhy"></select></td>
+      <td class="lbl">职业</td><td><select class="field-select" data-field="brjbqk_syzy"></select></td>
+      <td class="lbl">出生地</td><td><span class="field-edit" data-field="brjbqk_sycsd" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">身份证号</td><td colspan="3"><span class="field-edit" data-field="brjbqk_sysfzh" contenteditable="false"></span></td>
+      <td class="lbl">户口地址</td><td><span class="field-edit" data-field="brjbqk_syhkdz" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">工作单位及地址</td><td colspan="3"><span class="field-edit" data-field="brjbqk_sygzdwjdz" contenteditable="false"></span></td>
+      <td class="lbl">单位电话</td><td><span class="field-edit" data-field="brjbqk_sygzdh" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">联系人姓名</td><td><span class="field-edit" data-field="brjbqk_sylxrxm" contenteditable="false"></span></td>
+      <td class="lbl">关系</td><td><select class="field-select" data-field="brjbqk_sylxrgx"></select></td>
+      <td class="lbl">联系人电话</td><td><span class="field-edit" data-field="brjbqk_sylxrdh" contenteditable="false"></span></td></tr>
+  <tr><th colspan="6">入 院 · 出 院</th></tr>
+  <tr><td class="lbl">入院科别</td><td><span class="field-edit" data-field="brrcz_syrykb" contenteditable="false"></span></td>
+      <td class="lbl">入院病区</td><td><span class="field-edit" data-field="brrcz_syrybq" contenteditable="false"></span></td>
+      <td class="lbl">入院日期</td><td><span class="field-edit" data-field="brrcz_syryrq" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">转科科别</td><td><span class="field-edit" data-field="brrcz_syzrkb" contenteditable="false"></span></td>
+      <td class="lbl">转入病区</td><td><span class="field-edit" data-field="brrcz_syzrbq" contenteditable="false"></span></td>
+      <td class="lbl">转科日期</td><td><span class="field-edit" data-field="brrcz_syzkrq" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">出院科别</td><td><span class="field-edit" data-field="brrcz_sycykb" contenteditable="false"></span></td>
+      <td class="lbl">出院病区</td><td><span class="field-edit" data-field="brrcz_sycybq" contenteditable="false"></span></td>
+      <td class="lbl">出院日期</td><td><span class="field-edit" data-field="brrcz_sycyrq" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">实际住院天数</td><td><span class="field-edit" data-field="brrcz_sysyzy" contenteditable="false"></span></td>
+      <td class="lbl">术前住院天数</td><td><span class="field-edit" data-field="brrcz_sysqzyts" contenteditable="false"></span></td>
+      <td class="lbl">入院后确诊日期</td><td><span class="field-edit" data-field="brrcz_syryhqzrq" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">入院时情况</td><td colspan="3"><span class="field-edit" data-field="brrcz_syrysqk" contenteditable="false"></span></td>
+      <td class="lbl">死亡时间</td><td><span class="field-edit" data-field="brrcz_syswsj" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">死亡原因</td><td colspan="5"><span class="field-edit" data-field="brrcz_syswyy" contenteditable="false"></span></td></tr>
+</table>
+<table class="case-table diag">
+  <colgroup><col style="width:34%"><col style="width:16%"><col style="width:10%"><col style="width:10%"><col style="width:10%"><col style="width:10%"><col style="width:10%"></colgroup>
+  <tr><th colspan="7">诊 断（转归：治愈 / 好转 / 未愈 / 死亡 / 其他）</th></tr>
+  <tr><th>诊断名称</th><th>疾病编码(ICD-10)</th><th>治愈</th><th>好转</th><th>未愈</th><th>死亡</th><th>其他</th></tr>
+  <tr><td class="lbl" style="white-space:normal">主要诊断</td><td><span class="field-edit" data-field="brjzz_syzyzd_icd10" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syzyzd_zy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syzyzd_hz"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syzyzd_wy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syzyzd_sw"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syzyzd_qt"></span></td>
+</tr>
+  <tr><td class="lbl" style="white-space:normal">其他诊断1</td><td><span class="field-edit" data-field="brjzz_syqtzd1" contenteditable="false"></span></td><td><span class="field-edit" data-field="brjzz_syqtzd1_icd10" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd1_zy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd1_hz"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd1_wy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd1_sw"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd1_qt"></span></td>
+</tr>
+  <tr><td class="lbl" style="white-space:normal">其他诊断2</td><td><span class="field-edit" data-field="brjzz_syqtzd2" contenteditable="false"></span></td><td><span class="field-edit" data-field="brjzz_syqtzd2_icd10" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd2_zy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd2_hz"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd2_wy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd2_sw"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd2_qt"></span></td>
+</tr>
+  <tr><td class="lbl" style="white-space:normal">其他诊断3</td><td><span class="field-edit" data-field="brjzz_syqtzd3" contenteditable="false"></span></td><td><span class="field-edit" data-field="brjzz_syqtzd3_icd10" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd3_zy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd3_hz"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd3_wy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd3_sw"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd3_qt"></span></td>
+</tr>
+  <tr><td class="lbl" style="white-space:normal">其他诊断4</td><td><span class="field-edit" data-field="brjzz_syqtzd4" contenteditable="false"></span></td><td><span class="field-edit" data-field="brjzz_syqtzd4_icd10" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd4_zy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd4_hz"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd4_wy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd4_sw"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd4_qt"></span></td>
+</tr>
+  <tr><td class="lbl" style="white-space:normal">其他诊断5</td><td><span class="field-edit" data-field="brjzz_syqtzd5" contenteditable="false"></span></td><td><span class="field-edit" data-field="brjzz_syqtzd5_icd10" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd5_zy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd5_hz"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd5_wy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd5_sw"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd5_qt"></span></td>
+</tr>
+  <tr><td class="lbl" style="white-space:normal">其他诊断6</td><td><span class="field-edit" data-field="brjzz_syqtzd6" contenteditable="false"></span></td><td><span class="field-edit" data-field="brjzz_syqtzd6_icd10" contenteditable="false"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd6_zy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd6_hz"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd6_wy"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd6_sw"></span></td>
+      <td><span class="field-radio" data-field="brjzz_syqtzd6_qt"></span></td>
+</tr>
+</table>
+<table class="case-table">
+  <colgroup><col style="width:90px"><col style="width:170px"><col style="width:90px"><col style="width:150px"><col style="width:90px"><col style="width:188px"></colgroup>
+  <tr><td class="lbl">门诊与出院</td><td><span class="field-radio" data-field="brjzz_symzycy"></span></td>
+      <td class="lbl">入院与出院</td><td><span class="field-radio" data-field="brjzz_syryycy"></span></td>
+      <td class="lbl">临床与病理</td><td><span class="field-radio" data-field="brjzz_sylcybl"></span></td></tr>
+  <tr><td class="lbl">术前与术后</td><td><span class="field-radio" data-field="brjzz_sysqysh"></span></td>
+      <td class="lbl">抢救次数</td><td><span class="field-edit" data-field="brjzz_syqjcs" contenteditable="false"></span></td>
+      <td class="lbl">成功次数</td><td><span class="field-edit" data-field="brjzz_sycgcs" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">HBsAg</td><td><span class="field-radio" data-field="brjzz_syhbsag"></span></td>
+      <td class="lbl">HCV-Ab</td><td><span class="field-radio" data-field="brjzz_syhcvab"></span></td>
+      <td class="lbl">HIV-Ab</td><td><span class="field-radio" data-field="brjzz_syhivab"></span></td></tr>
+  <tr><td class="lbl">过敏药物</td><td colspan="5"><span class="field-edit" data-field="brjzz_sygmyw" contenteditable="false"></span></td></tr>
+</table>
+<div class="sign-line">
+科主任：<span class="field-edit" data-field="qmxx_sykzr" contenteditable="false"></span>　主任（副主任）医师：<span class="field-edit" data-field="qmxx_syzzys" contenteditable="false"></span>　主治医师：<span class="field-edit" data-field="qmxx_syzyys" contenteditable="false"></span>　住院医师：<span class="field-edit" data-field="qmxx_syyjssxys" contenteditable="false"></span>　进修医师：<span class="field-edit" data-field="qmxx_syjxys" contenteditable="false"></span>　实习医师：<span class="field-edit" data-field="qmxx_syxys" contenteditable="false"></span><br>
+病案质量：<span class="field-radio" data-field="brjzz_sybazl"></span>　质控医师：<span class="field-edit" data-field="qmxx_syzkys" contenteditable="false"></span>　质控护士：<span class="field-edit" data-field="qmxx_syzkhs" contenteditable="false"></span>　病案编目员：<span class="field-edit" data-field="qmxx_sybmy" contenteditable="false"></span>
+</div>
+</div>
+<div class="a4-footer">第 1 页 / 共 2 页　（双面打印请选择"短边翻转"）</div>
+</div>
+<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">住 院 病 案 首 页（续）</span>
+<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>
+</div>
+<div class="a4-body">
+<table class="case-table cmpt">
+  <tr><th colspan="10">手 术 及 操 作（10 行）</th></tr>
+  <tr><th>操作编码</th><th>操作日期</th><th>操作名称</th><th>术者</th><th>Ⅰ助</th><th>Ⅱ助</th><th>麻醉方式</th><th>麻醉医师</th><th>切口类别</th><th>愈合等级</th></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss1_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss1_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss1_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss1_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss1_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss1_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss1_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss1_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss1_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss1_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss2_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss2_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss2_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss2_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss2_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss2_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss2_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss2_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss2_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss2_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss3_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss3_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss3_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss3_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss3_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss3_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss3_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss3_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss3_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss3_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss4_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss4_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss4_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss4_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss4_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss4_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss4_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss4_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss4_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss4_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss5_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss5_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss5_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss5_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss5_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss5_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss5_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss5_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss5_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss5_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss6_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss6_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss6_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss6_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss6_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss6_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss6_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss6_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss6_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss6_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss7_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss7_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss7_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss7_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss7_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss7_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss7_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss7_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss7_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss7_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss8_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss8_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss8_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss8_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss8_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss8_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss8_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss8_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss8_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss8_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss9_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss9_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss9_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss9_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss9_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss9_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss9_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss9_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss9_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss9_yhdj"></select></td></tr>
+  <tr><td><span class="field-edit" data-field="brssqk_syss10_czbm" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss10_czrq" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss10_czmc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="brssqk_syss10_sz" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss10_1z" contenteditable="false"></span></td><td><span class="field-edit" data-field="brssqk_syss10_2z" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss10_mzfs"></select></td><td><span class="field-edit" data-field="brssqk_syss10_mzys" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="brssqk_syss10_qklb"></select></td><td><select class="field-select" data-field="brssqk_syss10_yhdj"></select></td></tr>
+</table>
+<table class="case-table cmpt">
+  <colgroup><col style="width:90px"><col style="width:170px"><col style="width:90px"><col style="width:150px"><col style="width:90px"><col style="width:188px"></colgroup>
+  <tr><td class="lbl">病理检查号</td><td><span class="field-edit" data-field="brjzz_sybljch" contenteditable="false"></span></td>
+      <td class="lbl">标本固定日期</td><td><span class="field-edit" data-field="brjzz_sygdrq" contenteditable="false"></span></td>
+      <td class="lbl">病案质量</td><td><span class="field-radio" data-field="brjzz_sybazl"></span></td></tr>
+  <tr><td class="lbl">病理诊断</td><td colspan="3"><span class="field-edit" data-field="brjzz_syblzd" contenteditable="false"></span></td>
+      <td class="lbl">尸检号</td><td><span class="field-edit" data-field="brjzz_systjph" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">尸检主要诊断</td><td colspan="3"><span class="field-edit" data-field="brjzz_sysjzyzd" contenteditable="false"></span></td>
+      <td class="lbl">附病理标本</td><td><span class="field-edit" data-field="brjzz_syfsybl" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">医院感染名称</td><td colspan="5"><span class="field-edit" data-field="brjzz_syyygrmc" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">血型</td><td><span class="field-radio" data-field="qtnr_syxx"></span></td>
+      <td class="lbl">Rh</td><td><span class="field-radio" data-field="qtnr_syrh"></span></td>
+      <td class="lbl">输血反应</td><td><span class="field-radio" data-field="qtnr_sysxfy"></span></td></tr>
+</table>
+<table class="case-table cmpt">
+  <tr><th colspan="6">住 院 费 用（元）</th></tr>
+  <tr><td>住院费用总计</td><td><span class="field-edit" data-field="brzyfy_syzyfyzj" contenteditable="false"></span></td><td>中药费(草药)</td><td><span class="field-edit" data-field="brzyfy_syzcy" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>中成药费</td><td><span class="field-edit" data-field="brzyfy_syzcyf" contenteditable="false"></span></td><td>西药费</td><td><span class="field-edit" data-field="brzyfy_syxyf" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>手术费</td><td><span class="field-edit" data-field="brzyfy_sysyf" contenteditable="false"></span></td><td>治疗费</td><td><span class="field-edit" data-field="brzyfy_syzlf" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>检查费</td><td><span class="field-edit" data-field="brzyfy_syjsf" contenteditable="false"></span></td><td>其他检查费</td><td><span class="field-edit" data-field="brzyfy_syqtjcf" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>放射费</td><td><span class="field-edit" data-field="brzyfy_syfsf" contenteditable="false"></span></td><td>化验费</td><td><span class="field-edit" data-field="brzyfy_syhyf" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>输血费</td><td><span class="field-edit" data-field="brzyfy_sysyf" contenteditable="false"></span></td><td>氧气费</td><td><span class="field-edit" data-field="brzyfy_syyef" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>麻醉费</td><td><span class="field-edit" data-field="brzyfy_symzf" contenteditable="false"></span></td><td>接生费</td><td><span class="field-edit" data-field="brzyfy_syssf" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>护理费</td><td><span class="field-edit" data-field="brzyfy_syhlf" contenteditable="false"></span></td><td>陪床费</td><td><span class="field-edit" data-field="brzyfy_sypcf" contenteditable="false"></span></td><td></td><td></td></tr>
+  <tr><td>其他费用</td><td><span class="field-edit" data-field="brzyfy_syqtfy" contenteditable="false"></span></td><td colspan="4"></td></tr>
+</table>
+</div>
+<div class="a4-footer">第 2 页 / 共 2 页　（双面打印请选择"短边翻转"）</div>
+</div>`,
+    fields: [
+      { type: 'radio', name: 'brjbqk_syxb', caption: '性别', options: ['男', '女'], value: '男' },
+      { type: 'radio', name: 'qtnr_syxx', caption: '血型', options: ['A', 'B', 'O', 'AB', '不详', '未查'] },
+      { type: 'radio', name: 'qtnr_syrh', caption: 'Rh', options: ['阴性', '阳性', '不详', '未查'] },
+      { type: 'radio', name: 'qtnr_sysxfy', caption: '输血反应', options: ['有', '无'] },
+      { type: 'radio', name: 'brjzz_sybazl', caption: '病案质量', options: ['甲', '乙', '丙'], value: '甲' },
+      { type: 'radio', name: 'brjzz_symzycy', caption: '门诊与出院', options: ['符合', '不符合', '未做'] },
+      { type: 'radio', name: 'brjzz_syryycy', caption: '入院与出院', options: ['符合', '不符合', '未做'] },
+      { type: 'radio', name: 'brjzz_sylcybl', caption: '临床与病理', options: ['符合', '不符合', '未做'] },
+      { type: 'radio', name: 'brjzz_sysqysh', caption: '术前与术后', options: ['符合', '不符合', '未做'] },
+      { type: 'radio', name: 'brjzz_syhbsag', caption: 'HBsAg', options: ['阴性', '阳性'] },
+      { type: 'radio', name: 'brjzz_syhcvab', caption: 'HCV-Ab', options: ['阴性', '阳性'] },
+      { type: 'radio', name: 'brjzz_syhivab', caption: 'HIV-Ab', options: ['阴性', '阳性'] },
+      { type: 'radio', name: 'brjzz_syzyzd_zy', caption: '主要诊断·治愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syzyzd_hz', caption: '主要诊断·好转', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syzyzd_wy', caption: '主要诊断·未愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syzyzd_sw', caption: '主要诊断·死亡', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syzyzd_qt', caption: '主要诊断·其他', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd1_zy', caption: '其他诊断1·治愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd1_hz', caption: '其他诊断1·好转', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd1_wy', caption: '其他诊断1·未愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd1_sw', caption: '其他诊断1·死亡', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd1_qt', caption: '其他诊断1·其他', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd2_zy', caption: '其他诊断2·治愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd2_hz', caption: '其他诊断2·好转', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd2_wy', caption: '其他诊断2·未愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd2_sw', caption: '其他诊断2·死亡', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd2_qt', caption: '其他诊断2·其他', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd3_zy', caption: '其他诊断3·治愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd3_hz', caption: '其他诊断3·好转', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd3_wy', caption: '其他诊断3·未愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd3_sw', caption: '其他诊断3·死亡', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd3_qt', caption: '其他诊断3·其他', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd4_zy', caption: '其他诊断4·治愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd4_hz', caption: '其他诊断4·好转', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd4_wy', caption: '其他诊断4·未愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd4_sw', caption: '其他诊断4·死亡', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd4_qt', caption: '其他诊断4·其他', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd5_zy', caption: '其他诊断5·治愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd5_hz', caption: '其他诊断5·好转', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd5_wy', caption: '其他诊断5·未愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd5_sw', caption: '其他诊断5·死亡', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd5_qt', caption: '其他诊断5·其他', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd6_zy', caption: '其他诊断6·治愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd6_hz', caption: '其他诊断6·好转', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd6_wy', caption: '其他诊断6·未愈', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd6_sw', caption: '其他诊断6·死亡', options: ['✓'] },
+      { type: 'radio', name: 'brjzz_syqtzd6_qt', caption: '其他诊断6·其他', options: ['✓'] },
     ],
   },
   anesthesia: {

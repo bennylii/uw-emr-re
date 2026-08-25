@@ -227,6 +227,10 @@
       <option value="yzb">医嘱单</option>
       <option value="disclosure">住院告知书/授权委托书</option>
       <option value="labreport">检查检验报告单</option>
+      <option value="anesthesia">麻醉知情同意书</option>
+      <option value="transfusion">输血治疗同意书</option>
+      <option value="special">特殊检查治疗同意书</option>
+      <option value="critical">病危(重)通知书</option>
       <option value="treatment">治疗处置记录</option>
     </optgroup>
   </select>
@@ -1152,6 +1156,90 @@ const TEMPLATES = {
       { indent: true, html: '患者/法定代理人意见：同意手术（操作），并以本同意书签字为证。' },
       { indent: false, html: '患者签名：<span class="field-edit" data-field="sign_patient" contenteditable="false"></span>　法定代理人签名：<span class="field-edit" data-field="sign_agent" contenteditable="false"></span>　与患者关系：<span class="field-edit" data-field="relation" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
       { indent: false, html: '经治医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　手术者签名：<span class="field-edit" data-field="sign_surgeon" contenteditable="false"></span>　医师签名日期时间：<span class="field-edit" data-field="sign_doc_time" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  anesthesia: {
+    title: '麻醉知情同意书（WS 445.9）',
+    paras: [
+      { indent: false, html: '知情同意书编号：<span class="field-edit" data-field="consent_no" contenteditable="false"></span>' },
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '术前诊断编码：<span class="field-edit" data-field="pre_diag_code" contenteditable="false"></span>　拟实施手术编码：<span class="field-edit" data-field="op_code" contenteditable="false"></span>　手术日期时间：<span class="field-edit" data-field="op_date" contenteditable="false"></span>' },
+      { indent: false, html: '拟实施麻醉方法：<span class="field-hengxian" data-field="anesthesia" contenteditable="false"></span>' },
+      { indent: false, html: '患者基础疾病：<span class="field-hengxian" data-field="base_disease" contenteditable="false"></span>　对麻醉可能产生的影响：<span class="field-hengxian" data-field="disease_impact" contenteditable="false"></span>' },
+      { indent: false, html: '拟行有创操作和监测方法：<span class="field-hengxian" data-field="invasive_monitor" contenteditable="false"></span>' },
+      { indent: true, html: '麻醉中、麻醉后可能发生的意外及并发症：' },
+      { indent: false, html: '1. 麻醉药物过敏、中毒反应，全麻后恶性高热、苏醒延迟；' },
+      { indent: false, html: '2. 气管插管困难、误吸、呼吸道梗阻、呼吸抑制；' },
+      { indent: false, html: '3. 心脑血管意外、休克、心跳骤停等危及生命的情况。' },
+      { indent: false, html: '使用麻醉镇痛泵：<span class="field-radio" data-field="pump_flag"></span>　参加麻醉安全保险：<span class="field-radio" data-field="insurance_flag"></span>' },
+      { indent: true, html: '医疗机构意见：麻醉医师已就上述风险向患者/法定代理人充分告知，其表示理解并同意实施麻醉。' },
+      { indent: true, html: '患者/法定代理人意见：同意实施麻醉，并以本同意书签字为证。' },
+      { indent: false, html: '患者签名：<span class="field-edit" data-field="sign_patient" contenteditable="false"></span>　法定代理人签名：<span class="field-edit" data-field="sign_agent" contenteditable="false"></span>　与患者关系：<span class="field-edit" data-field="relation" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+      { indent: false, html: '麻醉医师签名：<span class="field-edit" data-field="sign_anesth" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_anesth_time" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  transfusion: {
+    title: '输血治疗同意书（WS 445.9）',
+    paras: [
+      { indent: false, html: '知情同意书编号：<span class="field-edit" data-field="consent_no" contenteditable="false"></span>' },
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁' },
+      { indent: false, html: '疾病诊断编码：<span class="field-edit" data-field="diag_code" contenteditable="false"></span>　输血史：<span class="field-radio" data-field="transfusion_hist"></span>' },
+      { indent: false, html: '输血指征：<span class="field-hengxian" data-field="transfusion_indication" contenteditable="false"></span>' },
+      { indent: false, html: '输血品种：<span class="field-hengxian" data-field="blood_type" contenteditable="false"></span>　输血方式：<span class="field-hengxian" data-field="transfusion_mode" contenteditable="false"></span>　拟定输血日期时间：<span class="field-edit" data-field="transfusion_date" contenteditable="false"></span>' },
+      { indent: false, html: '输血前检查项目及结果：<span class="field-hengxian" data-field="pre_transfusion_exam" contenteditable="false"></span>' },
+      { indent: true, html: '输血风险及可能发生的不良后果：' },
+      { indent: false, html: '1. 发热反应、过敏反应、溶血性输血反应；' },
+      { indent: false, html: '2. 输血相关传染病（乙肝、丙肝、艾滋病、梅毒等）存在窗口期；' },
+      { indent: false, html: '3. 大量输血致循环超负荷、凝血功能障碍等。' },
+      { indent: true, html: '医疗机构意见：医师已就输血必要性及上述风险充分告知，患者/法定代理人理解并同意。' },
+      { indent: false, html: '患者签名：<span class="field-edit" data-field="sign_patient" contenteditable="false"></span>　法定代理人签名：<span class="field-edit" data-field="sign_agent" contenteditable="false"></span>　与患者关系：<span class="field-edit" data-field="relation" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+      { indent: false, html: '医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_doc_time" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  special: {
+    title: '特殊检查及特殊治疗同意书（WS 445.9）',
+    paras: [
+      { indent: false, html: '知情同意书编号：<span class="field-edit" data-field="consent_no" contenteditable="false"></span>' },
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁　疾病诊断编码：<span class="field-edit" data-field="diag_code" contenteditable="false"></span>' },
+      { indent: false, html: '特殊检查及特殊治疗项目名称：<span class="field-hengxian" data-field="special_item" contenteditable="false"></span>' },
+      { indent: false, html: '检查/治疗目的：<span class="field-hengxian" data-field="special_purpose" contenteditable="false"></span>' },
+      { indent: true, html: '可能引起的并发症及风险：' },
+      { indent: false, html: '1. 出血、感染、穿孔、脏器损伤；' },
+      { indent: false, html: '2. 麻醉意外、造影剂过敏；' },
+      { indent: false, html: '3. 检查/治疗失败或需中转手术。' },
+      { indent: false, html: '替代方案：<span class="field-hengxian" data-field="alternative" contenteditable="false"></span>' },
+      { indent: true, html: '医疗机构意见：医师已就上述风险及替代方案充分告知，患者/法定代理人理解并同意实施。' },
+      { indent: false, html: '患者签名：<span class="field-edit" data-field="sign_patient" contenteditable="false"></span>　法定代理人签名：<span class="field-edit" data-field="sign_agent" contenteditable="false"></span>　与患者关系：<span class="field-edit" data-field="relation" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+      { indent: false, html: '医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_doc_time" contenteditable="false"></span>' },
+    ],
+    fields: [
+      { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
+    ],
+  },
+  critical: {
+    title: '病危（重）通知书（WS 445.9）',
+    paras: [
+      { indent: false, html: '通知书编号：<span class="field-edit" data-field="consent_no" contenteditable="false"></span>' },
+      { indent: false, html: '科室：<span class="field-edit" data-field="dept" contenteditable="false"></span>　病区：<span class="field-edit" data-field="ward" contenteditable="false"></span>　病房：<span class="field-edit" data-field="room" contenteditable="false"></span>　床号：<span class="field-edit" data-field="bed" contenteditable="false"></span>　住院号：<span class="field-edit" data-field="case_no" contenteditable="false"></span>' },
+      { indent: false, html: '姓名：<span class="field-edit" data-field="name" contenteditable="false"></span>　性别：<span class="field-radio" data-field="sex"></span>　年龄：<span class="field-edit" data-field="age" contenteditable="false"></span>岁　疾病诊断编码：<span class="field-edit" data-field="diag_code" contenteditable="false"></span>' },
+      { indent: true, html: '病情概括及主要抢救措施：' },
+      { indent: false, html: '<span class="field-hengxian" data-field="condition_summary" contenteditable="false"></span>' },
+      { indent: true, html: '病危（重）通知内容：患者目前病情危重，虽经积极救治，仍随时可能出现生命危险，请家属予以理解并配合治疗。' },
+      { indent: false, html: '通知日期时间：<span class="field-edit" data-field="notice_time" contenteditable="false"></span>' },
+      { indent: false, html: '法定代理人签名：<span class="field-edit" data-field="sign_agent" contenteditable="false"></span>　与患者关系：<span class="field-edit" data-field="relation" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_date" contenteditable="false"></span>' },
+      { indent: false, html: '医师签名：<span class="field-edit" data-field="sign_doc" contenteditable="false"></span>　签名日期时间：<span class="field-edit" data-field="sign_doc_time" contenteditable="false"></span>' },
     ],
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },

@@ -1785,7 +1785,7 @@ labreport: {
       <td class="lbl">民族</td><td><span class="field-edit" data-field="ethnic" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">新生儿出生体重</td><td><span class="field-edit" data-field="birth_weight" contenteditable="false"></span>g</td>
       <td class="lbl">新生儿入院体重</td><td><span class="field-edit" data-field="admit_weight" contenteditable="false"></span>g</td>
-      <td class="lbl">出生地</td><td colspan="3">
+      <td class="lbl">出生地</td><td>
         <select class="region-select" data-field="birthplace" data-level="prov"></select>
         <select class="region-select" data-field="birthplace" data-level="city"></select>
         <select class="region-select" data-field="birthplace" data-level="dist"></select></td></tr>
@@ -1818,11 +1818,11 @@ labreport: {
       <td class="lbl">单位邮编</td><td><span class="field-edit" data-field="work_zip" contenteditable="false"></span></td>
       <td class="lbl">联系人</td><td><span class="field-edit" data-field="contact" contenteditable="false"></span></td></tr>
   <tr><td class="lbl">关系</td><td><select class="field-select" data-field="relation"></select></td>
-      <td class="lbl">联系人地址</td><td colspan="2">
+      <td class="lbl">联系人地址</td><td colspan="3">
         <select class="region-select" data-field="contact_addr" data-level="prov"></select>
         <select class="region-select" data-field="contact_addr" data-level="city"></select>
-        <select class="region-select" data-field="contact_addr" data-level="dist"></select></td>
-      <td class="lbl">联系人电话</td><td><span class="field-edit" data-field="contact_phone" contenteditable="false"></span></td></tr>
+        <select class="region-select" data-field="contact_addr" data-level="dist"></select>
+        电话 <span class="field-edit" data-field="contact_phone" contenteditable="false"></span></td></tr>
 </table>
 <table class="case-table">
   <colgroup><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:163px"><col style="width:76px"><col style="width:164px"></colgroup>
@@ -1938,7 +1938,7 @@ labreport: {
 </div>
 <div class="a4-body">
 <table class="case-table cmpt">
-  <tr><th colspan="8">手术及操作（8 行）</th></tr>
+  <tr><th colspan="11">手术及操作（8 行）</th></tr>
   <tr><th>手术及操作名称</th><th>编码</th><th>日期</th><th>手术级别</th><th>切口类别</th><th>愈合等级</th><th>麻醉方式</th><th>术者</th><th>麻醉医师</th><th>I助</th><th>II助</th></tr>
   <tr><td><span class="field-edit" data-field="op1_name" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_code" contenteditable="false"></span></td>
@@ -1951,6 +1951,83 @@ labreport: {
       <td><span class="field-edit" data-field="op1_anest_doc" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_assist" contenteditable="false"></span></td>
       <td><span class="field-edit" data-field="op1_assist2" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op2_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op2_level"></select></td>
+      <td><select class="field-select" data-field="op2_incision"></select></td>
+      <td><select class="field-select" data-field="op2_heal"></select></td>
+      <td><select class="field-select" data-field="op2_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op2_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op2_assist2" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op3_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op3_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op3_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op3_level"></select></td>
+      <td><select class="field-select" data-field="op3_incision"></select></td>
+      <td><select class="field-select" data-field="op3_heal"></select></td>
+      <td><select class="field-select" data-field="op3_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op3_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op3_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op3_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op3_assist2" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op4_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op4_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op4_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op4_level"></select></td>
+      <td><select class="field-select" data-field="op4_incision"></select></td>
+      <td><select class="field-select" data-field="op4_heal"></select></td>
+      <td><select class="field-select" data-field="op4_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op4_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op4_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op4_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op4_assist2" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op5_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op5_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op5_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op5_level"></select></td>
+      <td><select class="field-select" data-field="op5_incision"></select></td>
+      <td><select class="field-select" data-field="op5_heal"></select></td>
+      <td><select class="field-select" data-field="op5_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op5_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op5_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op5_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op5_assist2" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op6_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op6_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op6_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op6_level"></select></td>
+      <td><select class="field-select" data-field="op6_incision"></select></td>
+      <td><select class="field-select" data-field="op6_heal"></select></td>
+      <td><select class="field-select" data-field="op6_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op6_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op6_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op6_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op6_assist2" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op7_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op7_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op7_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op7_level"></select></td>
+      <td><select class="field-select" data-field="op7_incision"></select></td>
+      <td><select class="field-select" data-field="op7_heal"></select></td>
+      <td><select class="field-select" data-field="op7_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op7_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op7_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op7_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op7_assist2" contenteditable="false"></span></td></tr>
+  <tr><td><span class="field-edit" data-field="op8_name" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op8_code" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op8_date" contenteditable="false"></span></td>
+      <td><select class="field-select" data-field="op8_level"></select></td>
+      <td><select class="field-select" data-field="op8_incision"></select></td>
+      <td><select class="field-select" data-field="op8_heal"></select></td>
+      <td><select class="field-select" data-field="op8_anesthesia"></select></td>
+      <td><span class="field-edit" data-field="op8_surgeon" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op8_anest_doc" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op8_assist" contenteditable="false"></span></td>
+      <td><span class="field-edit" data-field="op8_assist2" contenteditable="false"></span></td></tr>
 </table>
 <table class="case-table cmpt">
   <tr><th colspan="8">中医治疗情况</th></tr>

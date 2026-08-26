@@ -298,6 +298,8 @@
         <button id="qcBtn" onclick="runQC()">相似度比对</button>
         <div id="qcResult" style="margin-top:6px"></div>
         <div id="missingList" style="margin-top:8px"></div>
+        <button id="qcBtn2" onclick="runCaseQC()" style="background:#27ae60">首页运行质控</button>
+        <div id="qcCaseOut" style="margin-top:6px"></div>
       </div>
     </div>
     <div class="foot">
@@ -4266,6 +4268,119 @@ function fillSample() {
 /* 启动 */
 showPatientList();   // 启动先显示病人列表（双击进入病历）
 loadTemplate();
+
+
+// ===== 运行质控（逆向 u_emr_archive_caseitem 规则4-9 + 首页业务逻辑一致性） =====
+function fv(name) {
+  const paper = document.getElementById('paper');
+  const el = paper.querySelector('[data-field="' + name + '"]');
+  if (!el) return '';
+  if (el.classList.contains('field-edit') || el.classList.contains('field-hengxian'))
+    return el.textContent.trim();
+  const fd = (TEMPLATES[currentTpl].fields || []).find(x => x.name === name);
+  return fd ? (fd.value || '') : '';
+}
+function runCaseQC() {
+  const out = document.getElementById('qcCaseOut');
+  const rows = [];
+  const warn = [];
+  // 数据窗规则类型参考 u_emr_archive_caseitem.udo: 4仅备选值/5身份证出生一致/7ICD性别/8ICD转归/9ICD-名称一致
+  // 出生日期 ↔ 年龄（规则5近似：身份证/出生日期推算年龄）
+  const birth = fv('birth') || fv('brjbqk_sycsny');
+  const age = fv('age') || fv('brjbqk_synl');
+  if (birth && !age) warn.push('出生日期已填但年龄未填');
+  if (birth && age) {
+    const y = parseInt(String(birth).slice(0, 4), 10);
+    const nowY = new Date().getFullYear();
+    if (y && Math.abs(nowY - y) !== Math.round(Number(age)) && Math.abs(nowY - y) !== Number(age) && Math.abs(nowY - y) !== Number(age) + 1 && Math.abs(nowY - y) !== Number(age) - 1)
+      warn.push('年龄与出生日期推算不符（推算 ' + (nowY - y) + ' 岁，填写 ' + age + ' 岁）');
+  }
+  // 身份证 → 出生日期（规则5: of_check_card 身份证和出生年月相符）
+  const idno = fv('idno') || fv('brjbqk_sysfzh');
+  if (idno && /^\d{17}[0-9X]$/i.test(idno)) {
+    const y = idno.slice(6, 10), m = idno.slice(10, 12), d = idno.slice(12, 14);
+    const b = String(birth || '').replace(/\D/g, '');
+    if (b && b !== (y + m + d)) warn.push('身份证号与出生日期不相符（身份证第7-14位=' + y + '-' + m + '-' + d + '）');
+    if (!birth) warn.push('身份证号已填，建议核验出生日期');
+  }
+  // 住院时长: 入院 < 出院
+  const it = fv('in_time'), ot = fv('out_time');
+  if (it && ot && String(it) > String(ot)) warn.push('入院时间晚于出院时间');
+  if (it && ot && String(it) === String(ot)) warn.push('入院与出院时间相同');
+  // 离院方式 ↔ 转诊机构（业务一致性）
+  const dm = fv('discharge_mode') || fv('brrcz_sycyfs');
+  if (dm && dm.indexOf('转院') >= 0 && !fv('transfer_org')) warn.push('离院方式为医嘱转院，未填接收医疗机构');
+  if (dm && dm.indexOf('转社区') >= 0 && !fv('transfer_community')) warn.push('离院方式为医嘱转社区，未填接收社区卫生机构');
+  if (dm && dm.indexOf('死亡') >= 0) warn.push('离院方式为死亡，应书写死亡记录并核对尸检标志');
+  // 死亡一致性: 有死亡记录则离院方式应为死亡
+  if (fv('death_time') || fv('brrcz_syswsj')) {
+    if (dm && String(dm).indexOf('死亡') < 0) warn.push('填写了死亡时间，离院方式应为死亡');
+  }
+  // 手术完整性（规则: 手术必有编码/级别/切口/愈合/麻醉）
+  for (let n = 1; n <= 8; n++) {
+    const nm = fv('op' + n + '_name');
+    if (nm) {
+      if (!fv('op' + n + '_code')) warn.push('手术' + n + '已填名称，缺少手术编码');
+      if (!fv('op' + n + '_level')) warn.push('手术' + n + '已填名称，缺少手术级别');
+      if (!fv('op' + n + '_incision')) warn.push('手术' + n + '已填名称，缺少切口类别');
+      if (!fv('op' + n + '_heal')) warn.push('手术' + n + '已填名称，缺少愈合等级');
+      if (!fv('op' + n + '_anesthesia')) warn.push('手术' + n + '已填名称，缺少麻醉方式');
+      if (!fv('op' + n + '_date')) warn.push('手术' + n + '已填名称，缺少手术日期');
+    }
+  }
+  // 操作完整性
+  for (let n = 1; n <= 8; n++) {
+    const nm = fv('cz' + n + '_name');
+    if (nm && !fv('cz' + n + '_code')) warn.push('操作' + n + '已填名称，缺少操作编码');
+  }
+  // 费用合计: total_fee 与分项之和
+  let feeSum = 0, hasFee = false;
+  for (let k = 1; k <= 24; k++) {
+    const v = fv('fee' + String(k).padStart(2, '0'));
+    if (v && !isNaN(parseFloat(v))) { feeSum += parseFloat(v); hasFee = true; }
+  }
+  const tf = fv('total_fee');
+  if (hasFee && tf && !isNaN(parseFloat(tf)) && Math.abs(parseFloat(tf) - feeSum) > 1)
+    warn.push('住院费用总计(' + tf + ') 与分项合计(' + feeSum.toFixed(2) + ') 不符');
+  // 抢救
+  const rc = parseFloat(fv('rescue_cnt')) || 0, ro = parseFloat(fv('rescue_ok')) || 0;
+  if (rc > 0 && ro > rc) warn.push('抢救成功次数大于抢救总次数');
+  // 诊断: 主要诊断名称 ↔ 编码（规则9: ICD 与名称一致的基础校验）
+  const dmc = fv('diag_main_code') || fv('brjzz_syzyzd_icd10');
+  if (dmc && !/^[A-Z]\d/i.test(String(dmc))) warn.push('主要诊断编码(' + dmc + ') 不符合 ICD-10 编码格式');
+  const dn = fv('diag_main');
+  if (dn && !fv('diag_main_code')) warn.push('主要诊断名称已填，缺少编码');
+  // 其他诊断: 名称与编码成对
+  for (let n = 1; n <= 22; n++) {
+    const dn2 = fv('diag_other' + (n === 1 ? '' : n));
+    const dc2 = fv('diag_other' + (n === 1 ? '' : n) + '_code');
+    if (dn2 && !dc2) warn.push('其他诊断' + n + '已填名称，缺少编码');
+    if (dc2 && !dn2) warn.push('其他诊断' + n + '已填编码，缺少名称');
+  }
+  // 过敏
+  if (fv('allergy_flag') === '有' && !fv('allergy')) warn.push('过敏史标志为有，但未填过敏药物');
+  // 血型
+  if (fv('blood_type') && !fv('rh')) warn.push('血型已填，但未填 Rh 血型');
+  // 旧版转归: 主要诊断 ICD 存在 → 5 种转归至少勾一个
+  const zy = ['zy', 'hz', 'wy', 'sw', 'qt'];
+  if (fv('brjzz_syzyzd_icd10')) {
+    const chk = zy.some(z => fv('brjzz_syzyzd_' + z) === '✓');
+    if (!chk) warn.push('主要诊断未勾选转归（治愈/好转/未愈/死亡/其他）');
+  }
+  // 空页/病历概要必填（无字典的通用必填）
+  if (currentTpl === 'case2012' || currentTpl === 'case2012tcm') {
+    if (!fv('name')) warn.push('姓名未填写');
+    if (!fv('case_no')) warn.push('病案号未填写');
+    if (!fv('sex')) warn.push('性别未选择');
+    if (!fv('in_time')) warn.push('入院日期未填写');
+  }
+  const ok = warn.length === 0;
+  out.innerHTML = ok
+    ? '<span class="ok">✓ 质控通过（' + (warn.length) + ' 项）</span>'
+    : '<span class="warn">✗ 发现问题 ' + warn.length + ' 项：</span><ul style="margin:4px 0 0 14px;padding:0">' +
+      warn.map(w => '<li style="margin:2px 0">' + w + '</li>').join('') + '</ul>';
+}
+
 </script>
 </body>
 </html>

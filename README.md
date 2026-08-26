@@ -22,10 +22,7 @@
 │   └── emr_editor_demo.html    # 病历编辑器交互演示（双击浏览器打开）
 ├── docs/
 │   ├── uwWordDll-abiword-diff.md   # 定制层对比报告（版本判定/定制类/API 清单/实现反推）
-│   ├── uwWordDll_api.h             # 8117 导出接口清单（互操作事实）
-│   └── standards/                  # 电子病历标准 OCR 全文（WS 445 系列）
-│       ├── WS445.10-2014-住院病案首页-OCR.md   # 148 数据元 + 值域代码表
-│       └── WS445.11-2014-中医住院病案首页-OCR.md # 164 数据元（MinerU 分段 OCR）
+│   └── uwWordDll_api.h             # 8117 导出接口清单（互操作事实）
 ├── src/uwemr/                  # 定制层 clean-room 源码（已编译验证）
 └── tools/
     ├── compare_uwabiword.py        # 导出类名 vs 上游源码匹配率对比
@@ -36,16 +33,45 @@
 
 ## 交互演示（demo/emr_editor_demo.html）
 
-浏览器直接打开即可，仿真逆向出的定制层核心机制：
+浏览器直接打开即可，仿真逆向出的定制层核心机制 + 电子病历标准落地：
 
-- **病历模板**：入院记录/病程记录/手术记录三套，AbiWord 风格白纸排版
+- **病历模板 ×33**：覆盖 **WS 445《电子病历基本数据集》全部 17 部分**
+  （445.1 概要 / 445.2 门诊 / 445.3 处方 / 445.4 检查检验 / 445.5 治疗处置 /
+  445.6 助产 / 445.7 护理操作 / 445.8 护理评估 / 445.9 知情告知（6 子集：
+  手术/麻醉/输血/特殊检查/病危/其他）/ 445.10 病案首页 / 445.11 中医首页 /
+  445.12 入院 / 445.13 病程（含抢救/术前小结/死亡）/ 445.14 医嘱 / 445.15 出院 /
+  445.16 转诊 / 445.17 医疗机构信息）+ 病案首页 2012 版（卫医政发〔2011〕84号）
+  + 旧版首页 case1/case2（逆向 `d_emr_archive_case1/2` 拼音字段，诊断多转归、手术 10 行）
+- **A4 双面打印**：首页/中医首页/旧版首页按原始 DW 布局重排，表格 flex 拉伸填满 A4，
+  `@media print` 双面提示（页眉回填姓名/科室/病案号）
 - **结构化域控件**（对应 `fp_FieldCtrlRadiobuttonRun/EditRun/HengXianRun`）：
-  性别单选 ◉○、编辑域下划线填项、横线域
+  性别单选 ◉○、编辑域下划线填项、横线域、select 下拉（付费方式/婚姻/职业/省市区三级联动）
 - **XML 双向绑定**（对应 `fd_Field::setValue + updateFragobject`）：
-  右侧面板实时生成病历 XML（`<record><para><field name=.../></para></record>`）
+  右侧面板实时生成病历 XML（`<record><para><field name=.../></para></record>`），
+  XML 导入回填 + 导出（`RecordData_GetStandardXml` 语义）
 - **书写质控**（对应 `CompareSimilValue` + `uwGetNotCompleteList`）：
   n-gram 相似度比对（与 `src/uwemr/qc` 同算法）+ 缺项检查
-- **导出**：XML（`RecordData_GetStandardXml` 语义）/ HTML（`uwGetOutHtmlString` 语义）
+- **首页运行质控**（逆向 `u_emr_archive_caseitem.udo` 规则 4-9 + 首页业务逻辑）：
+  身份证↔出生日期（`of_check_card`）、出生↔年龄推算、入院<出院、离院方式↔转诊机构、
+  手术/操作完整性、费用总计↔分项合计、抢救成功≤总次数、ICD-10 格式、诊断名↔编码成对、
+  过敏标志↔药物、血型↔Rh、旧版转归必勾等 20+ 检查项
+- **CA 签名**：仿真 `saf_rsasignwithstamp` 记录签名列表
+- **导出**：XML / HTML（`uwGetOutHtmlString` 语义）
+
+## 演示中的业务逆向来源（速览）
+
+| 模板/机制 | 逆向来源 |
+|-----------|---------|
+| 病案首页 2012（A4 双面） | `d_emr_archive_case2012_print`（707 列）、`jbxx_zy`（295）、`drg_basj`（154）、`ssx`（276） |
+| 中医首页 | `d_emr_archive_case2012_jbxx_zy` + WS 445.11 标准（OCR 归档 `docs/standards/`） |
+| 旧版首页 case1/case2 | `d_emr_archive_case1`（259 列）/ `case2`（330 列）拼音字段 |
+| 医嘱单 | `d_bq_yzcl_yzsr_cq/ls`（ZY_BQYZ 表，剂量单位/每日次数/次数列） |
+| 护理/体温/出入量/导管/助产 | `ENR_SRD` / `ENR_TZJL` / `ENR_JZHL` 直证 |
+| 首页质控规则 | `u_emr_archive_caseitem.udo`（规则 4-9）+ `dd_emr_archive_caseitem_checkrule` |
+| WS 445 数据元 | Word COM 转换 .doc → GBK 提取（`HDSD00.xx.xxx` 行后第 3 行即数据元名） |
+
+> 数据元覆盖说明：模板字段名与逆向 DW 列名对齐（如 `brjbqk_syxm`=病人姓名），
+> 可直接溯源生产 DataWindow；质控规则语义复刻自 p-code，非臆造。
 
 ## 合规声明（重要）
 

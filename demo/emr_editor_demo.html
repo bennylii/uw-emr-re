@@ -3924,6 +3924,12 @@ function updateMissing(tpl) {
 function loadTemplate() {
   currentTpl = document.getElementById('tplSel').value;
   renderTemplate(TEMPLATES[currentTpl]);
+  updateMissing(TEMPLATES[currentTpl]);
+  if (currentTpl === 'case2012' || currentTpl === 'case2012tcm' ||
+      currentTpl === 'case_old' || currentTpl === 'case_old2' ||
+      currentTpl === 'summary') {
+    setTimeout(runCaseQC, 150);
+  }
 }
 function newDoc() {
   document.getElementById('paper').innerHTML = '<div class="para" contenteditable="true">（空白病历文档）</div>';
@@ -4359,8 +4365,10 @@ function runCaseQC() {
   }
   // 过敏
   if (fv('allergy_flag') === '有' && !fv('allergy')) warn.push('过敏史标志为有，但未填过敏药物');
-  // 血型
-  if (fv('blood_type') && !fv('rh')) warn.push('血型已填，但未填 Rh 血型');
+  // 血型（仅首页模板，无默认填充值）
+  const qcCasePage = currentTpl === 'case2012' || currentTpl === 'case2012tcm' ||
+                     currentTpl === 'case_old' || currentTpl === 'case_old2';
+  if (qcCasePage && fv('blood_type') && !fv('rh')) warn.push('血型已填，但未填 Rh 血型');
   // 旧版转归: 主要诊断 ICD 存在 → 5 种转归至少勾一个
   const zy = ['zy', 'hz', 'wy', 'sw', 'qt'];
   if (fv('brjzz_syzyzd_icd10')) {

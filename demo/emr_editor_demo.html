@@ -198,6 +198,7 @@
       <option value="case2012">病案首页(2012版 卫医政发84号)</option>
       <option value="case2012tcm">中医病案首页(WS 445.11)</option>
       <option value="case_old">病案首页(旧版·拼音)</option>
+      <option value="org_info">医疗机构信息(WS 445.17)</option>
       <option value="admission">入院记录</option>
       <option value="progress">病程记录</option>
       <option value="discharge">出院记录</option>
@@ -1161,6 +1162,39 @@ const TEMPLATES = {
     fields: [
       { type: 'radio', name: 'sex', caption: '性别', options: ['男', '女'], value: '男' },
     ],
+  },
+  org_info: {
+    title: '医疗机构信息（WS 445.17）',
+    html: `<div class="a4-page">
+<div class="a4-header">
+<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>
+<span class="h-title">医疗机构信息表</span>
+<span class="h-meta">数据集标识符 HDSD00.18_V1.0</span>
+</div>
+<div class="a4-body">
+<table class="case-table">
+  <colgroup><col style="width:120px"><col style="width:200px"><col style="width:120px"><col style="width:200px"><col style="width:120px"><col style="width:200px"></colgroup>
+  <tr><th colspan="6">医疗机构信息（WS 445.17-2014 电子病历基本数据集 第17部分）</th></tr>
+  <tr><td class="lbl">医疗机构名称</td><td colspan="3"><span class="field-edit" data-field="org_name" contenteditable="false"></span></td>
+      <td class="lbl">组织机构代码</td><td><span class="field-edit" data-field="org_code" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">医疗机构联系电话</td><td colspan="3"><span class="field-edit" data-field="org_phone" contenteditable="false"></span></td>
+      <td class="lbl">负责人（法人）姓名</td><td><span class="field-edit" data-field="org_leader" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">负责人联系电话</td><td colspan="5"><span class="field-edit" data-field="org_leader_phone" contenteditable="false"></span></td></tr>
+  <tr><th colspan="6">医疗机构地址</th></tr>
+  <tr><td class="lbl">地址-省（自治区、直辖市）</td><td><span class="field-edit" data-field="org_addr_prov" contenteditable="false"></span></td>
+      <td class="lbl">地址-市（地区、州）</td><td><span class="field-edit" data-field="org_addr_city" contenteditable="false"></span></td>
+      <td class="lbl">地址-县（区）</td><td><span class="field-edit" data-field="org_addr_dist" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">地址-乡（镇、街道）</td><td><span class="field-edit" data-field="org_addr_town" contenteditable="false"></span></td>
+      <td class="lbl">地址-村（街、路、弄）</td><td><span class="field-edit" data-field="org_addr_village" contenteditable="false"></span></td>
+      <td class="lbl">地址-门牌号码</td><td><span class="field-edit" data-field="org_addr_no" contenteditable="false"></span></td></tr>
+  <tr><td class="lbl">地址-邮政编码</td><td colspan="5"><span class="field-edit" data-field="org_zip" contenteditable="false"></span></td></tr>
+  <tr><th colspan="6">备注</th></tr>
+  <tr><td colspan="6" style="height:120px"><span class="field-hengxian" data-field="org_remark" contenteditable="false"></span></td></tr>
+</table>
+</div>
+<div class="a4-footer">第 1 页 / 共 1 页</div>
+</div>`,
+    fields: [],
   },
   case_old: {
     title: '住院病案首页（旧版·拼音字段）',

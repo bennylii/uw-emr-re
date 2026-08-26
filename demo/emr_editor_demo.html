@@ -3027,6 +3027,27 @@ function renderTemplate(tpl) {
       paper.appendChild(div);
     });
   }
+  wrapA4Paper(tpl);
+
+// 自动包裹 A4 纸张（无 .a4-page 的模板）
+function wrapA4Paper(tpl) {
+  const paper = document.getElementById('paper');
+  if (paper.querySelector('.a4-page')) return;
+  const title = esc(tpl.title);
+  const page = document.createElement('div');
+  page.className = 'a4-page';
+  page.innerHTML =
+    '<div class="a4-header">' +
+      '<b class="h-org" data-header="org_name" data-dflt="1">×××医院</b>' +
+      '<span class="h-title">' + title + '</span>' +
+      '<span class="h-meta">姓名 <b data-header="name"></b>　科室 <b data-header="in_dept"></b>　病案号 <b data-header="case_no"></b></span>' +
+    '</div>' +
+    '<div class="a4-body" style="align-items:stretch"></div>' +
+    '<div class="a4-footer">第 1 页 / 共 1 页</div>';
+  while (paper.firstChild) page.querySelector('.a4-body').appendChild(paper.firstChild);
+  paper.appendChild(page);
+  refreshA4Headers();
+}
   // 医嘱单：初始化页签状态
   if (currentTpl === 'yzb') {
     yzbActiveTab = 'ld';

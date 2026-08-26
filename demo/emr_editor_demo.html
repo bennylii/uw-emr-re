@@ -158,6 +158,7 @@
     #main { display: block; height: auto; }
     #docPane { padding: 0; overflow: visible; }
     #paper { box-shadow: none; max-width: 100%; padding: 0; min-height: 0; background: #fff; }
+    #paper > :not(.a4-page) { display: none !important; }
     .a4-page { width: 210mm !important; min-height: 297mm !important; margin: 0 auto; box-shadow: none;
       padding: 7mm 6mm 5mm 6mm; page-break-after: always; box-sizing: border-box; }
     .a4-page:last-child { page-break-after: auto; }
@@ -4028,8 +4029,9 @@ function refreshA4Headers() {
 
 function printDoc() {
   refreshA4Headers();
-  const pages = document.querySelectorAll('.a4-page').length;
-  if (!confirm('共 ' + pages + ' 页，将调用浏览器打印。\n\n纸质双面使用请选择「双面打印 - 短边翻转」。\n\n继续打印？')) return;
+  const pages = document.querySelectorAll('#paper .a4-page').length;
+  if (!pages) { alert('当前无 A4 文档可打印，请先载入模板'); return; }
+  if (!confirm('共 ' + pages + ' 页，将调用浏览器打印（仅打印 A4 纸张部分）。\n\n纸质双面使用请选择「双面打印 - 短边翻转」。\n\n继续打印？')) return;
   window.print();
 }
 
